@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="04768c73-091e-48f4-961a-2d7c83038a62" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f3656e564ee1458cb717d4e24f939d129fc0/87/bb98d182/TraceListener.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/182ec85d25b779c7118bca2890ca95ae8dd32868c52272faee4a3a304f624b/Assert.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/228bff957d5b9f32cfbedd8bf82a5d3e862ec3e051593a67913b95ae288287/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8849db4866a8ac98eb5ff9c31dc633441624f5bb3162461639be42ad5fe53/Where.SpeedOpt.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Cards/Stack.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/CardsTests/StackTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Klondike/AI.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Klondike/Options.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3D8nXo8KStYx0oNtutQVx5pAvxq" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;12e52440-4e64-4db2-885c-4196c2966f43.executor&quot;: &quot;Debug&quot;,
+    &quot;9dee7443-acbc-4608-ad9b-f3e9a55b557f.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.37176472&quot;,
+    &quot;b0d58474-68be-4012-bceb-70db44853e46.executor&quot;: &quot;Debug&quot;,
+    &quot;c74bf514-9942-4ad2-a460-c32ffc03426e.executor&quot;: &quot;Debug&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;e2b07431-fc9e-4308-8209-0f58b6862afc.executor&quot;: &quot;Debug&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager" selected="12e52440-4e64-4db2-885c-4196c2966f43" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="04768c73-091e-48f4-961a-2d7c83038a62" name="Changes" comment="" />
+      <created>1777672607110</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777672607110</updated>
+      <workItem from="1777672608364" duration="5628000" />
+      <workItem from="1777758382094" duration="6116000" />
+      <workItem from="1777840703568" duration="6190000" />
+      <workItem from="1777875051132" duration="1541000" />
+      <workItem from="1777964042472" duration="7746000" />
+      <workItem from="1778397115781" duration="2084000" />
+      <workItem from="1778442195170" duration="4066000" />
+      <workItem from="1778708561343" duration="3421000" />
+      <workItem from="1778744154218" duration="10171000" />
+      <workItem from="1778886521792" duration="1270000" />
+      <workItem from="1778923423724" duration="2916000" />
+      <workItem from="1778966195661" duration="7863000" />
+      <workItem from="1778978483277" duration="2032000" />
+      <workItem from="1779056229785" duration="4630000" />
+      <workItem from="1779141154147" duration="3726000" />
+      <workItem from="1779227739781" duration="5625000" />
+      <workItem from="1779304503285" duration="3902000" />
+      <workItem from="1779347095693" duration="8626000" />
+      <workItem from="1779569554285" duration="7728000" />
+      <workItem from="1779593046250" duration="8943000" />
+      <workItem from="1779663654686" duration="3285000" />
+      <workItem from="1779676970949" duration="8280000" />
+      <workItem from="1779736566873" duration="2342000" />
+      <workItem from="1779826614328" duration="3460000" />
+      <workItem from="1780000597346" duration="19000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Klondike/AI.cs</url>
+          <line>161</line>
+          <properties documentPath="C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Klondike\AI.cs" containingFunctionPresentation="Method 'FlipFeed'">
+            <startOffsets>
+              <option value="7182" />
+            </startOffsets>
+            <endOffsets>
+              <option value="7183" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Klondike/Game.cs</url>
+          <line>485</line>
+          <properties documentPath="C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Klondike\Game.cs" containingFunctionPresentation="Method 'PlayGame'">
+            <startOffsets>
+              <option value="15613" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15628" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Frame#Klondike.Game.FindAllPossibleMoves" memberName="this" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>

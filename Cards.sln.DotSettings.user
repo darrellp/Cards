@@ -1,0 +1,73 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAssert_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F182ec85d25b779c7118bca2890ca95ae8dd32868c52272faee4a3a304f624b_003FAssert_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAssert_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F182ec85d25b779c7118bca2890ca95ae8dd32868c52272faee4a3a304f624b_003FAssert_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ADebug_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F56b895832ba1dd5dcf6eab77be40a0537da9d1bf60cfbac19515378f1ac9ca13_003FDebug_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AFirst_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F5d16dd521ecb96a323be5963be4cbf12673a02bff45d747e826354246a9160_003FFirst_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ALayout_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F6ab81dd11e7e68ff4af5d79fd6c1868d35145dfb12bc92d068328bcd53f9a75d_003FLayout_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AList_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F3cca26e6dd627c1a7919bec86cb05b6d975a30287456f7daa8773a92451a_003FList_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AMemoryExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F712ed736d3c51761a1752a52e3dcafaf84a553b1c2bdcbbee8b4c6c621f160_003FMemoryExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AQueue_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003Fa2177bdb5d3b5c3a47d4da573f2262f54494431df696d6721696c7169484c6c2_003FQueue_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ARandom_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F2732d66c405b45d5f571abc2f54458cac1facd4829d999e48b33d25d7866e83_003FRandom_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AShuffle_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F5e27164629f726b4820472afdf5c88c2340aa3c7e56d64ed6696629b082f2_003FShuffle_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelpers_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F499997d4b5f06d22ed69e314f59ff5407f822562b6922c66cd6453405bb0229c_003FThrowHelpers_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fd2fc4e5236f74a0d8789f902be54d3bbf48938_003Fff_003F1c7989b9_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F228bff957d5b9f32cfbedd8bf82a5d3e862ec3e051593a67913b95ae288287_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F228bff957d5b9f32cfbedd8bf82a5d3e862ec3e051593a67913b95ae288287_003FThrowHelper_002Ecs_002Fz_003A2_002D1/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F228bff957d5b9f32cfbedd8bf82a5d3e862ec3e051593a67913b95ae288287_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AThrowHelper_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F29ff4eecbec3445d30cf6be51b75c75bc14f83445c042e746c738e76cd8bb_003FThrowHelper_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATraceListener_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Ff3656e564ee1458cb717d4e24f939d129fc0_003F87_003Fbb98d182_003FTraceListener_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATraceListener_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Ff3656e564ee1458cb717d4e24f939d129fc0_003F87_003Fbb98d182_003FTraceListener_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AWhere_002ESpeedOpt_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F8849db4866a8ac98eb5ff9c31dc633441624f5bb3162461639be42ad5fe53_003FWhere_002ESpeedOpt_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12e52440_002D4e64_002D4db2_002D885c_002D4196c2966f43/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestColors" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.CardTests.TestColors&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.ConstructorTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.SelectNextMoveTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestMixedStackFromString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestSplit&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.CardTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=99c3e29e_002D8108_002D4bee_002D835f_002Da611cbe6b926/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FindAllMovesTest #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\CardsTests" Presentation="&amp;lt;CardsTests&amp;gt;" /&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c1cba21f_002D68d5_002D49db_002D9377_002Da26ad98c6aa5/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="PlaySpecificGames" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c55add5a_002D190a_002D4a1a_002Db776_002Df5eb677179dd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FindAllMovesTest #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c74bf514_002D9942_002D4ad2_002Da460_002Dc32ffc03426e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestColors #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;Project Location="C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\CardsTests" Presentation="&amp;lt;CardsTests&amp;gt;" /&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.Test1&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.ConstructorTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestUpDownToString&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestMixedStackFromString&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e2b07431_002Dfc9e_002D4308_002D8209_002D0f58b6862afc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="FindAllMovesTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestMixedStackFromString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestUpDownToString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestMixedToString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.SelectNextMoveTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.PlayGameTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.PlaySpecificGames&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

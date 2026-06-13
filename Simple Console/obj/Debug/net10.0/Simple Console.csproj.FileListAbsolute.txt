@@ -1,0 +1,44 @@
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.exe
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.deps.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.runtimeconfig.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.pdb
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Spectre.Console.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Spectre.Console.Ansi.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Cards.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Klondike.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Cards.pdb
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Klondike.pdb
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.csproj.AssemblyReference.cache
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.AssemblyInfoInputs.cache
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.AssemblyInfo.cs
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.csproj.CoreCompileInputs.cache
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple C.B564A4A2.Up2Date
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\refint\Simple Console.dll
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.pdb
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.genruntimeconfig.cache
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\ref\Simple Console.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.exe
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.deps.json
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.runtimeconfig.json
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Simple Console.pdb
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Spectre.Console.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Spectre.Console.Ansi.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Cards.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Klondike.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Cards.pdb
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\bin\Debug\net10.0\Klondike.pdb
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.csproj.AssemblyReference.cache
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.GeneratedMSBuildEditorConfig.editorconfig
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.AssemblyInfoInputs.cache
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.AssemblyInfo.cs
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.csproj.CoreCompileInputs.cache
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple C.B564A4A2.Up2Date
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\refint\Simple Console.dll
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.pdb
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\Simple Console.genruntimeconfig.cache
+E:\OneDrive\Documents\My Projects\Cards\Simple Console\obj\Debug\net10.0\ref\Simple Console.dll

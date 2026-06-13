@@ -1,0 +1,90 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Simple Console/1.0.0": {
+        "dependencies": {
+          "Cards": "1.0.0",
+          "Klondike": "1.0.0",
+          "Spectre.Console": "0.55.3-alpha.0.18"
+        },
+        "runtime": {
+          "Simple Console.dll": {}
+        }
+      },
+      "Spectre.Console/0.55.3-alpha.0.18": {
+        "dependencies": {
+          "Spectre.Console.Ansi": "0.55.3-alpha.0.18"
+        },
+        "runtime": {
+          "lib/net10.0/Spectre.Console.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.55.3.0"
+          }
+        }
+      },
+      "Spectre.Console.Ansi/0.55.3-alpha.0.18": {
+        "runtime": {
+          "lib/net10.0/Spectre.Console.Ansi.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.55.3.0"
+          }
+        }
+      },
+      "Cards/1.0.0": {
+        "runtime": {
+          "Cards.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Klondike/1.0.0": {
+        "dependencies": {
+          "Cards": "1.0.0"
+        },
+        "runtime": {
+          "Klondike.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Simple Console/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Spectre.Console/0.55.3-alpha.0.18": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-vh2ltMTsZkrtpAC9kh/qSg+PSz1kMZ2L+NmDvrFuNQ1vO14V5fx4qskwLyWL9stti44dk29zH5k+4w3grtzAyQ==",
+      "path": "spectre.console/0.55.3-alpha.0.18",
+      "hashPath": "spectre.console.0.55.3-alpha.0.18.nupkg.sha512"
+    },
+    "Spectre.Console.Ansi/0.55.3-alpha.0.18": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f9IU0AmqAsXSW7QbArcXa8pwQWh2psm/hbfUvUwjvoSA8xVoH1Ygc6IpMt9iwyq3tDfil3VWfHSbAnOq/rjKkw==",
+      "path": "spectre.console.ansi/0.55.3-alpha.0.18",
+      "hashPath": "spectre.console.ansi.0.55.3-alpha.0.18.nupkg.sha512"
+    },
+    "Cards/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Klondike/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
