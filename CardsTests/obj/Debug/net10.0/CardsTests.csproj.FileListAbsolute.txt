@@ -320,3 +320,5 @@ E:\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\refint\Card
 E:\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\CardsTests.pdb
 E:\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\CardsTests.genruntimeconfig.cache
 E:\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\ref\CardsTests.dll
+E:\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\CardsTests.sourcelink.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\CardsTests\obj\Debug\net10.0\CardsTests.sourcelink.json

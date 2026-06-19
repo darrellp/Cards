@@ -324,3 +324,5 @@ E:\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\refint\K
 E:\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\KlondikeTests.pdb
 E:\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\KlondikeTests.genruntimeconfig.cache
 E:\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\ref\KlondikeTests.dll
+E:\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\KlondikeTests.sourcelink.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\KlondikeTests\obj\Debug\net10.0\KlondikeTests.sourcelink.json

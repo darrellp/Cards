@@ -79,21 +79,9 @@ public class AI(Game game)
         SelectNextMove();
         return _nextMoves.Dequeue();
     }
-
-    (List<Move> accept, List<Move> avoid) FindAvoidMoves(List<Move> moves)
-    {
-        var avoid = new List<Move>();
-        var accept = new List<Move>();
-        foreach (var move in moves)
-        {
-            
-        }
-
-        return (accept, avoid);
-    }
     
     /// <summary>
-    /// Selects from among several potential new moves and enques the best
+    /// Selects from among several potential new moves and enques the best one
     /// </summary>
     ///
     /// <remarks>
@@ -108,11 +96,32 @@ public class AI(Game game)
             return;
         }
 
-        var moves = game.FindAllPossibleMoves().Where(m => CheckInvariant(m, game)).ToList();
-        
-        // If there are no conventional moves try flipping another card from the feed
+        var invariantMoves = game.FindAllPossibleMoves().Where(m => CheckInvariant(m, game)).ToList();
+        var immediate = invariantMoves.FirstOrDefault(IsImmediateMove);
+        List<Move> moves;
+        bool avoidMovesExist = false;
+
+        if (immediate == null)
+        {
+            var (acceptableMoves, avoidMoves) = GetAvoids(invariantMoves);
+            avoidMovesExist = avoidMoves.Count > 0;
+            moves = acceptableMoves.Count == 0 && game._gameState.State == GS.PlayingAvoidedMoves
+                ? avoidMoves
+                : acceptableMoves;
+        }
+        else
+        {
+            moves = [immediate];
+        }
+
+        // If there are no moves try flipping another card from the feed
         if (moves.Count == 0)
         {
+            if (game._gameState.State != GS.Moved && avoidMovesExist)
+            {
+                // We didn't have any usable moves in that stock run but detected some avoid moves
+                game._gameState.EventOccurred(Event.DetectedAvoidedMoves);
+            }
             FlipFeed();
             return;
         }
@@ -131,6 +140,26 @@ public class AI(Game game)
     #endregion
     
     #region Move Selection
+
+    (List<Move> accept, List<Move> avoid) GetAvoids(List<Move> moves)
+    {
+        var accept = new List<Move>();
+        var avoid = new List<Move>();
+        
+        foreach (var m in moves)
+        {
+            if (IsAvoidMove(m))
+            {
+                avoid.Add(m);
+            }
+            else
+            {
+                accept.Add(m);
+            }
+        }
+        return (accept, avoid);
+    }
+    
     /// <summary>
     /// Pick the best move from a list of moves
     /// </summary>
@@ -144,21 +173,6 @@ public class AI(Game game)
         {
             return move;
         }
-
-        // var doable = new List<Move>();
-        //
-        // foreach (var m in moves)
-        // {
-        //     if (IsAvoidMove(m))
-        //     {
-        //         _avoidMoves.Add(m);
-        //     }
-        //     else
-        //     {
-        //         doable.Add(m);
-        //     }
-        // }
-        //
         return moves.First();
     }
     
@@ -195,13 +209,24 @@ public class AI(Game game)
     /// <returns>True if it's to be avoided, false otherwise</returns>
     private bool IsAvoidMove(Move move)
     {
-        // Don't open up a tableaux space unless there's a king to fill the new space
+        // Don't open up a tableaux space unless there's a king to fill the new space or it's a king to
+        // the foundation.  Don't want to label our final winning king moves as "avoid".
         if (move.FromTableau)
         {
             var srcStack = game.FromStack(move) as MixedStack;
             Debug.Assert(srcStack != null, nameof(srcStack) + " != null");
-            if (srcStack.Count == srcStack.CardsUp && srcStack.Count == srcStack.CardsUp)
+            if (srcStack.Count == srcStack.CardsUp && srcStack.Count == move.CardCount)
             {
+                var kingsAvailable = false;
+                
+                // Is there a king on the waste pile?
+                if (game._waste.TopCard.Rank == Card.KING)
+                {
+                    // Arrange for the king move to be next
+                    move.comboMove = new Move(StackId.Waste, move.IdSrc, 1);
+                    kingsAvailable = true;
+                }
+
                 // Is there a king on a tableau?
                 for (var iTab = 0; iTab < Game.TabCount; iTab++)
                 {
@@ -210,21 +235,26 @@ public class AI(Game game)
                     // We can only move a king from a tableau if it's got facedown cards below it
                     if (tab.CardsUp != tab.Count && tab.FirstFaceupCard.Rank == Card.KING)
                     {
-                        // Arrange for the king move to be next
-                        move.comboMove = new Move(StackId.Tab1 + iTab, move.IdSrc, tab.CardsUp);
-                        return false;
+                        var comboMoveCount = tab.CardsUp;
+                        // If we are moving TO the king, we have to
+                        // add our count to the cardcount to be moved since that will alter the King stack
+                        if (move.IdDst == StackId.Tab1 + iTab)
+                        {
+                            comboMoveCount += srcStack.CardsUp;
+                        }
+                        
+                        // Arrange for the king move to be next.
+                        move.comboMove = new Move(StackId.Tab1 + iTab, move.IdSrc, comboMoveCount);
+                        kingsAvailable = true;
+                        break;
                     }
                 }
 
-                // Is there a king on the stock?
-                if (game._stock.TopCard.Rank == Card.KING)
+                if (!kingsAvailable)
                 {
-                    // Arrange for the king move to be next
-                    move.comboMove = new Move(StackId.Stock, move.IdSrc, 1);
-                    return false;
+                    // Clearing out a spot with no kings available so avoid this move
+                    return true;
                 }
-
-                return true;
             }
         }
 
@@ -312,7 +342,7 @@ public class AI(Game game)
             if (game._waste.Count == 0)
             {
                 // If no waste cards to put on stock, we've lost
-                game._gameState = GameState.Lost;
+                game._gameState.EventOccurred(Event.Lose);
                 _nextMoves.Enqueue(Move.NoMove);
                 return;
             }

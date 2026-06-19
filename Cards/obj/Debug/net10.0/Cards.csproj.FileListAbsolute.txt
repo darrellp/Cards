@@ -20,3 +20,5 @@ E:\OneDrive\Documents\My Projects\Cards\Cards\bin\Debug\net10.0\Cards.deps.json
 E:\OneDrive\Documents\My Projects\Cards\Cards\bin\Debug\net10.0\Cards.dll
 E:\OneDrive\Documents\My Projects\Cards\Cards\bin\Debug\net10.0\Cards.pdb
 E:\OneDrive\Documents\My Projects\Cards\Cards\obj\Debug\net10.0\ref\Cards.dll
+E:\OneDrive\Documents\My Projects\Cards\Cards\obj\Debug\net10.0\Cards.sourcelink.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Cards\obj\Debug\net10.0\Cards.sourcelink.json

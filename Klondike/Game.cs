@@ -23,39 +23,6 @@ public enum StackId
 }
 #endregion
 
-#region Enums
-// The game runs through a finite state machine which includes the following states:
-//      NoMoves - No moves have been made in this run through the stock
-//      Moved - a non-stock move has been made in this run through the stock
-//      AvoidedMoves - avoided moves have been avoided and no regular moves have been made
-//      PlayingAvoidedMoves - we are allowing avoided moves to be made
-//      Won - the game is won
-//      Lost - the game is lost
-//
-//      The game starts in NoMoves state and terminates in either Won or Lost states and the transitions are:
-//      
-//      From/To                 Transition
-//      ----------------------------------
-//      ANY/Won                 Game is won
-//      NoMoves/Lost            End of stock
-//      NoMoves/Moved           Any move is taken
-//      NoMoves/AvoidedMoves    An avoided move is detected but not taken
-//      AvoidedMoves/PlayingAvoidedMoves
-//                              End of stock
-//      PlayingAvoidedMoves/NoMoves
-//                              End of stock
-//      Moved/NoMoves           End of stock
-//      
-internal enum GameState
-{
-    NoMoves,
-    Moved,
-    AvoidedMoves,
-    PlayingAvoidedMoves,
-    Won,
-    Lost,
-}
-#endregion
 
 
 public class Game
@@ -67,9 +34,9 @@ public class Game
     public const int FndCount = 4;
     public int Moves { get; private set; }
     public bool Won => WinCheck();
-    public bool Lost => _gameState == GameState.Lost;
+    public bool Lost => _gameState.Lost;
     
-    internal GameState _gameState = GameState.NoMoves;
+    internal GameState _gameState = new GameState();
 
     public int LowFoundationRank()
     {
@@ -79,12 +46,12 @@ public class Game
 
     bool WinCheck()
     {
-        if (_gameState != GameState.Won && _foundations.Select(s => s.Count).All(c => c == 13))
+        if (!_gameState.Won && _foundations.Select(s => s.Count).All(c => c == 13))
         {
-            _gameState = GameState.Won;
+            _gameState.EventOccurred(Event.Win);
         }
 
-        return _gameState == GameState.Won;
+        return _gameState.Won;
     }
     #endregion
     
@@ -533,10 +500,15 @@ public class Game
         
         var movedCards = src.Split(move.CardCount);
         
-        if (move is { IdSrc: StackId.Stock, CardCount: > 1 } || move.IdDst == StackId.Stock)
+        if (move.IdSrc == StackId.Stock || move.IdDst == StackId.Stock)
         {
             // If we've moving between the feed and discards or vice versa then the stack gets flipped
             movedCards.Reverse();
+        }
+        else
+        {
+            _gameState.EventOccurred(Event.MadeMove);
+
         }
 
         if (src is MixedStack mixedStack)
@@ -554,28 +526,16 @@ public class Game
         
         if (move.IdDst == StackId.Stock)
         {
-            // We're flipping the deck
-            //      NoMoves/Lost            End of stock
-            //      AvoidedMoves/PlayingAvoidedMoves
-            //                              End of stock
-            //      PlayingAvoidedMoves/NoMoves
-            //                              End of stock
-            //      Moved/NoMoves           End of stock
-            _gameState = _gameState switch
-            {
-                GameState.NoMoves => GameState.Lost,
-                GameState.AvoidedMoves => GameState.PlayingAvoidedMoves,
-                GameState.PlayingAvoidedMoves => GameState.NoMoves,
-                GameState.Moved => GameState.NoMoves,
-                _ => GameState.Lost,
-            };
+            _gameState.EventOccurred(Event.EndOfStock);
         }
 
-        // If there are any moves to be made make note of that in the game state
-        if (_gameState == GameState.NoMoves && FindAllPossibleMoves().Any(m => AI.CheckInvariant(m, this)))
-        {
-            _gameState = GameState.Moved;
-        }
+        var nextMoves = FindAllPossibleMoves().Where(m => AI.CheckInvariant(m, this));
+        
+        // // If there are any moves to be made make note of that in the game state
+        // if (_gameState.State == GS.NoMoves && FindAllPossibleMoves().Any(m => AI.CheckInvariant(m, this)))
+        // {
+        //     _gameState.EventOccurred(Event.MadeMove);
+        // }
     }
     #endregion
     
@@ -608,7 +568,7 @@ public class Game
         return PlayGameTo(int.MaxValue);
     }
 
-    private bool PlayGameTo(int moveCount)
+    internal bool PlayGameTo(int moveCount)
     {
         var ai = new AI(this);
         var invariantLast = Invariant();

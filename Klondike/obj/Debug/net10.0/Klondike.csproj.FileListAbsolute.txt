@@ -28,3 +28,5 @@ E:\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\Klondike.dll
 E:\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\refint\Klondike.dll
 E:\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\Klondike.pdb
 E:\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\ref\Klondike.dll
+E:\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\Klondike.sourcelink.json
+C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\Klondike\obj\Debug\net10.0\Klondike.sourcelink.json
