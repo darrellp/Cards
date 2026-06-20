@@ -70,7 +70,6 @@ public class GameState
             case Event.EndOfStock:
                 State = State switch
                 {
-                    GS.Moved => GS.NoMoves,
                     GS.NoMoves => GS.Lost,
                     GS.AvoidedMoves => GS.PlayingAvoidedMoves,
                     GS.PlayingAvoidedMoves or GS.Moved => GS.NoMoves,
