@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Klondike")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a2dfeac2b651248f8d674702f72cfbf140f5878a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29db9e15e2486b84b82cfdb65963a6ee46f61bba")]
 [assembly: System.Reflection.AssemblyProductAttribute("Klondike")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Klondike")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

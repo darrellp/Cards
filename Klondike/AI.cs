@@ -173,7 +173,47 @@ public class AI(Game game)
         {
             return move;
         }
+        
+        // At this point it becomes a bit more difficult to pick out a move.  We have a list of non-immediate moves which
+        // all increase the invariant and are either not avoided or its time to play them.  Some considerations:
+        // 1. Stuff that turns up new invariant cards is always good
+        // 2. Turning up cards in tableaus from deeper stacks is better
+        // 3. UNLESS we've got kings on Tableaus with cards above them which will fill empty stacks
+
+        // Preferentially pick revealing moves with maximum depth
+        var revealing = moves.Where(IsRevealingMove).MaxBy(SrcDepth);
+        if (revealing != null)
+        {
+            return revealing;
+        }
+        
         return moves.First();
+    }
+
+    private bool IsRevealingMove(Move move)
+    {
+        while (move != null)
+        {
+            if (move.FromTableau)
+            {
+                var srcStack = game.FromStack(move) as MixedStack;
+                if (move.CardCount == srcStack.CardsUp && srcStack.Count > move.CardCount)
+                {
+                    return true;
+                }
+            }
+
+            move = move.comboMove;
+        }
+
+        return false;
+    }
+
+    private int SrcDepth(Move move)
+    {
+        var srcStack = game.FromStack(move) as MixedStack;
+        Debug.Assert(srcStack != null);
+        return srcStack.Count - srcStack.CardsUp;
     }
     
     // We classify moves into one of a few types:
