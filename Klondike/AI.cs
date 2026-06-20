@@ -76,7 +76,7 @@ public class AI(Game game)
         {
            return Move.NoMove;
         }
-        SelectNextMove();
+        EnqueueNextMoves();
         return _nextMoves.Dequeue();
     }
     
@@ -88,7 +88,7 @@ public class AI(Game game)
     /// Sometimes more than one move may be queued up.  The series of moves is guaranteed to increase
     /// the invariant though it may go down in the middle of the series of moves.
     /// </remarks>
-    private void SelectNextMove()
+    private void EnqueueNextMoves()
     {
         if (_nextMoves.Count > 0)
         {
