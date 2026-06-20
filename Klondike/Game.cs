@@ -490,7 +490,7 @@ public class Game
         var src = StackFromId(move.IdSrc);
         var dst = StackFromId(move.IdDst);
         
-        if (move.IdDst is >= StackId.Fnd1 and <= StackId.Fnd4)
+        if (move.ToFoundation)
         {
             // Mark this foundation stack as building in the source card's suit
             // (redundant after first ace but arguably faster to just do it than make a check)
@@ -528,14 +528,6 @@ public class Game
         {
             _gameState.EventOccurred(Event.EndOfStock);
         }
-
-        var nextMoves = FindAllPossibleMoves().Where(m => AI.CheckInvariant(m, this));
-        
-        // // If there are any moves to be made make note of that in the game state
-        // if (_gameState.State == GS.NoMoves && FindAllPossibleMoves().Any(m => AI.CheckInvariant(m, this)))
-        // {
-        //     _gameState.EventOccurred(Event.MadeMove);
-        // }
     }
     #endregion
     

@@ -28,6 +28,7 @@ public class KlondikeBoard
                 new Layout("TopIndicators").Size(1),
                 new Layout("BottomIndicators").Size(1),
                 new Layout("Tableaux").Size(13),
+                new Layout("Counts").Size(1),
                 new Layout("Help").Size(1),
                 new Layout("GameInfo").Size(1));
         
@@ -40,6 +41,7 @@ public class KlondikeBoard
         klayout["TopStacks"].Update(topStacksLayout);
         klayout["Help"].Update(new Markup("[yellow]Q[/] - Quit [yellow]N[/] - New Game [yellow]Space[/] - Next Move"));
         klayout["GameInfo"].Update(new Markup("[yellow]Game[/]"));
+        klayout["Counts"].Update(new Markup(""));
         
         var ai = new AI(game);
 
@@ -78,6 +80,8 @@ public class KlondikeBoard
                     UpdateTableaux(klayout["Tableaux"], game);
                     UpdateFoundations(topStacksLayout["Foundations"], game);
 
+                    UpdateCounts(klayout["Counts"], game);
+
                     var (topIndicator, botIndicator) = GetIndicatorStrings(nextMove);
                     var topLength = topIndicator.RemoveMarkup().Length;
                     var botLength = botIndicator.RemoveMarkup().Length;
@@ -106,6 +110,18 @@ public class KlondikeBoard
                 }
             });
     }
+
+    private void UpdateCounts(Layout layout, Game game)
+    {
+        StringBuilder sbCounts = new();
+        for (var iTab = 0; iTab < Game.TabCount; iTab++)
+        {
+            var tabStack = game.Tableau(iTab);
+            sbCounts.Append($"{tabStack.Count - tabStack.CardsUp}  ");
+        }
+        layout.Update(new Markup(sbCounts.ToString()));
+    }
+
     #endregion
 
     #region Indicator strings
