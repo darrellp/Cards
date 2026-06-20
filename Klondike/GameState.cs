@@ -43,7 +43,7 @@ internal enum Event
 }
 #endregion
 
-internal class GameState
+public class GameState
 {
     internal GS State { get; set; } = GS.NoMoves;
     internal bool Lost => State == GS.Lost;
@@ -93,4 +93,6 @@ internal class GameState
                 break;
         }
     }
+    
+    override public string ToString() => State.ToString();
 }

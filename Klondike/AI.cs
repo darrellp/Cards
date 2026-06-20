@@ -105,7 +105,7 @@ public class AI(Game game)
         {
             var (acceptableMoves, avoidMoves) = GetAvoids(invariantMoves);
             avoidMovesExist = avoidMoves.Count > 0;
-            moves = acceptableMoves.Count == 0 && game._gameState.State == GS.PlayingAvoidedMoves
+            moves = acceptableMoves.Count == 0 && game.State.State == GS.PlayingAvoidedMoves
                 ? avoidMoves
                 : acceptableMoves;
         }
@@ -117,10 +117,10 @@ public class AI(Game game)
         // If there are no moves try flipping another card from the feed
         if (moves.Count == 0)
         {
-            if (game._gameState.State != GS.Moved && avoidMovesExist)
+            if (game.State.State != GS.Moved && avoidMovesExist)
             {
                 // We didn't have any usable moves in that stock run but detected some avoid moves
-                game._gameState.EventOccurred(Event.DetectedAvoidedMoves);
+                game.State.EventOccurred(Event.DetectedAvoidedMoves);
             }
             FlipFeed();
             return;
@@ -342,7 +342,7 @@ public class AI(Game game)
             if (game._waste.Count == 0)
             {
                 // If no waste cards to put on stock, we've lost
-                game._gameState.EventOccurred(Event.Lose);
+                game.State.EventOccurred(Event.Lose);
                 _nextMoves.Enqueue(Move.NoMove);
                 return;
             }

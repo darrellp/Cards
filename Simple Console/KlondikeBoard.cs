@@ -30,7 +30,8 @@ public class KlondikeBoard
                 new Layout("Tableaux").Size(13),
                 new Layout("Counts").Size(1),
                 new Layout("Help").Size(1),
-                new Layout("GameInfo").Size(1));
+                new Layout("GameInfo").Size(1),
+                new Layout("State"));
         
         var topStacksLayout = new Layout("TopStacks")
             .SplitColumns(
@@ -42,6 +43,7 @@ public class KlondikeBoard
         klayout["Help"].Update(new Markup("[yellow]Q[/] - Quit [yellow]N[/] - New Game [yellow]Space[/] - Next Move"));
         klayout["GameInfo"].Update(new Markup("[yellow]Game[/]"));
         klayout["Counts"].Update(new Markup(""));
+        klayout["State"].Update(new Markup("[purple]NoMoves[/]"));
         
         var ai = new AI(game);
 
@@ -88,7 +90,7 @@ public class KlondikeBoard
                     Debug.Assert(topLength <= BoardWidth && botLength <= BoardWidth);
                     klayout["TopIndicators"].Update(new Markup(topIndicator));
                     klayout["BottomIndicators"].Update(new Markup(botIndicator));
-
+                    
                     ctx.Refresh();
                     inChar = Char.ToUpper(Console.ReadKey(true).KeyChar);
                     if (inChar == 'N')
@@ -107,6 +109,7 @@ public class KlondikeBoard
                     {
                         game.MakeMove(nextMove);
                     }
+                    klayout["State"].Update(new Markup($"[purple]{game.State.ToString()}[/]"));
                 }
             });
     }

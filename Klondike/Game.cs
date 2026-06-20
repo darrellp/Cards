@@ -34,9 +34,9 @@ public class Game
     public const int FndCount = 4;
     public int Moves { get; private set; }
     public bool Won => WinCheck();
-    public bool Lost => _gameState.Lost;
-    
-    internal GameState _gameState = new GameState();
+    public bool Lost => State.Lost;
+
+    public GameState State { get; } = new GameState();
 
     public int LowFoundationRank()
     {
@@ -46,12 +46,12 @@ public class Game
 
     bool WinCheck()
     {
-        if (!_gameState.Won && _foundations.Select(s => s.Count).All(c => c == 13))
+        if (!State.Won && _foundations.Select(s => s.Count).All(c => c == 13))
         {
-            _gameState.EventOccurred(Event.Win);
+            State.EventOccurred(Event.Win);
         }
 
-        return _gameState.Won;
+        return State.Won;
     }
     #endregion
     
@@ -507,7 +507,7 @@ public class Game
         }
         else
         {
-            _gameState.EventOccurred(Event.MadeMove);
+            State.EventOccurred(Event.MadeMove);
 
         }
 
@@ -526,7 +526,7 @@ public class Game
         
         if (move.IdDst == StackId.Stock)
         {
-            _gameState.EventOccurred(Event.EndOfStock);
+            State.EventOccurred(Event.EndOfStock);
         }
     }
     #endregion
