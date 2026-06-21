@@ -65,6 +65,7 @@ public class KlondikeBoard
                         GameOver = true;
                         wonLost = "Sorry - you lost!";
                     }
+                    klayout["State"].Update(new Markup($"[purple]{game.State.ToString()}[/]"));
                     var gameInfo = $"[blue]Game: {game.Seed}  Move: {game.Moves}[/] [red]{wonLost}[/]";
                     klayout["GameInfo"].Update(new Markup(gameInfo));
                     var nextMove = new Move(StackId.None, StackId.None);
@@ -109,7 +110,6 @@ public class KlondikeBoard
                     {
                         game.MakeMove(nextMove);
                     }
-                    klayout["State"].Update(new Markup($"[purple]{game.State.ToString()}[/]"));
                 }
             });
     }
