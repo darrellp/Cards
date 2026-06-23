@@ -38,9 +38,19 @@ public class Game
 
     public GameState State { get; } = new GameState();
 
-    public int LowFoundationRank()
+    public int LowFoundationRank(Suit suit)
     {
-        return Foundations().Select(s => s.Count == 0 ? 0 : s.TopCard.Rank).Min();
+        var top = int.MaxValue;
+        var isBlack = Card.IsBlackSuit(suit);
+        for (var iFnd = 0; iFnd < Game.FndCount; iFnd++)
+        {
+            if (Card.IsBlackSuit(_fndSuits[iFnd]) != isBlack)
+            {
+                top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
+            }
+        }
+
+        return top;
     }
 
 

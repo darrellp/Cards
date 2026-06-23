@@ -231,8 +231,8 @@ public class AI(Game game)
         }
         // It would be a teeny bit faster to determine this once in the caller and pass it into this
         // routine as a paramater rather than repeatedly calculating it here...
-        var lowRank = game.LowFoundationRank();
         var srcCard = game.StackFromId(move.IdSrc).TopCard;
+        var lowRank = game.LowFoundationRank(srcCard.Suit);
         return srcCard.Rank <= lowRank + 2;
     }
 
