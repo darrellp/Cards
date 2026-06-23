@@ -137,6 +137,7 @@ public record Card(byte Rank, Suit Suit)
     /// Returns true if this is a black card
     /// </summary>
     public bool IsBlack => Suit == Suit.Club || Suit == Suit.Spade;
+    public static bool IsBlackSuit(Suit suit) => suit == Suit.Club || suit == Suit.Spade;
     
     /// <summary>
     /// Returns true if this is a red card
