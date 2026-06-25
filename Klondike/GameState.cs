@@ -30,12 +30,14 @@ internal enum GS
     AvoidedMoves,
     PlayingAvoidedMoves,
     Won,
+    WillWin,
     Lost,
 }
 
 internal enum Event
 {
     Win,
+    WillWin,
     Lose,
     MadeMove,
     DetectedAvoidedMoves,
@@ -56,6 +58,12 @@ public class GameState
             // These are terminal states - no moving from them
             return;
         }
+
+        if (State == GS.WillWin && e != Event.Win)
+        {
+            // We stay in WillWin until we go into Win state
+            return;
+        }
         
         switch (e)
         {
@@ -63,6 +71,10 @@ public class GameState
                 State = GS.Won;
                 break;
 
+            case Event.WillWin:
+                State = GS.WillWin;
+                break;
+            
             case Event.Lose:
                 State = GS.Lost;
                 break;

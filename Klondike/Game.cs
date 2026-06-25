@@ -53,7 +53,17 @@ public class Game
         return top;
     }
 
+    bool WillWinCheck()
+    {
+        if (_stock.Count == 0 && _waste.Count == 0 && Tableaus().All(s => s.Count == s.CardsUp))
+        {
+            State.EventOccurred(Event.WillWin);
+            return true;
+        }
 
+        return false;
+    }
+    
     bool WinCheck()
     {
         if (!State.Won && _foundations.Select(s => s.Count).All(c => c == 13))
@@ -534,7 +544,7 @@ public class Game
         dst.Merge(movedCards);
         Moves++;
         
-        if (move.IdDst == StackId.Stock)
+        if (!WillWinCheck() && move.IdDst == StackId.Stock)
         {
             State.EventOccurred(Event.EndOfStock);
         }

@@ -209,11 +209,22 @@ public class AI(Game game)
         return false;
     }
 
-    private int SrcDepth(Move move)
+    private int SrcDepth(Move? move)
     {
-        var srcStack = game.FromStack(move) as MixedStack;
-        Debug.Assert(srcStack != null);
-        return srcStack.Count - srcStack.CardsUp;
+        while (move != null)
+        {
+            var srcStack = game.FromStack(move) as MixedStack;
+            if (srcStack != null)
+            {
+                return srcStack.Count - srcStack.CardsUp;
+            }
+            else
+            {
+                move = move.comboMove;
+            }
+        }
+
+        return -1;
     }
     
     // We classify moves into one of a few types:
