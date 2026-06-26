@@ -3,11 +3,11 @@
 /// <summary>
 /// Intended to represent a stack where the top cards are faceup and the remainder facedown
 /// </summary>
-public class MixedStack : Stack
+public sealed class MixedStack : Stack
 {
-    public int CardsUp { get; set; } = 0;
+    public int CardsUp { get; set; }
 
-    public MixedStack() : base([])
+    private MixedStack() : base([])
     {
         CardsUp = 0;
     }
@@ -167,7 +167,7 @@ public class MixedStack : Stack
     /// </remarks>
     /// 
     /// <param name="card">Card to be added</param>
-    public virtual void Add(string cardString)
+    public void Add(string cardString)
     {
         base.Add(cardString);
         CardsUp++;

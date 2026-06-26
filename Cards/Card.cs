@@ -21,31 +21,34 @@ public enum Suit
 /// <param name="Suit">Suit of the card</param>
 public record Card(byte Rank, Suit Suit)
 {
+    // ReSharper disable InconsistentNaming
     public const int JACK = 11;
     public const int QUEEN = 12;
     public const int KING = 13;
     public const int ACE = 1;
+    // ReSharper restore InconsistentNaming
     
     public static readonly Card NullCard = new Card(0, Suit.None);
-    public static char SuitAbbrev(Suit suitParm)
+
+    private static char SuitAbbrev(Suit suitParm)
     {
         return suitParm switch
         {
-            Cards.Suit.Club => 'C',
-            Cards.Suit.Diamond => 'D',
-            Cards.Suit.Heart => 'H',
-            Cards.Suit.Spade => 'S',
+            Suit.Club => 'C',
+            Suit.Diamond => 'D',
+            Suit.Heart => 'H',
+            Suit.Spade => 'S',
             _ => 'X'
         };
     }
 
-    public static char RankAbbrev(int rankParm)
+    private static char RankAbbrev(int rankParm)
     {
         if (rankParm < 1 || rankParm > 13)
         {
-            throw new ArgumentOutOfRangeException("Cards must be ranked from 1 to 13");
+            throw new ArgumentOutOfRangeException(nameof(rankParm));
         }
-        if (rankParm > 1 && rankParm < 10)
+        if (rankParm is > 1 and < 10)
         {
             return (char)('0' + rankParm);
         }
@@ -64,11 +67,11 @@ public record Card(byte Rank, Suit Suit)
 
     public static Card CardFromString(string cardString)
     {
-        Byte rank = 0;
-        char rankChar = cardString[0];
-        if (rankChar >= '1' && rankChar <= '9')
+        byte rank;
+        var rankChar = cardString[0];
+        if (rankChar is >= '1' and <= '9')
         {
-            rank = (Byte)(rankChar - '0');
+            rank = (byte)(rankChar - '0');
         }
         else
         {
@@ -90,7 +93,7 @@ public record Card(byte Rank, Suit Suit)
             'S' => Suit.Spade,
             _ => throw new ArgumentException($"Invalid card string {cardString}")
         };
-        return new Card(rank, suit);
+        return new(rank, suit);
     }
     
     /// <summary>
