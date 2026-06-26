@@ -62,7 +62,6 @@ public class AI(Game game)
     // Place we can queue up moves so we can assure a series of
     // move are made in succession
     private readonly Queue<Move> _nextMoves = new Queue<Move>();
-    private readonly List<Move> _avoidMoves = new List<Move>();
     #endregion
 
     #region Next move methods
@@ -168,7 +167,7 @@ public class AI(Game game)
     private Move SelectBestMove(List<Move> moves)
     {
         // Check for immediate moves
-        var move = moves.FirstOrDefault(m => IsImmediateMove(m));
+        var move = moves.FirstOrDefault(IsImmediateMove);
         if (move != null)
         {
             return move;
@@ -190,13 +189,14 @@ public class AI(Game game)
         return moves.First();
     }
 
-    private bool IsRevealingMove(Move move)
+    private bool IsRevealingMove(Move? move)
     {
         while (move != null)
         {
             if (move.FromTableau)
             {
                 var srcStack = game.FromStack(move) as MixedStack;
+                Debug.Assert(srcStack != null, nameof(srcStack) + " != null");
                 if (move.CardCount == srcStack.CardsUp && srcStack.Count > move.CardCount)
                 {
                     return true;
@@ -213,15 +213,11 @@ public class AI(Game game)
     {
         while (move != null)
         {
-            var srcStack = game.FromStack(move) as MixedStack;
-            if (srcStack != null)
+            if (game.FromStack(move) is MixedStack srcStack)
             {
                 return srcStack.Count - srcStack.CardsUp;
             }
-            else
-            {
-                move = move.comboMove;
-            }
+            move = move.comboMove;
         }
 
         return -1;
@@ -274,14 +270,13 @@ public class AI(Game game)
                 if (game._waste.TopCard.Rank == Card.KING)
                 {
                     // Arrange for the king move to be next
-                    move.comboMove = new Move(StackId.Waste, move.IdSrc, 1);
+                    move.comboMove = new Move(StackId.Waste, move.IdSrc);
                     kingsAvailable = true;
                 }
 
                 // Is there a king on a tableau?
                 for (var iTab = 0; iTab < Game.TabCount; iTab++)
                 {
-                    // TODO: see if there are multiple king moves and take from the one with the most cards down
                     var tab = game._tableau[iTab];
                     // We can only move a king from a tableau if it's got facedown cards below it
                     if (tab.CardsUp != tab.Count && tab.FirstFaceupCard.Rank == Card.KING)
@@ -330,7 +325,7 @@ public class AI(Game game)
     /// <param name="move">the move to check</param>
     /// <param name="game">the game to check</param>
     /// <returns>True if it's fine, false if it breaks the invariant</returns>
-    internal static bool CheckInvariant(Move move, Game game)
+    private static bool CheckInvariant(Move move, Game game)
     {
         if (move.TabToTab)
         {
@@ -397,7 +392,6 @@ public class AI(Game game)
                 _nextMoves.Enqueue(Move.NoMove);
                 return;
             }
-            // TODO: Handle avoid moves
             _nextMoves.Enqueue(new Move(StackId.Waste, StackId.Stock, game._waste.Count));
             return;
         }
