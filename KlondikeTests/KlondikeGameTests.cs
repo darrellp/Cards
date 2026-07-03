@@ -92,8 +92,8 @@ public class Tests
     [Test]
     public void PlaySpecificGames()
     {
-        var test = new Game(193843936);
-        test.PlayGameTo(109);
+        var test = new Game(850976309);
+        test.PlayGameTo(76);
         //Assert.That(test.PlayGame());
     }
 }

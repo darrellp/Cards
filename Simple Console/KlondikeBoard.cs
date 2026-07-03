@@ -48,68 +48,76 @@ public class KlondikeBoard
         var ai = new AI(game);
 
         AnsiConsole.Live(klayout)
-            .Start(async ctx =>
+            .Start(ctx =>
             {
-                // Gameplay loop
-                while (true)
+                try
                 {
-                    char inChar;
-                    var wonLost = "";
-                    if (game.Won)
+                    // Gameplay loop
+                    while (true)
                     {
-                        GameOver = true;
-                        wonLost = "!!!  YOU WON  !!!";
-                    }
-                    else if (game.Lost)
-                    {
-                        GameOver = true;
-                        wonLost = "Sorry - you lost!";
-                    }
-                    klayout["State"].Update(new Markup($"[purple]{game.State.ToString()}[/]"));
-                    var gameInfo = $"[blue]Game: {game.Seed}  Move: {game.Moves}[/] [red]{wonLost}[/]";
-                    klayout["GameInfo"].Update(new Markup(gameInfo));
-                    var nextMove = new Move(StackId.None, StackId.None);
-                    if (!GameOver)
-                    {
-                        nextMove = ai.GetNextMove();
-                    }
+                        var wonLost = "";
+                        if (game.Won)
+                        {
+                            GameOver = true;
+                            wonLost = "!!!  YOU WON  !!!";
+                        }
+                        else if (game.Lost)
+                        {
+                            GameOver = true;
+                            wonLost = "Sorry - you lost!";
+                        }
+                        klayout["State"].Update(new Markup($"[purple]{game.State}[/]"));
+                        var gameInfo = $"[blue]Game: {game.Seed}  Move: {game.Moves}[/] [red]{wonLost}[/]";
+                        klayout["GameInfo"].Update(new Markup(gameInfo));
+                        var nextMove = new Move(StackId.None, StackId.None);
+                        if (!GameOver)
+                        {
+                            nextMove = ai.GetNextMove();
+                        }
 
-                    var discardCard = game.Discards().TopCard;
-                    var discardString = discardCard == Card.NullCard ? "[green]--[/]" : CardString(discardCard);
-                    topStacksLayout["Discard"].Update(new Markup(discardString));
-                    var feedString = game.Feed().Count == 0 ? "[green]--[/]" : "ST";
-                    topStacksLayout["Feed"].Update(new Markup(feedString));
+                        var discardCard = game.Discards().TopCard;
+                        var discardString = discardCard == Card.NullCard ? "[green]--[/]" : CardString(discardCard);
+                        topStacksLayout["Discard"].Update(new Markup(discardString));
+                        var feedString = game.Feed().Count == 0 ? "[green]--[/]" : "ST";
+                        topStacksLayout["Feed"].Update(new Markup(feedString));
 
-                    UpdateTableaux(klayout["Tableaux"], game);
-                    UpdateFoundations(topStacksLayout["Foundations"], game);
+                        UpdateTableaux(klayout["Tableaux"], game);
+                        UpdateFoundations(topStacksLayout["Foundations"], game);
 
-                    UpdateCounts(klayout["Counts"], game);
+                        UpdateCounts(klayout["Counts"], game);
 
-                    var (topIndicator, botIndicator) = GetIndicatorStrings(nextMove);
-                    var topLength = topIndicator.RemoveMarkup().Length;
-                    var botLength = botIndicator.RemoveMarkup().Length;
-                    Debug.Assert(topLength <= BoardWidth && botLength <= BoardWidth);
-                    klayout["TopIndicators"].Update(new Markup(topIndicator));
-                    klayout["BottomIndicators"].Update(new Markup(botIndicator));
+                        var (topIndicator, botIndicator) = GetIndicatorStrings(nextMove);
+                        var topLength = topIndicator.RemoveMarkup().Length;
+                        var botLength = botIndicator.RemoveMarkup().Length;
+                        Debug.Assert(topLength <= BoardWidth && botLength <= BoardWidth);
+                        klayout["TopIndicators"].Update(new Markup(topIndicator));
+                        klayout["BottomIndicators"].Update(new Markup(botIndicator));
                     
-                    ctx.Refresh();
-                    inChar = Char.ToUpper(Console.ReadKey(true).KeyChar);
-                    if (inChar == 'N')
-                    {
-                        NewGame = true;
-                        break;
+                        ctx.Refresh();
+                        var inChar = char.ToUpper(Console.ReadKey(true).KeyChar);
+                        if (inChar == 'N')
+                        {
+                            NewGame = true;
+                            break;
+                        }
+
+                        if (inChar == 'Q')
+                        {
+                            Quit = true;
+                            break;
+                        }
+
+                        if (!GameOver && inChar == ' ')
+                        {
+                            game.MakeMove(nextMove);
+                        }
                     }
 
-                    if (inChar == 'Q')
-                    {
-                        Quit = true;
-                        break;
-                    }
-
-                    if (!GameOver && inChar == ' ')
-                    {
-                        game.MakeMove(nextMove);
-                    }
+                    return Task.CompletedTask;
+                }
+                catch (Exception exception)
+                {
+                    return Task.FromException(exception);
                 }
             });
     }
@@ -209,9 +217,6 @@ public class KlondikeBoard
             
             case >= StackId.Tab1 and <= StackId.Tab7:
                 index = 3 * (id - StackId.Tab1);
-                break;
-            
-            default:
                 break;
         }
 
