@@ -44,7 +44,8 @@ public class Game
         var isBlack = Card.IsBlackSuit(suit);
         for (var iFnd = 0; iFnd < Game.FndCount; iFnd++)
         {
-            if (Card.IsBlackSuit(_fndSuits[iFnd]) != isBlack)
+            var fndSuit = _fndSuits[iFnd];
+            if (fndSuit == Suit.None || Card.IsBlackSuit(fndSuit) != isBlack)
             {
                 top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
             }

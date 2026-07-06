@@ -3,6 +3,7 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAssert_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F182ec85d25b779c7118bca2890ca95ae8dd32868c52272faee4a3a304f624b_003FAssert_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ADebug_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F56b895832ba1dd5dcf6eab77be40a0537da9d1bf60cfbac19515378f1ac9ca13_003FDebug_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AException_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003Fb4f8b29071cfcf73e927671b936ba53110f1b613a1cc9bef4fc4f07dd0fbe9_003FException_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AFirst_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F5d16dd521ecb96a323be5963be4cbf12673a02bff45d747e826354246a9160_003FFirst_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AFirst_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F5d16dd521ecb96a323be5963be4cbf12673a02bff45d747e826354246a9160_003FFirst_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ALayout_002Ecs_002Fl_003AC_0021_003FUsers_003Fjar_005Fc_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F6ab81dd11e7e68ff4af5d79fd6c1868d35145dfb12bc92d068328bcd53f9a75d_003FLayout_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ALayout_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F6ab81dd11e7e68ff4af5d79fd6c1868d35145dfb12bc92d068328bcd53f9a75d_003FLayout_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
@@ -54,7 +55,7 @@
     &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c74bf514_002D9942_002D4ad2_002Da460_002Dc32ffc03426e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestColors #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c74bf514_002D9942_002D4ad2_002Da460_002Dc32ffc03426e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestColors #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;
     &lt;Project Location="C:\Users\jar_c\OneDrive\Documents\My Projects\Cards\CardsTests" Presentation="&amp;lt;CardsTests&amp;gt;" /&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
@@ -67,7 +68,7 @@
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e2b07431_002Dfc9e_002D4308_002D8209_002D0f58b6862afc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="FindAllMovesTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e2b07431_002Dfc9e_002D4308_002D8209_002D0f58b6862afc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="FindAllMovesTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.FindAllMovesTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.StackTests.TestMixedStackFromString&lt;/TestId&gt;&#xD;
@@ -76,5 +77,7 @@
     &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.SelectNextMoveTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.PlayGameTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::68537B00-3F40-47FD-8866-5B9594AEBB50::net10.0::KlondikeTests.Tests.PlaySpecificGames&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.ImageTests.TestStreams&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::67F73954-BA78-4E42-8BB9-C4A6DCE6E182::net10.0::CardsTests.ImageTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

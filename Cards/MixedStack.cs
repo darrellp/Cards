@@ -167,7 +167,7 @@ public sealed class MixedStack : Stack
     /// </remarks>
     /// 
     /// <param name="card">Card to be added</param>
-    public void Add(string cardString)
+    public override void Add(string cardString)
     {
         base.Add(cardString);
         CardsUp++;

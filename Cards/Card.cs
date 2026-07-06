@@ -1,4 +1,6 @@
-﻿namespace Cards;
+﻿using System.Reflection;
+
+namespace Cards;
 
 public enum Suit
 {
@@ -21,15 +23,38 @@ public enum Suit
 /// <param name="Suit">Suit of the card</param>
 public record Card(byte Rank, Suit Suit)
 {
+    #region Constants
     // ReSharper disable InconsistentNaming
     public const int JACK = 11;
     public const int QUEEN = 12;
     public const int KING = 13;
     public const int ACE = 1;
     // ReSharper restore InconsistentNaming
+    #endregion
     
+    #region Static fields
     public static readonly Card NullCard = new Card(0, Suit.None);
 
+    public static readonly string[] ImageRanks =
+    [
+        "illegal",
+        "ace",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7n",
+        "8",
+        "9",
+        "10",
+        "jack",
+        "queen",
+        "king"
+    ];
+    #endregion
+
+    #region Naming
     private static char SuitAbbrev(Suit suitParm)
     {
         return suitParm switch
@@ -44,25 +69,25 @@ public record Card(byte Rank, Suit Suit)
 
     private static char RankAbbrev(int rankParm)
     {
-        if (rankParm < 1 || rankParm > 13)
+        switch (rankParm)
         {
-            throw new ArgumentOutOfRangeException(nameof(rankParm));
+            case < 1:
+            case > 13:
+                throw new ArgumentOutOfRangeException(nameof(rankParm));
+            case > 1 and < 10:
+                return (char)('0' + rankParm);
+            default:
+                return rankParm switch
+                {
+                    1 => 'A',
+                    10 => 'T',
+                    11 => 'J',
+                    12 => 'Q',
+                    13 => 'K',
+                    // ReSharper disable once UnreachableSwitchArmDueToIntegerAnalysis
+                    _ => '\0'
+                };
         }
-        if (rankParm is > 1 and < 10)
-        {
-            return (char)('0' + rankParm);
-        }
-        
-        return rankParm switch
-        {
-            1 => 'A',
-            10 => 'T',
-            11 => 'J',
-            12 => 'Q',
-            13 => 'K',
-            // ReSharper disable once UnreachableSwitchArmDueToIntegerAnalysis
-            _ => '\0'
-        };
     }
 
     public static Card CardFromString(string cardString)
@@ -95,7 +120,40 @@ public record Card(byte Rank, Suit Suit)
         };
         return new(rank, suit);
     }
+
+    private string ImageRank()
+    {
+        return ImageRanks[Rank];
+    }
+
+    private string ImageSuit()
+    {
+        return Suit switch
+        {
+            Suit.Club => "clubs",
+            Suit.Diamond => "diamonds",
+            Suit.Heart => "hearts",
+            Suit.Spade => "spades",
+            _ => throw new ArgumentException($"Invalid suit {Suit}")
+        };
+    }
+
+    private string ImageFile()
+    {
+        var variant = Rank > 10 ? "2" : "";
+        return $"{ImageRank()}_of_{ImageSuit()}{variant}.png";
+    }
+
+    public Stream ImageStream()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var names = assembly.GetManifestResourceNames();
+        var resourcePath = $"Cards.Resources.Playing_Cards.{ImageFile()}";
+        return assembly.GetManifestResourceStream(resourcePath)!;
+    }
+    #endregion
     
+    #region Queries
     /// <summary>
     /// Checks if card is the same color as this card
     /// </summary>
@@ -151,4 +209,5 @@ public record Card(byte Rank, Suit Suit)
     {
         return $"{RankAbbrev(Rank)}{SuitAbbrev(Suit)}";
     }
+    #endregion
 }
