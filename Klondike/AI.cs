@@ -140,7 +140,7 @@ public class AI(Game game)
     
     #region Move Selection
 
-    (List<Move> accept, List<Move> avoid) GetAvoids(List<Move> moves)
+    private (List<Move> accept, List<Move> avoid) GetAvoids(List<Move> moves)
     {
         var accept = new List<Move>();
         var avoid = new List<Move>();
