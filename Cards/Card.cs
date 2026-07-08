@@ -69,25 +69,21 @@ public record Card(byte Rank, Suit Suit)
 
     private static char RankAbbrev(int rankParm)
     {
-        switch (rankParm)
+        return rankParm switch
         {
-            case < 1:
-            case > 13:
-                throw new ArgumentOutOfRangeException(nameof(rankParm));
-            case > 1 and < 10:
-                return (char)('0' + rankParm);
-            default:
-                return rankParm switch
-                {
-                    1 => 'A',
-                    10 => 'T',
-                    11 => 'J',
-                    12 => 'Q',
-                    13 => 'K',
-                    // ReSharper disable once UnreachableSwitchArmDueToIntegerAnalysis
-                    _ => '\0'
-                };
-        }
+            < 1 or > 13 => throw new ArgumentOutOfRangeException(nameof(rankParm)),
+            > 1 and < 10 => (char)('0' + rankParm),
+            _ => rankParm switch
+            {
+                1 => 'A',
+                10 => 'T',
+                11 => 'J',
+                12 => 'Q',
+                13 => 'K',
+                // ReSharper disable once UnreachableSwitchArmDueToIntegerAnalysis
+                _ => '\0'
+            }
+        };
     }
 
     public static Card CardFromString(string cardString)
