@@ -13,7 +13,6 @@ to set the actual DataContext for runtime, set the DataContext property in code 
     </Design.DataContext>
 
     <Grid>
-        <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Image Source="{Binding HeartCardImage}"/>
     </Grid>
 
