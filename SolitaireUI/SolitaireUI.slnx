@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Project Path="KlondikeUI.Android/KlondikeUI.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="KlondikeUI.Browser/KlondikeUI.Browser.csproj" />
+  <Project Path="KlondikeUI.Desktop/KlondikeUI.Desktop.csproj" />
+  <Project Path="KlondikeUI.iOS/KlondikeUI.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="KlondikeUI/KlondikeUI.csproj" />
+</Solution>

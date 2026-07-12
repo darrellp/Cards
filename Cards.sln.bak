@@ -1,8 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37012.4 d17.14
-MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cards", "Cards\Cards.csproj", "{4C183937-4FD9-46A1-8828-BBBEF36B2374}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardsTests", "CardsTests\CardsTests.csproj", "{67F73954-BA78-4E42-8BB9-C4A6DCE6E182}"
@@ -13,15 +10,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeTests", "KlondikeTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simple Console", "Simple Console\Simple Console.csproj", "{28095B6B-474C-4B52-94D8-451D160FCB21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI", "SolitaireUI\SolitaireUI\SolitaireUI.csproj", "{80C87E4D-EDDE-4788-B2DE-FE3BB7DB56F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeUI", "KlondikeUI\KlondikeUI\KlondikeUI.csproj", "{80C87E4D-EDDE-4788-B2DE-FE3BB7DB56F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.Android", "SolitaireUI\SolitaireUI.Android\SolitaireUI.Android.csproj", "{B30F6915-86D8-4E7A-94BD-68D513E31008}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeUI.Android", "KlondikeUI\KlondikeUI.Android\KlondikeUI.Android.csproj", "{B30F6915-86D8-4E7A-94BD-68D513E31008}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.Desktop", "SolitaireUI\SolitaireUI.Desktop\SolitaireUI.Desktop.csproj", "{9C20BB61-8E38-403B-BCB8-6839CBBB37DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeUI.Desktop", "KlondikeUI\KlondikeUI.Desktop\KlondikeUI.Desktop.csproj", "{9C20BB61-8E38-403B-BCB8-6839CBBB37DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.iOS", "SolitaireUI\SolitaireUI.iOS\SolitaireUI.iOS.csproj", "{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeUI.iOS", "KlondikeUI\KlondikeUI.iOS\KlondikeUI.iOS.csproj", "{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.Browser", "SolitaireUI\SolitaireUI.Browser\SolitaireUI.Browser.csproj", "{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KlondikeUI.Browser", "KlondikeUI\KlondikeUI.Browser\KlondikeUI.Browser.csproj", "{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +51,7 @@ Global
 		{80C87E4D-EDDE-4788-B2DE-FE3BB7DB56F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80C87E4D-EDDE-4788-B2DE-FE3BB7DB56F4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B30F6915-86D8-4E7A-94BD-68D513E31008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B30F6915-86D8-4E7A-94BD-68D513E31008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B30F6915-86D8-4E7A-94BD-68D513E31008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B30F6915-86D8-4E7A-94BD-68D513E31008}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9C20BB61-8E38-403B-BCB8-6839CBBB37DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -61,14 +59,12 @@ Global
 		{9C20BB61-8E38-403B-BCB8-6839CBBB37DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C20BB61-8E38-403B-BCB8-6839CBBB37DF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{196A5395-FFCE-42BE-9E3E-C6451BF4DDD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
