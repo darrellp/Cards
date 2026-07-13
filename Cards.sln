@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.iOS", "Solitair
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitaireUI.Browser", "SolitaireUI\SolitaireUI.Browser\SolitaireUI.Browser.csproj", "{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericSol", "GenericSol\GenericSol.csproj", "{629952CC-9613-4E22-B6BC-9D36150AD644}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,8 +69,15 @@ Global
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CAF6676-C76F-4CE8-AD78-4B9F743BB5BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629952CC-9613-4E22-B6BC-9D36150AD644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629952CC-9613-4E22-B6BC-9D36150AD644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629952CC-9613-4E22-B6BC-9D36150AD644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629952CC-9613-4E22-B6BC-9D36150AD644}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD2D88CB-7AEA-46DA-BF99-07D80D9B12D0}
 	EndGlobalSection
 EndGlobal
