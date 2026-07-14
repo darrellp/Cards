@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 
 namespace Cards;
 
@@ -52,6 +53,10 @@ public record Card(byte Rank, Suit Suit)
         "queen",
         "king"
     ];
+    #endregion
+
+    #region Properties
+    public int Index => (Rank - 1) + (int)Suit * 13;
     #endregion
 
     #region Naming
@@ -204,6 +209,11 @@ public record Card(byte Rank, Suit Suit)
     public override string ToString()
     {
         return $"{RankAbbrev(Rank)}{SuitAbbrev(Suit)}";
+    }
+
+    public IEnumerator<Card> GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
     #endregion
 }

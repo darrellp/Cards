@@ -1,4 +1,6 @@
-﻿namespace Cards;
+﻿using System.Collections;
+
+namespace Cards;
 
 /// <summary>
 /// Class to represent card stacks in a cards.dll client
@@ -14,7 +16,7 @@
 /// </remarks>
 /// 
 /// <param name="cards">List of cards making up the stack from bottom to top</param>
-public class Stack(List<Card> cards)
+public class Stack(List<Card> cards) : IEnumerable<Card>
 {
     // Actual list of cards in this stack
     protected internal List<Card> _cards = cards;
@@ -97,7 +99,6 @@ public class Stack(List<Card> cards)
         var cardsArray = _cards.ToArray();
         rnd.Shuffle(cardsArray);
         _cards = cardsArray.ToList();
-        //_cards.Shuffle();
     }
 
     /// <summary>
@@ -198,4 +199,13 @@ public class Stack(List<Card> cards)
         _cards[iCard] = Card.CardFromString(cardName);
     }
 
+    public IEnumerator<Card> GetEnumerator()
+    {
+        return _cards.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 }
