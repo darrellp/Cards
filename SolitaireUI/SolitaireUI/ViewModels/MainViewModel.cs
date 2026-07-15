@@ -16,8 +16,8 @@ public partial class MainViewModel : ViewModelBase
             var deck = Stack.SortedDeck();
             foreach (var cardCur in deck)
             {
-                using var stream = card.ImageStream();
-                CardImages[cardCur.Index] = new Bitmap(stream);
+                using (var stream = cardCur.ImageStream())
+                    CardImages[cardCur.Index] = new Bitmap(stream);
             }
         }
         return CardImages[card.Index];

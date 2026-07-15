@@ -45,7 +45,7 @@ public record Card(byte Rank, Suit Suit)
         "4",
         "5",
         "6",
-        "7n",
+        "7",
         "8",
         "9",
         "10",
