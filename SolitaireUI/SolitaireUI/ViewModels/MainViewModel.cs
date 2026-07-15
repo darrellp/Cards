@@ -23,5 +23,6 @@ public partial class MainViewModel : ViewModelBase
         return CardImages[card.Index];
     }
 
-    [ObservableProperty] public Bitmap _heartCardImage = ImageFromCard(Card.CardFromString("KH"));
+    // [ObservableProperty] public Bitmap _heartCardImage = ImageFromCard(Card.CardFromString("KH"));
+    [ObservableProperty] public Stack _deck = MixedStack.ParseMixed("TC | AS 3C 4H TS");
 }

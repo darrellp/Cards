@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SolitaireUI.ViewModels"
+             xmlns:controls="using:SolitaireUI.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SolitaireUI.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+    <StackPanel Margin="20" Spacing="10">
+        <!-- Example usage of StackControl -->
+        <TextBlock Text="Stack Control Examples:" FontWeight="Bold" FontSize="16"/>
+        
+        <!-- Example: Empty Stack -->
+        <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Empty Stack:" Margin="0,0,0,5"/>
+                <controls:StackControl Width="71" Height="96"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Example: Normal Stack Face Up -->
+        <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Normal Stack (Face Up):" Margin="0,0,0,5"/>
+                <controls:StackControl Width="71" Height="96" 
+                                       FaceUp="True"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Example: Normal Stack Face Down -->
+        <Border BorderBrush="Gray" BorderThickness="1" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Normal Stack (Face Down):" Margin="0,0,0,5"/>
+                <controls:StackControl Width="71" Height="96" 
+                                       FaceUp="False"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>
