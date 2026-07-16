@@ -1,7 +1,7 @@
 ﻿using Cards;
 
 namespace GenericSol.Games.TestGame;
-internal class TestGame : GenericGame
+public class TestGame : GenericGame
 {
     Stack _from;
     Stack _to;
@@ -23,7 +23,7 @@ internal class TestGame : GenericGame
     {
         _ai = new TestAi();
         _ai.Game = this;
-        var deck = Stack.ShuffledDeck(new Random(seed));
+        var deck = Stack.SortedDeck();
         _from = deck.Split(3);
         _to = new Stack([]);
     }

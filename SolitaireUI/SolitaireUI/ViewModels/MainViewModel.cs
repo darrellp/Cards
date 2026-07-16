@@ -1,6 +1,8 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Cards;
+using GenericSol.Games.TestGame;
+using Klondike;
 
 namespace SolitaireUI.ViewModels;
 
@@ -23,6 +25,8 @@ public partial class MainViewModel : ViewModelBase
         return CardImages[card.Index];
     }
 
+    private static TestGame _game = new();
     // [ObservableProperty] public Bitmap _heartCardImage = ImageFromCard(Card.CardFromString("KH"));
-    [ObservableProperty] public Stack _deck = MixedStack.ParseMixed("TC | AS 3C 4H TS");
+    [ObservableProperty] public Stack _from = _game.StackFromName("From");
+    [ObservableProperty] public Stack _to = _game.StackFromName("To");
 }

@@ -2,7 +2,7 @@
 
 internal class TestAi : IAi
 {
-    public IGame Game { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public IGame Game { get; set; }
 
     public IMove GetNextMove()
     {

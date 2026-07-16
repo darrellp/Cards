@@ -14,7 +14,7 @@ to set the actual DataContext for runtime, set the DataContext property in code 
     </Design.DataContext>
 
     <Grid>
-       <controls:StackControl Stack="{Binding Deck}" FaceUp="false" CardWidth="100" CardHeight="120" Width="100" Height="200"/>
+       <controls:StackControl Stack="{Binding From}" FaceUp="true" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
     </Grid>
 
 </UserControl>

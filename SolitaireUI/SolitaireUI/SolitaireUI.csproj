@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -23,6 +23,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\..\Cards\Cards.csproj" />
+      <ProjectReference Include="..\..\GenericSol\GenericSol.csproj" />
       <ProjectReference Include="..\..\Klondike\Klondike.csproj" />
     </ItemGroup>
 </Project>
