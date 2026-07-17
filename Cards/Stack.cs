@@ -18,12 +18,20 @@ namespace Cards;
 /// <param name="cards">List of cards making up the stack from bottom to top</param>
 public class Stack(List<Card> cards) : IEnumerable<Card>
 {
+    // Event to notify when the stack is modified
+    public event EventHandler? StackModified;
+
     // Actual list of cards in this stack
     protected internal List<Card> _cards = cards;
     public int Count => _cards.Count;
 
     public Stack() : this([]) {}
     
+    protected virtual void OnStackModified()
+    {
+        StackModified?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>
     /// Returns a stack of the top n cards and leaves the bottom cards in the original stack
     /// </summary>
@@ -55,6 +63,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         var newBottomList = _cards.Take(bottomCount).ToList();
         var newTopList = _cards.Skip(bottomCount).ToList();
         _cards = newBottomList;
+        OnStackModified();
         return new Stack(newTopList);
     }
 
@@ -72,6 +81,8 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         {
             _cards.AddRange(sourceStack._cards);
             sourceStack._cards = [];
+            OnStackModified();
+            sourceStack.OnStackModified();
             return;
         }
 
@@ -83,11 +94,14 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         int sourceSizePostOp = sourceStack.Count - cardCount;
         _cards = _cards.Concat(sourceStack._cards.Skip(sourceSizePostOp)).ToList();
         sourceStack._cards = sourceStack._cards.Take(sourceSizePostOp).ToList();
+        OnStackModified();
+        sourceStack.OnStackModified();
     }
 
     public virtual void Reverse()
     {
         _cards.Reverse();
+        OnStackModified();
     }
 
     public void Shuffle(Random? rnd = null)
@@ -99,6 +113,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         var cardsArray = _cards.ToArray();
         rnd.Shuffle(cardsArray);
         _cards = cardsArray.ToList();
+        OnStackModified();
     }
 
     /// <summary>
@@ -166,6 +181,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     public virtual void Add(Card card)
     {
         _cards.Add(card);
+        OnStackModified();
     }
     
     /// <summary>
@@ -177,6 +193,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     {
         var card = Card.CardFromString(cardString);
         _cards.Add(card);
+        OnStackModified();
     }
     
     public Card this[int index]
@@ -192,11 +209,13 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     internal void Replace(int iCard, Card card)
     {
         _cards[iCard] = card;
+        OnStackModified();
     }
     
     internal void Replace(int iCard, String cardName)
     {
         _cards[iCard] = Card.CardFromString(cardName);
+        OnStackModified();
     }
 
     public IEnumerator<Card> GetEnumerator()

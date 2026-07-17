@@ -28,12 +28,17 @@ public class StackControl : Control
     public static readonly StyledProperty<double> FaceDownPeekHeightProperty =
         AvaloniaProperty.Register<StackControl, double>(nameof(FaceDownPeekHeight), defaultValue: 5.0);
 
+    private Stack? _previousStack;
+
     static StackControl()
     {
         AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty, 
             CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty);
         AffectsMeasure<StackControl>(StackProperty, CardWidthProperty, CardHeightProperty, 
             OverlapDistanceProperty, FaceDownPeekHeightProperty);
+        
+        StackProperty.Changed.AddClassHandler<StackControl>((control, args) => 
+            control.OnStackChanged(args));
     }
 
     public Stack? Stack
@@ -70,6 +75,28 @@ public class StackControl : Control
     {
         get => GetValue(FaceDownPeekHeightProperty);
         set => SetValue(FaceDownPeekHeightProperty, value);
+    }
+
+    private void OnStackChanged(AvaloniaPropertyChangedEventArgs args)
+    {
+        // Unsubscribe from previous stack
+        if (_previousStack != null)
+        {
+            _previousStack.StackModified -= OnStackModified;
+        }
+
+        // Subscribe to new stack
+        _previousStack = args.NewValue as Stack;
+        if (_previousStack != null)
+        {
+            _previousStack.StackModified += OnStackModified;
+        }
+    }
+
+    private void OnStackModified(object? sender, EventArgs e)
+    {
+        InvalidateVisual();
+        InvalidateMeasure();
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -149,7 +176,7 @@ public class StackControl : Control
     {
         if (FaceUp && Stack!.Count > 0)
         {
-            var bottomCard = Stack[0];
+            var bottomCard = Stack[^1];
             var bitmap = MainViewModel.ImageFromCard(bottomCard);
             var rect = new Rect(0, 0, CardWidth, CardHeight);
             context.DrawImage(bitmap, rect);

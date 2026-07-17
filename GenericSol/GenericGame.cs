@@ -25,7 +25,7 @@ public abstract class GenericGame : IGame
     public int Seed => _seed;
     public int MoveCount { get; set; }
 
-    public string State => throw new NotImplementedException();
+    public string State => "Playing";
 
     public IList<Stack> Stacks => throw new NotImplementedException();
 
