@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Cards;
 using GenericSol.Games.TestGame;
 using Klondike;
@@ -29,4 +30,14 @@ public partial class MainViewModel : ViewModelBase
     // [ObservableProperty] public Bitmap _heartCardImage = ImageFromCard(Card.CardFromString("KH"));
     [ObservableProperty] public Stack _from = _game.StackFromName("From");
     [ObservableProperty] public Stack _to = _game.StackFromName("To");
+
+    [RelayCommand]
+    private void ApplyAiMove()
+    {
+        var nextMove = _game.Ai.GetNextMove();
+        if (nextMove is not null)
+        {
+            _game.ApplyMove(nextMove);
+        }
+    }
 }
