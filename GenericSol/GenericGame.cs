@@ -1,6 +1,4 @@
 ﻿using Cards;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace GenericSol;
 public abstract class GenericGame : IGame
@@ -25,11 +23,13 @@ public abstract class GenericGame : IGame
     public int Seed => _seed;
     public int MoveCount { get; set; }
 
-    public string State => "Playing";
+    public string State => GameState.State;
 
     public IList<Stack> Stacks => throw new NotImplementedException();
 
     public virtual IAi Ai => throw new NotImplementedException();
+
+    public virtual IGameState GameState { get; set; } = new GenericGameState();
 
     public virtual void ApplyMove(IMove move)
     {

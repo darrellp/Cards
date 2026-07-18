@@ -30,4 +30,13 @@ public class TestGame : GenericGame
         _from = MixedStack.FromStack(stack, 3);
         _to = new MixedStack([], 0);
     }
+
+    public override void ApplyMove(IMove move)
+    {
+        base.ApplyMove(move);
+        if (_from.Count == 0)
+        {
+            GameState.EventOccurred("Won");
+        }
+    }
 }
