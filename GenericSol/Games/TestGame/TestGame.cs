@@ -24,9 +24,10 @@ public class TestGame : GenericGame
         _ai = new TestAi();
         _ai.Game = this;
         var deck = Stack.SortedDeck();
-        _from = deck.Split(3);
-        // King is on top - we want it on the bottom
-        _from.Reverse();
-        _to = new Stack([]);
+        var stack = deck.Split(3);
+        // The king ends on top as it was in the sorted deck, but we want it to be on the bottom of the stack
+        stack.Reverse();
+        _from = MixedStack.FromStack(stack, 3);
+        _to = new MixedStack([], 0);
     }
 }
