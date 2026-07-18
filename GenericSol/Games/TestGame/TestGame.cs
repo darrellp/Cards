@@ -23,7 +23,7 @@ public class TestGame : GenericGame
     {
         _ai = new TestAi();
         _ai.Game = this;
-        var deck = Stack.SortedDeck();
+        var deck = Stack.ShuffledDeck();
         var stack = deck.Split(3);
         // The king ends on top as it was in the sorted deck, but we want it to be on the bottom of the stack
         stack.Reverse();

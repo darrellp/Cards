@@ -1,7 +1,12 @@
-﻿namespace GenericSol;
+﻿using System.Runtime.InteropServices.Marshalling;
+
+namespace GenericSol;
 internal class GenericGameState : IGameState
 {
     public string State { get; set; } = "Normal";
+
+    public event EventHandler? Won;
+    public event EventHandler? Lost;
 
     public void EventOccurred(string gameEvent)
     {
@@ -9,7 +14,23 @@ internal class GenericGameState : IGameState
         {
             "Won" => "Won",
             "Lost" => "Lost",
-            _ => State
+            _ => NewGameState(gameEvent)
         };
-}
+
+        if (gameEvent == "Won")
+        {
+            Won?.Invoke(this, EventArgs.Empty);
+        }
+        else if (gameEvent == "Lost")
+        {
+            Lost?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    // Won/Lost are handled generically.  Any other state changes are handled
+    // by overriding this method in a derived class.  The default is to return the current state.
+    public virtual string NewGameState(string gameEvent)
+    {
+        return State;
+    }
 }

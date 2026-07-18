@@ -1,9 +1,11 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Cards;
 using GenericSol.Games.TestGame;
 using Klondike;
+using System;
 
 namespace SolitaireUI.ViewModels;
 
@@ -27,9 +29,44 @@ public partial class MainViewModel : ViewModelBase
     }
 
     private static TestGame _game = new();
-    // [ObservableProperty] public Bitmap _heartCardImage = ImageFromCard(Card.CardFromString("KH"));
+
     [ObservableProperty] public Stack _from = _game.StackFromName("From");
     [ObservableProperty] public Stack _to = _game.StackFromName("To");
+
+    [ObservableProperty] public bool _isGameOverDialogVisible;
+    [ObservableProperty] public string _gameOverMessage = string.Empty;
+    [ObservableProperty] public IBrush _gameOverBackground = Brushes.Transparent;
+
+    public MainViewModel()
+    {
+        SubscribeToGameEvents();
+    }
+
+    private void SubscribeToGameEvents()
+    {
+        _game.GameState.Won += OnGameWon;
+        _game.GameState.Lost += OnGameLost;
+    }
+
+    private void UnsubscribeFromGameEvents()
+    {
+        _game.GameState.Won -= OnGameWon;
+        _game.GameState.Lost -= OnGameLost;
+    }
+
+    private void OnGameWon(object? sender, EventArgs e)
+    {
+        GameOverMessage = "You Won!";
+        GameOverBackground = Brushes.Green;
+        IsGameOverDialogVisible = true;
+    }
+
+    private void OnGameLost(object? sender, EventArgs e)
+    {
+        GameOverMessage = "You Lost!";
+        GameOverBackground = Brushes.Red;
+        IsGameOverDialogVisible = true;
+    }
 
     [RelayCommand]
     private void ApplyAiMove()
@@ -39,5 +76,18 @@ public partial class MainViewModel : ViewModelBase
         {
             _game.ApplyMove(nextMove);
         }
+    }
+
+    [RelayCommand]
+    private void ResetGame()
+    {
+        UnsubscribeFromGameEvents();
+        _game = new TestGame();
+        SubscribeToGameEvents();
+
+        From = _game.StackFromName("From");
+        To = _game.StackFromName("To");
+
+        IsGameOverDialogVisible = false;
     }
 }

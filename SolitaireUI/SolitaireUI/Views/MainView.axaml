@@ -15,9 +15,36 @@ to set the actual DataContext for runtime, set the DataContext property in code 
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*, *">
-        <controls:StackControl Grid.Column="0" HorizontalAlignment="Center" Stack="{Binding From}" FaceUp="true" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
-        <controls:StackControl Grid.Column="1" HorizontalAlignment="Center" Stack="{Binding To}" FaceUp="false" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
-    </Grid>
+    <Panel>
+        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*, *">
+            <controls:StackControl Grid.Column="0" HorizontalAlignment="Center" Stack="{Binding From}" FaceUp="true" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
+            <controls:StackControl Grid.Column="1" HorizontalAlignment="Center" Stack="{Binding To}" FaceUp="false" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
+        </Grid>
+
+        <Border IsVisible="{Binding IsGameOverDialogVisible}"
+                Background="#88000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border Background="{Binding GameOverBackground}"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    CornerRadius="8"
+                    Padding="30"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <StackPanel Spacing="20" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding GameOverMessage}"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               HorizontalAlignment="Center"/>
+                    <Button Content="OK"
+                            HorizontalAlignment="Center"
+                            IsDefault="True"
+                            Command="{Binding ResetGameCommand}"/>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Panel>
 
 </UserControl>
