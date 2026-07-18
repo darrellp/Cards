@@ -1,7 +1,5 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-
-namespace GenericSol;
-internal class GenericGameState : IGameState
+﻿namespace GenericSol;
+public class GenericGameState : IGameState
 {
     public string State { get; set; } = "Normal";
 
