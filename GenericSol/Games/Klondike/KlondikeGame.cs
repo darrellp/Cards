@@ -27,11 +27,27 @@ internal class KlondikeGame : GenericGame
     // ReSharper restore InconsistentNaming
     #endregion
 
+    public int LowFoundationRank(Suit suit)
+    {
+        var top = int.MaxValue;
+        var isBlack = Card.IsBlackSuit(suit);
+        for (var iFnd = 0; iFnd < FndCount; iFnd++)
+        {
+            var fndSuit = _fndSuits[iFnd];
+            if (fndSuit == Suit.None || Card.IsBlackSuit(fndSuit) != isBlack)
+            {
+                top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
+            }
+        }
+
+        return top;
+    }
+
 
 
     public override IList<IMove> GetMoves()
     {
-        var moves = new List<GenericMove>();
+        var moves = new List<KlondikeMove>();
 
         // Check moves from the discard pile
         if (_waste.Count != 0)
@@ -43,7 +59,7 @@ internal class KlondikeGame : GenericGame
             if (fCanPlay)
             {
                 // new foundation stack
-                moves.Add(new GenericMove("Waste", FndNameFromIndex(fndIndex)));
+                moves.Add(new KlondikeMove("Waste", FndNameFromIndex(fndIndex)));
             }
 
             // Discard to tableau moves
@@ -52,7 +68,7 @@ internal class KlondikeGame : GenericGame
                 // Check for moves from the discard pile to a tableau
                 if (discard.IsKBelow(_tableau[iTab].TopCard))
                 {
-                    moves.Add(new GenericMove("Waste", TabNameFromIndex(iTab)));
+                    moves.Add(new KlondikeMove("Waste", TabNameFromIndex(iTab)));
                 }
             }
         }
@@ -65,7 +81,7 @@ internal class KlondikeGame : GenericGame
             {
                 if (fndCard.IsKBelow(_tableau[iTabDst].TopCard))
                 {
-                    moves.Add(new GenericMove(TabNameFromIndex(iFnd), FndNameFromIndex(iTabDst)));
+                    moves.Add(new KlondikeMove(TabNameFromIndex(iFnd), FndNameFromIndex(iTabDst)));
                 }
             }
         }
@@ -80,7 +96,7 @@ internal class KlondikeGame : GenericGame
             var (fndIndex, fCanPlay) = CanPlayToFoundations(tabCard);
             if (fCanPlay)
             {
-                moves.Add(new GenericMove(TabNameFromIndex(iTab), FndNameFromIndex(fndIndex)));
+                moves.Add(new KlondikeMove(TabNameFromIndex(iTab), FndNameFromIndex(fndIndex)));
             }
 
             // tableau to tableau
@@ -92,7 +108,7 @@ internal class KlondikeGame : GenericGame
                 if (canPlay)
                 {
                     var tabIdSrc = TabNameFromIndex(iTabSrc);
-                    moves.Add(new GenericMove(tabIdSrc, tabId, cCards));
+                    moves.Add(new KlondikeMove(tabIdSrc, tabId, cCards));
                 }
             }
         }
@@ -206,7 +222,7 @@ internal class KlondikeGame : GenericGame
         return indexAssigned >= 0 ? indexAssigned : indexUnassigned;
     }
 
-    string FndNameFromIndex(int index)
+    internal static string FndNameFromIndex(int index)
     {
         if (index < 0 || index >= FndCount)
         {
@@ -215,7 +231,7 @@ internal class KlondikeGame : GenericGame
         return $"fnd{index}";
     }
 
-    string TabNameFromIndex(int index)
+    internal static string TabNameFromIndex(int index)
     {
         if (index < 0 || index >= TabCount)
         {
