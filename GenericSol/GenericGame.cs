@@ -4,7 +4,7 @@ namespace GenericSol;
 public abstract class GenericGame : IGame
 {
     int _seed = -1;
-    Random _random;
+    protected Random _random;
 
     protected GenericGame(int seed = -1)
     {
@@ -17,7 +17,11 @@ public abstract class GenericGame : IGame
             _seed = seed;
         }
         _random = new Random(_seed);
+        Initialize();
     }
+
+    public virtual void Initialize() { }
+
 
     public Random Random => _random;
     public int Seed => _seed;

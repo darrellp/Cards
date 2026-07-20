@@ -35,6 +35,29 @@ public class KlondikeGame : GenericGame
         }
     }
 
+    private void DealDeck(Stack deck)
+    {
+        Debug.Assert(deck.Count == 52);
+        for (var iTab = 0; iTab < TabCount; iTab++)
+        {
+            _tableau[iTab] = MixedStack.FromStack(deck.Split(iTab + 1), 1);
+        }
+
+        for (var iFnd = 0; iFnd < FndCount; iFnd++)
+        {
+            _foundations[iFnd] = new Stack();
+        }
+
+        _waste = new Stack();
+        _stock = deck;
+    }
+
+    override public void Initialize()
+    {
+        var deck = Stack.ShuffledDeck(_random);
+        DealDeck(deck);
+    }
+
     public int LowFoundationRank(Suit suit)
     {
         var top = int.MaxValue;
@@ -50,8 +73,6 @@ public class KlondikeGame : GenericGame
 
         return top;
     }
-
-
 
     public override IList<IMove> GetMoves()
     {
