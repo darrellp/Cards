@@ -1,8 +1,5 @@
 ﻿using Cards;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace GenericSol.Games.Klondike;
 public class KlondikeGame : GenericGame

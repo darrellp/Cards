@@ -1,6 +1,5 @@
 ﻿using Cards;
 using System.Diagnostics;
-using System.Linq;
 
 namespace GenericSol.Games.Klondike;
 internal class KlondikeAi : IAi
@@ -11,8 +10,8 @@ internal class KlondikeAi : IAi
     private readonly Queue<KlondikeMove> _nextMoves = new Queue<KlondikeMove>();
     #endregion
 
-    public IGame Game { get; set; }
-    public KlondikeGame KlondikeGame => Game as KlondikeGame;
+    public IGame Game { get; set; } = null!;
+    private KlondikeGame KlondikeGame => (Game as KlondikeGame)!;
 
     public IMove GetNextMove()
     {
@@ -199,8 +198,6 @@ internal class KlondikeAi : IAi
         {
             return false;
         }
-        // It would be a teeny bit faster to determine this once in the caller and pass it into this
-        // routine as a paramater rather than repeatedly calculating it here...
         var srcCard = KlondikeGame.StackFromName(move.Src).TopCard;
         var lowRank = KlondikeGame.LowFoundationRank(srcCard.Suit);
         return srcCard.Rank <= lowRank + 2;

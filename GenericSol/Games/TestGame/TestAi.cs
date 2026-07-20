@@ -2,7 +2,7 @@
 
 internal class TestAi : IAi
 {
-    public IGame Game { get; set; }
+    public IGame Game { get; set; } = null!;
 
     public IMove GetNextMove()
     {
