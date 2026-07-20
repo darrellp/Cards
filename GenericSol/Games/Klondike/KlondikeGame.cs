@@ -273,4 +273,22 @@ internal class KlondikeGame : GenericGame
             throw new ArgumentException($"Invalid stack name: {name}");
         }
     }
+
+    public override void ApplyAbstractPostMove(IMove move)
+    {
+        WinCheck();
+    }
+
+    bool WinCheck()
+    {
+        if (State != "Won" && _foundations.Select(s => s.Count).All(c => c == 13))
+        {
+            GameState.EventOccurred("Won");
+        }
+
+        return GameState.State == "Won";
+    }
+
+
+
 }
