@@ -3,9 +3,11 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Cards;
-using GenericSol.Games.TestGame;
-using Klondike;
 using System;
+using GenericSol;
+
+using GenericSol.Games.TestGame;
+using GenericSol.Games.Klondike;
 
 namespace SolitaireUI.ViewModels;
 
@@ -28,10 +30,27 @@ public partial class MainViewModel : ViewModelBase
         return CardImages[card.Index];
     }
 
-    private static TestGame _game = new();
 
-    [ObservableProperty] public Stack _from = _game.StackFromName("From");
-    [ObservableProperty] public Stack _to = _game.StackFromName("To");
+    private static TestGame _testGame = new();
+    private static KlondikeGame _klondikeGame = new();
+    private static IGame _game = _testGame;
+
+    [ObservableProperty] public Stack _from = _testGame.StackFromName("From");
+    [ObservableProperty] public Stack _to = _testGame.StackFromName("To");
+
+    [ObservableProperty] public Stack _stock = _klondikeGame.StackFromName("stock");
+    [ObservableProperty] public Stack _waste = _klondikeGame.StackFromName("waste");
+    [ObservableProperty] public Stack _fnd1 = _klondikeGame.StackFromName("fnd1");
+    [ObservableProperty] public Stack _fnd2 = _klondikeGame.StackFromName("fnd2");
+    [ObservableProperty] public Stack _fnd3 = _klondikeGame.StackFromName("fnd3");
+    [ObservableProperty] public Stack _fnd4 = _klondikeGame.StackFromName("fnd4");
+    [ObservableProperty] public Stack _tab1 = _klondikeGame.StackFromName("tab1");
+    [ObservableProperty] public Stack _tab2 = _klondikeGame.StackFromName("tab2");
+    [ObservableProperty] public Stack _tab3 = _klondikeGame.StackFromName("tab3");
+    [ObservableProperty] public Stack _tab4 = _klondikeGame.StackFromName("tab4");
+    [ObservableProperty] public Stack _tab5 = _klondikeGame.StackFromName("tab5");
+    [ObservableProperty] public Stack _tab6 = _klondikeGame.StackFromName("tab6");
+    [ObservableProperty] public Stack _tab7 = _klondikeGame.StackFromName("tab7");
 
     [ObservableProperty] public bool _isGameOverDialogVisible;
     [ObservableProperty] public string _gameOverMessage = string.Empty;

@@ -44,6 +44,7 @@ public abstract class GenericGame : IGame
 
         ApplyAbstractPreMove(move);
         var movedCards = srcStack.Split(cardCount);
+        ApplyAbstractSplit(move, srcStack, movedCards, dstStack);
         dstStack.Merge(movedCards);
         ApplyAbstractPostMove(move);
         MoveCount++;
@@ -51,6 +52,7 @@ public abstract class GenericGame : IGame
     }
 
     public virtual void ApplyAbstractPreMove(IMove move) { }
+    public virtual void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst) { }
     public virtual void ApplyAbstractPostMove(IMove move) { }
 
     public abstract IList<IMove> GetMoves();

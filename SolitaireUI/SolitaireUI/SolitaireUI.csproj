@@ -24,6 +24,5 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Cards\Cards.csproj" />
       <ProjectReference Include="..\..\GenericSol\GenericSol.csproj" />
-      <ProjectReference Include="..\..\Klondike\Klondike.csproj" />
     </ItemGroup>
 </Project>

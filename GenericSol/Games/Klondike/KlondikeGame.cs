@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Text;
 
 namespace GenericSol.Games.Klondike;
-internal class KlondikeGame : GenericGame
+public class KlondikeGame : GenericGame
 {
     #region Constants
     public const int TabCount = 7;
@@ -26,6 +26,14 @@ internal class KlondikeGame : GenericGame
     internal Stack _stock { get; private set; } = new Stack();
     // ReSharper restore InconsistentNaming
     #endregion
+
+    internal IEnumerable<MixedStack> Tableaus()
+    {
+        for (var iStack = 0; iStack < TabCount; iStack++)
+        {
+            yield return _tableau[iStack];
+        }
+    }
 
     public int LowFoundationRank(Suit suit)
     {
@@ -224,11 +232,11 @@ internal class KlondikeGame : GenericGame
 
     internal static string FndNameFromIndex(int index)
     {
-        if (index < 0 || index >= FndCount)
+        if (index < 0 || index > FndCount)
         {
             throw new ArgumentOutOfRangeException(nameof(index), "Foundation index must be between 0 and 3.");
         }
-        return $"fnd{index}";
+        return $"fnd{index + 1}";
     }
 
     internal static string TabNameFromIndex(int index)
@@ -237,7 +245,7 @@ internal class KlondikeGame : GenericGame
         {
             throw new ArgumentOutOfRangeException(nameof(index), "Tableau index must be between 0 and 6.");
         }
-        return $"tab{index}";
+        return $"tab{index + 1}";
     }
 
     public override Stack StackFromName(string name)
@@ -245,20 +253,20 @@ internal class KlondikeGame : GenericGame
         if (name.StartsWith("tab"))
         {
             var index = int.Parse(name.Substring(3));
-            if (index > 7)
+            if (index > TabCount || index < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(name), "Tableau index must be between 0 and 6.");
             }
-            return _tableau[index];
+            return _tableau[index - 1];
         }
         else if (name.StartsWith("fnd"))
         {
             var index = int.Parse(name.Substring(3));
-            if (index > 3)
+            if (index > FndCount || index < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(name), "Foundation index must be between 0 and 3.");
             }
-            return _foundations[index];
+            return _foundations[index - 1];
         }
         else if (name == "stock")
         {
@@ -276,7 +284,46 @@ internal class KlondikeGame : GenericGame
 
     public override void ApplyAbstractPostMove(IMove move)
     {
+        if (!WillWinCheck() && move.DstStack == "stock")
+        {
+            GameState.EventOccurred("EndOfStock");
+        }
+
         WinCheck();
+    }
+
+    public override void ApplyAbstractPreMove(IMove move)
+    {
+        if (move.DstStack.StartsWith("fnd"))
+        {
+            // Mark this foundation stack as building in the source card's suit
+            // (redundant after first ace but arguably faster to just do it than make a check)
+            var index = int.Parse(move.DstStack.Substring(3)) - 1;
+            var src = StackFromName(move.SrcStack);
+            _fndSuits[index] = src.TopCard.Suit;
+        }
+    }
+
+    public override void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst)
+    {
+        if (move.SrcStack == "stock" || move.DstStack == "stock")
+        {
+            moved.Reverse();
+        }
+        else
+        {
+            GameState.EventOccurred("MadeMove");
+        }
+
+        if (src is MixedStack mixedStack)
+        {
+            // If we've cleared all the faceup cards and still have facedown cards then
+            // turn one of them up
+            if (mixedStack is { CardsUp: 0, Count: > 0 })
+            {
+                mixedStack.CardsUp = 1;
+            }
+        }
     }
 
     bool WinCheck()
@@ -289,6 +336,16 @@ internal class KlondikeGame : GenericGame
         return GameState.State == "Won";
     }
 
+    bool WillWinCheck()
+    {
+        if (_stock.Count == 0 && _waste.Count == 0 && Tableaus().All(s => s.Count == s.CardsUp))
+        {
+            GameState.EventOccurred("WillWin");
+            return true;
+        }
+
+        return false;
+    }
 
 
 }
