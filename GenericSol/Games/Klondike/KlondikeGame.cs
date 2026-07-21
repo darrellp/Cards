@@ -1,4 +1,5 @@
 ﻿using Cards;
+using GenericSol.Games.TestGame;
 using System.Diagnostics;
 
 namespace GenericSol.Games.Klondike;
@@ -12,6 +13,9 @@ public class KlondikeGame : GenericGame
     #region Private members
     // Whether we have detected any moves yet in the current run through the feed
     private readonly Suit[] _fndSuits = [Suit.None, Suit.None, Suit.None, Suit.None];
+    KlondikeAi _ai;
+
+    public override IAi Ai => (IAi)_ai;
     #endregion
 
     #region Stacks
@@ -56,6 +60,8 @@ public class KlondikeGame : GenericGame
 
         _waste = new Stack();
         _stock = deck;
+        _ai = new KlondikeAi();
+        _ai.Game = this;
     }
 
     override public void Initialize()

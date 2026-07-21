@@ -32,7 +32,7 @@ public partial class MainViewModel : ViewModelBase
 
     private static TestGame _testGame = new();
     private static KlondikeGame _klondikeGame = new();
-    private static IGame _game = _testGame;
+    private static IGame _game = _klondikeGame;
 
     [ObservableProperty] public Stack _from = _testGame.StackFromName("From");
     [ObservableProperty] public Stack _to = _testGame.StackFromName("To");
@@ -102,9 +102,6 @@ public partial class MainViewModel : ViewModelBase
         UnsubscribeFromGameEvents();
         _game = new TestGame();
         SubscribeToGameEvents();
-
-        From = _game.StackFromName("From");
-        To = _game.StackFromName("To");
 
         IsGameOverDialogVisible = false;
     }
