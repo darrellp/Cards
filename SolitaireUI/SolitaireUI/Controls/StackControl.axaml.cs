@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Cards;
 using SolitaireUI.ViewModels;
 using System;
@@ -32,12 +31,12 @@ public class StackControl : Control
 
     static StackControl()
     {
-        AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty, 
+        AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty,
             CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty);
-        AffectsMeasure<StackControl>(StackProperty, CardWidthProperty, CardHeightProperty, 
+        AffectsMeasure<StackControl>(StackProperty, CardWidthProperty, CardHeightProperty,
             OverlapDistanceProperty, FaceDownPeekHeightProperty);
-        
-        StackProperty.Changed.AddClassHandler<StackControl>((control, args) => 
+
+        StackProperty.Changed.AddClassHandler<StackControl>((control, args) =>
             control.OnStackChanged(args));
     }
 
@@ -110,13 +109,13 @@ public class StackControl : Control
         {
             var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
             var faceUpCount = mixedStack.CardsUp;
-            
+
             var faceDownHeight = faceDownCount > 0 ? faceDownCount * FaceDownPeekHeight : 0;
             var overlapDistance = CalculateOverlapDistance(faceUpCount, availableSize.Height);
-            var faceUpHeight = faceUpCount > 0 
-                ? CardHeight + (faceUpCount - 1) * overlapDistance 
+            var faceUpHeight = faceUpCount > 0
+                ? CardHeight + (faceUpCount - 1) * overlapDistance
                 : 0;
-            
+
             var totalHeight = faceDownHeight + faceUpHeight;
             return new Size(CardWidth, totalHeight);
         }
@@ -166,7 +165,7 @@ public class StackControl : Control
     {
         var pen = new Pen(Brushes.Red, 3.0);
         var rect = new Rect(0, 0, CardWidth, CardHeight);
-        
+
         // Draw red X
         context.DrawLine(pen, rect.TopLeft, rect.BottomRight);
         context.DrawLine(pen, rect.TopRight, rect.BottomLeft);
@@ -212,7 +211,7 @@ public class StackControl : Control
         {
             var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, Bounds.Height);
             var firstFaceUpIndex = mixedStack.Count - mixedStack.CardsUp;
-            
+
             for (int i = 0; i < mixedStack.CardsUp; i++)
             {
                 var card = mixedStack[firstFaceUpIndex + i];

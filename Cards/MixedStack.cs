@@ -11,7 +11,7 @@ public sealed class MixedStack : Stack
     {
         CardsUp = 0;
     }
-    
+
     public MixedStack(List<Card> cards, int cardsFaceUp) : base(cards)
     {
         CardsUp = cardsFaceUp;
@@ -56,7 +56,7 @@ public sealed class MixedStack : Stack
         {
             throw new ArgumentOutOfRangeException(nameof(n), "n must be less than " + nameof(CardsUp));
         }
-        
+
         CardsUp = Math.Max(0, CardsUp - n);
         return base.Split(n);
     }
@@ -103,25 +103,25 @@ public sealed class MixedStack : Stack
             // take all faceup cards
             n = CardsUp;
         }
-        
+
         // We can only split the faceup cards
         if (n < 0 || n > CardsUp)
         {
             throw new ArgumentOutOfRangeException(nameof(n), "n must be less than " + nameof(CardsUp));
         }
-        
+
         var tmp = base.Split(n);
         CardsUp -= n;
         return new MixedStack(tmp._cards, n);
     }
-    
+
     public override string ToString()
     {
         if (Count == 0)
         {
             return "|";
         }
-        
+
         var orig = base.ToString();
 
         if (CardsUp == 0)
@@ -135,7 +135,7 @@ public sealed class MixedStack : Stack
         }
 
         var cFaceDown = Count - CardsUp;
-        var prefixLength =3 * cFaceDown - 1;
+        var prefixLength = 3 * cFaceDown - 1;
         var suffixLength = orig.Length - prefixLength - 1;
         var suffixStart = prefixLength == 0 ? 0 : prefixLength + 1;
         var prefix = orig.AsSpan(0, Math.Max(0, prefixLength));
@@ -181,7 +181,7 @@ public sealed class MixedStack : Stack
         }
         return this[^CardsUp];
     }
-    
+
     /// <summary>
     /// Creates a stack from it's string representation
     /// </summary>
@@ -190,7 +190,7 @@ public sealed class MixedStack : Stack
     /// <returns>The stack from the string</returns>
     public static MixedStack ParseMixed(string stackString)
     {
-       if (!stackString.Contains('|'))
+        if (!stackString.Contains('|'))
         {
             throw new ArgumentException("Stack string must contain '|'");
         }
@@ -199,7 +199,7 @@ public sealed class MixedStack : Stack
         {
             return new MixedStack();
         }
-        
+
         // Ensure that if a string begins or ends with '|' and no space we still work
         if (stackString[0] == '|' && stackString[1] != ' ')
         {

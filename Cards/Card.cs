@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Cards;
 
@@ -32,7 +31,7 @@ public record Card(byte Rank, Suit Suit)
     public const int ACE = 1;
     // ReSharper restore InconsistentNaming
     #endregion
-    
+
     #region Static fields
     public static readonly Card NullCard = new Card(0, Suit.None);
 
@@ -153,7 +152,7 @@ public record Card(byte Rank, Suit Suit)
         return assembly.GetManifestResourceStream(resourcePath)!;
     }
     #endregion
-    
+
     #region Queries
     /// <summary>
     /// Checks if card is the same color as this card
@@ -166,7 +165,7 @@ public record Card(byte Rank, Suit Suit)
     {
         return card != NullCard && !this.IsBlack ^ card.IsBlack;
     }
-    
+
     /// <summary>
     /// Legally "below" as defined in Klondike tableau
     /// </summary>
@@ -182,7 +181,7 @@ public record Card(byte Rank, Suit Suit)
     /// </param>
     /// 
     /// <returns>True if this card can be placed below cardAblve, else false</returns>
-     public bool IsKBelow(Card cardAbove)
+    public bool IsKBelow(Card cardAbove)
     {
         if (this == Card.NullCard)
         {
@@ -200,7 +199,7 @@ public record Card(byte Rank, Suit Suit)
     /// </summary>
     public bool IsBlack => Suit == Suit.Club || Suit == Suit.Spade;
     public static bool IsBlackSuit(Suit suit) => suit == Suit.Club || suit == Suit.Spade;
-    
+
     /// <summary>
     /// Returns true if this is a red card
     /// </summary>

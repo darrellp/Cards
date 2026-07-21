@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Cards;
+﻿using Cards;
+using System.Diagnostics;
 
 namespace Klondike;
 
@@ -64,7 +64,7 @@ public class Game
 
         return false;
     }
-    
+
     bool WinCheck()
     {
         if (!State.Won && _foundations.Select(s => s.Count).All(c => c == 13))
@@ -75,7 +75,7 @@ public class Game
         return State.Won;
     }
     #endregion
-    
+
     #region Private members
     // Whether we have detected any moves yet in the current run through the feed
     private readonly Suit[] _fndSuits = [Suit.None, Suit.None, Suit.None, Suit.None];
@@ -90,7 +90,7 @@ public class Game
     internal Stack _stock { get; private set; } = new Stack();
     // ReSharper restore InconsistentNaming
     #endregion
-    
+
     #region Constructors
     public Game(int seed, Options? options = null)
     {
@@ -100,14 +100,14 @@ public class Game
         GameOptions = options ?? new Options();
         DealDeck(deck);
     }
-    
+
     public Game(Stack deck)
     {
         DealDeck(deck);
     }
 
-    public Game(Options? options = null) : this(-1, options) {}
-    
+    public Game(Options? options = null) : this(-1, options) { }
+
     private void DealDeck(Stack deck)
     {
         Moves = 1;
@@ -121,7 +121,7 @@ public class Game
         {
             _foundations[iFnd] = new Stack();
         }
-        
+
         _waste = new Stack();
         _stock = deck;
     }
@@ -140,7 +140,7 @@ public class Game
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-    
+
     /// <summary>
     /// Return the source stack for a move
     /// </summary>
@@ -150,7 +150,7 @@ public class Game
     {
         return StackFromId(move.IdSrc);
     }
-    
+
     /// <summary>
     /// Return the destination stack for a move
     /// </summary>
@@ -188,7 +188,7 @@ public class Game
 
         // Determine the source card
         Card crdSrc;
-        
+
         if (move.IdSrc is >= StackId.Tab1 and <= StackId.Tab7)
         {
             crdSrc = stackSrc.Count == 0
@@ -200,7 +200,7 @@ public class Game
             Debug.Assert(move.CardCount == 0);
             crdSrc = stackSrc.TopCard;
         }
-        
+
         if (crdSrc == Card.NullCard)
         {
             return false;
@@ -277,7 +277,7 @@ public class Game
         {
             return (-1, false);
         }
-        
+
         var fndIndex = FndIndexFromSuit(card.Suit);
         var fndStack = _foundations[fndIndex];
         if (fndStack.Count == 0 && card.Rank == Card.ACE || fndStack.TopCard.Rank == card.Rank - 1)
@@ -287,7 +287,7 @@ public class Game
 
         return (-1, false);
     }
-#endregion
+    #endregion
 
     #region Stack accessing
     internal IEnumerable<MixedStack> Tableaus()
@@ -317,7 +317,7 @@ public class Game
     {
         return _waste;
     }
-    
+
     internal IEnumerable<Stack> Foundations()
     {
         for (var iStack = 0; iStack < FndCount; iStack++)
@@ -345,9 +345,9 @@ public class Game
         {
             return srcStack.FirstFaceupCard.Rank == Card.KING ? (srcStack.CardsUp, true) : noMove;
         }
-        
+
         // BOTH STACKS ARE OCCUPIED
-        
+
         var srcTop = srcStack.TopCard;
         var dstTop = dstStack.TopCard;
 
@@ -358,23 +358,23 @@ public class Game
         }
 
         var rankDifference = dstTop.Rank - srcTop.Rank;
-        
+
         // We have to have enough cards in source pile to come up to proper rank for the dst pile
         if (srcStack.CardsUp < rankDifference)
         {
             return noMove;
         }
-        
+
         // Finally, the colors have to be opposite
         if (srcStack[^rankDifference].IsSameColor(dstTop))
         {
             return noMove;
         }
-        
+
         // If we've survived all the previous tests then it's a valid move
         return (rankDifference, true);
     }
-    
+
     /// <summary>
     /// See if a card can be played on a foundation stack
     /// </summary>
@@ -391,16 +391,16 @@ public class Game
             card.Rank == Card.ACE &&                            // Card played must be ace
             _fndSuits.All(s => s != card.Suit) &&           // Can't be another foundation with this suit
             _fndSuits[index] == Suit.None;                      // This foundation must be empty
-        
+
         var buildFoundation =                              // To build a previous foundation
             _fndSuits[index] == card.Suit &&                    // Our suit must match the foundation's
             card.Rank == _foundations[index].TopCard.Rank + 1;  // Our rank must be one past the current top card's
-        
+
         // Valid move if we're starting a new foundation or building on a previous one
         return newFoundation || buildFoundation;
     }
     #endregion
-    
+
     #region Finding moves
     /// <summary>
     /// Find all possible moves
@@ -419,7 +419,7 @@ public class Game
         if (_waste.Count != 0)
         {
             var discard = _waste.TopCard;
-            
+
             // Check for discard to foundation moves
             var (fndIndex, fCanPlay) = CanPlayToFoundations(discard);
             if (fCanPlay)
@@ -438,7 +438,7 @@ public class Game
                 }
             }
         }
-        
+
         // Moves from the foundations
         for (var iFnd = 0; iFnd < FndCount; iFnd++)
         {
@@ -451,20 +451,20 @@ public class Game
                 }
             }
         }
-        
+
         // Moves from Tableau
         for (var iTab = 0; iTab < TabCount; iTab++)
         {
             var tabCard = _tableau[iTab].TopCard;
             var tabId = StackId.Tab1 + iTab;
-            
+
             // Tableau to foundation - here iTab tableau is source
             var (fndIndex, fCanPlay) = CanPlayToFoundations(tabCard);
             if (fCanPlay)
             {
                 moves.Add(new Move(StackId.Tab1 + iTab, StackId.Fnd1 + fndIndex));
             }
-            
+
             // tableau to tableau
             // Note: in this context iTab is the destination and we check over all other
             // possible source tableaus
@@ -478,7 +478,7 @@ public class Game
                 }
             }
         }
-        
+
         // Right now I'm not considering Foundation to Tableau to avoid circular logic problems.  I probably should
         // include them and weed them out the same time I weed out circular dependencies in tableau to tableau moves.
         // Resolving these circularities I think depends on always turning one more card up.  We need sometimes to
@@ -491,7 +491,7 @@ public class Game
         return moves;
     }
     #endregion
-    
+
     #region Making moves
     /// <summary>
     /// Make a move
@@ -510,7 +510,7 @@ public class Game
         }
         var src = StackFromId(move.IdSrc);
         var dst = StackFromId(move.IdDst);
-        
+
         if (move.ToFoundation)
         {
             // Mark this foundation stack as building in the source card's suit
@@ -518,9 +518,9 @@ public class Game
             var index = move.IdDst - StackId.Fnd1;
             _fndSuits[index] = src.TopCard.Suit;
         }
-        
+
         var movedCards = src.Split(move.CardCount);
-        
+
         if (move.IdSrc == StackId.Stock || move.IdDst == StackId.Stock)
         {
             // If we've moving between the feed and discards or vice versa then the stack gets flipped
@@ -544,14 +544,14 @@ public class Game
 
         dst.Merge(movedCards);
         Moves++;
-        
+
         if (!WillWinCheck() && move.IdDst == StackId.Stock)
         {
             State.EventOccurred(Event.EndOfStock);
         }
     }
     #endregion
-    
+
     #region Invariants
     private int Invariant()
     {
@@ -569,7 +569,7 @@ public class Game
         return faceup + 2 * foundations - 2 * facedown + 2 * emptyTableaus + 2 * topLevelKings;
     }
     #endregion
-    
+
     #region Playing a game
     public static bool PlayGame(int seed)
     {
@@ -586,7 +586,7 @@ public class Game
         var ai = new AI(this);
         var invariantLast = Invariant();
         var iMove = 0;
-        
+
         while (true)
         {
             if (++iMove >= moveCount)
@@ -597,13 +597,13 @@ public class Game
             {
                 return true;
             }
-            
+
             var move = ai.GetNextMove();
             if (Lost)
             {
                 return false;
             }
-            
+
             MakeMove(move);
 
             if (move.IdSrc != StackId.Stock && move.IdDst != StackId.Stock && move.comboMove == null)

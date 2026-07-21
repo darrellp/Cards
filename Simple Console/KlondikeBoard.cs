@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices.JavaScript;
-using System.Text;
-using Cards;
-using Spectre.Console;
+﻿using Cards;
 using Klondike;
+using Spectre.Console;
+using System.Diagnostics;
+using System.Text;
 namespace Simple_Console;
 
 public class KlondikeBoard
@@ -12,12 +11,12 @@ public class KlondikeBoard
     internal bool Quit { get; private set; }
     internal bool NewGame { get; private set; }
     #endregion
-    
+
     #region Private variables
     private const int BoardWidth = Klondike.Game.TabCount * 3 - 1;
     internal bool GameOver { get; private set; }
     #endregion
-    
+
     #region constructor/UI loop
     public KlondikeBoard(int seed = 0)
     {
@@ -32,19 +31,19 @@ public class KlondikeBoard
                 new Layout("Help").Size(1),
                 new Layout("GameInfo").Size(1),
                 new Layout("State"));
-        
+
         var topStacksLayout = new Layout("TopStacks")
             .SplitColumns(
                 new Layout("Foundations").Size(15),
                 new Layout("Discard").Size(3),
                 new Layout("Feed").Size(2));
-        
+
         klayout["TopStacks"].Update(topStacksLayout);
         klayout["Help"].Update(new Markup("[yellow]Q[/] - Quit [yellow]N[/] - New Game [yellow]Space[/] - Next Move"));
         klayout["GameInfo"].Update(new Markup("[yellow]Game[/]"));
         klayout["Counts"].Update(new Markup(""));
         klayout["State"].Update(new Markup("[purple]NoMoves[/]"));
-        
+
         var ai = new AI(game);
 
         AnsiConsole.Live(klayout)
@@ -92,7 +91,7 @@ public class KlondikeBoard
                         Debug.Assert(topLength <= BoardWidth && botLength <= BoardWidth);
                         klayout["TopIndicators"].Update(new Markup(topIndicator));
                         klayout["BottomIndicators"].Update(new Markup(botIndicator));
-                    
+
                         ctx.Refresh();
                         var inChar = char.ToUpper(Console.ReadKey(true).KeyChar);
                         if (inChar == 'N')
@@ -137,7 +136,7 @@ public class KlondikeBoard
 
     #region Indicator strings
     static readonly string EmptyLine = new String(' ', BoardWidth - 1);
-        
+
     private (string top, string bottom) GetIndicatorStrings(Move move)
     {
         var (indexSrc, isTopSrc) = GetIndicatorInfo(move.IdSrc);
@@ -204,17 +203,17 @@ public class KlondikeBoard
                 index = 3 * (id - StackId.Fnd1);
                 isTop = true;
                 break;
-            
+
             case StackId.Waste:
                 index = BoardWidth - 5;
                 isTop = true;
                 break;
-            
+
             case StackId.Stock:
                 index = BoardWidth - 2;
                 isTop = true;
                 break;
-            
+
             case >= StackId.Tab1 and <= StackId.Tab7:
                 index = 3 * (id - StackId.Tab1);
                 break;
@@ -223,7 +222,7 @@ public class KlondikeBoard
         return (index, isTop);
     }
     #endregion
-    
+
     #region Stack I/O
     private void UpdateFoundations(Layout layout, Game game)
     {

@@ -11,7 +11,7 @@ public abstract class GenericGame : IGame
         if (seed == -1)
         {
             _seed = new Random().Next();
-         }
+        }
         else
         {
             _seed = seed;

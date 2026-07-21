@@ -64,7 +64,7 @@ public class GameState
             // We stay in WillWin until we go into Win state
             return;
         }
-        
+
         switch (e)
         {
             case Event.Win:
@@ -74,7 +74,7 @@ public class GameState
             case Event.WillWin:
                 State = GS.WillWin;
                 break;
-            
+
             case Event.Lose:
                 State = GS.Lost;
                 break;
@@ -104,6 +104,6 @@ public class GameState
                 break;
         }
     }
-    
+
     override public string ToString() => State.ToString();
 }

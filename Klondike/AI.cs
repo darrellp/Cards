@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using Cards;
+﻿using Cards;
+using System.Diagnostics;
 
 namespace Klondike;
 
@@ -73,12 +73,12 @@ public class AI(Game game)
     {
         if (game.Won)
         {
-           return Move.NoMove;
+            return Move.NoMove;
         }
         EnqueueNextMoves();
         return _nextMoves.Dequeue();
     }
-    
+
     /// <summary>
     /// Selects from among several potential new moves and enques the best one
     /// </summary>
@@ -124,11 +124,11 @@ public class AI(Game game)
             FlipFeed();
             return;
         }
-        
+
         var nextMove = SelectBestMove(moves);
-        
+
         _nextMoves.Enqueue(nextMove);
-        
+
         // If this is part of a combo then enqueue the ensuing combo moves
         while (nextMove.comboMove != null)
         {
@@ -137,14 +137,14 @@ public class AI(Game game)
         }
     }
     #endregion
-    
+
     #region Move Selection
 
     private (List<Move> accept, List<Move> avoid) GetAvoids(List<Move> moves)
     {
         var accept = new List<Move>();
         var avoid = new List<Move>();
-        
+
         foreach (var m in moves)
         {
             if (IsAvoidMove(m))
@@ -158,7 +158,7 @@ public class AI(Game game)
         }
         return (accept, avoid);
     }
-    
+
     /// <summary>
     /// Pick the best move from a list of moves
     /// </summary>
@@ -172,7 +172,7 @@ public class AI(Game game)
         {
             return move;
         }
-        
+
         // At this point it becomes a bit more difficult to pick out a move.  We have a list of non-immediate moves which
         // all increase the invariant and are either not avoided or its time to play them.  Some considerations:
         // 1. Stuff that turns up new invariant cards is always good
@@ -185,7 +185,7 @@ public class AI(Game game)
         {
             return revealing;
         }
-        
+
         return moves.First();
     }
 
@@ -222,7 +222,7 @@ public class AI(Game game)
 
         return -1;
     }
-    
+
     // We classify moves into one of a few types:
     //   Immediate - return this as the move to make.  Nothing beats it.
     //   Rank - if no immediate moves then rank these moves and take the highest ranking
@@ -265,7 +265,7 @@ public class AI(Game game)
             if (srcStack.Count == srcStack.CardsUp && srcStack.Count == move.CardCount)
             {
                 var kingsAvailable = false;
-                
+
                 // Is there a king on the waste pile?
                 if (game._waste.TopCard.Rank == Card.KING)
                 {
@@ -288,7 +288,7 @@ public class AI(Game game)
                         {
                             comboMoveCount += srcStack.CardsUp;
                         }
-                        
+
                         // Arrange for the king move to be next.
                         move.comboMove = new Move(StackId.Tab1 + iTab, move.IdSrc, comboMoveCount);
                         kingsAvailable = true;
@@ -312,7 +312,7 @@ public class AI(Game game)
             // Foundation move above the foundation limits set up in IsImmediateMove
             return true;
         }
-        
+
         return false;
     }
     #endregion
@@ -336,7 +336,7 @@ public class AI(Game game)
             if (move.CardCount == src.CardsUp)
             {
                 // We're revealing a card in this stack (or emptying it) - allowed unless it is a first level King
-                
+
                 return src.FirstFaceupCard.Rank != Card.KING || src.Count > src.CardsUp;
             }
             Debug.Assert(move.CardCount < src.CardsUp, "Card count is incorrect");
@@ -355,7 +355,7 @@ public class AI(Game game)
             var dst = game.ToStack(move) as MixedStack;
             var cardMove = game.FromStack(move).TopCard;
             Debug.Assert(dst != null, "Foundation destination isn't mixed stack (i.e., tableau)");
-            
+
             for (var iTab = 0; iTab < Game.TabCount; iTab++)
             {
                 var tab = game._tableau[iTab];

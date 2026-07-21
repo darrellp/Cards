@@ -25,8 +25,8 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     protected internal List<Card> _cards = cards;
     public int Count => _cards.Count;
 
-    public Stack() : this([]) {}
-    
+    public Stack() : this([]) { }
+
     protected virtual void OnStackModified()
     {
         StackModified?.Invoke(this, EventArgs.Empty);
@@ -124,7 +124,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     public static Stack SortedDeck()
     {
         var deck = new List<Card>();
-        
+
         foreach (Suit suit in (Enum.GetValues(typeof(Suit))))
         {
             if (suit == Suit.None)
@@ -160,7 +160,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     /// <returns>The stack from the string</returns>
     public static Stack Parse(string stackString)
     {
-        var cardStrings =  stackString.Split(' ');
+        var cardStrings = stackString.Split(' ');
         var list = cardStrings.Select(s => Card.CardFromString(s)).ToList();
         return new Stack(list);
     }
@@ -183,7 +183,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         _cards.Add(card);
         OnStackModified();
     }
-    
+
     /// <summary>
     /// Add a card to this stack
     /// </summary>
@@ -195,10 +195,10 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         _cards.Add(card);
         OnStackModified();
     }
-    
+
     public Card this[int index]
     {
-        get => _cards[index]; 
+        get => _cards[index];
     }
 
     public override string ToString()
@@ -211,7 +211,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
         _cards[iCard] = card;
         OnStackModified();
     }
-    
+
     internal void Replace(int iCard, String cardName)
     {
         _cards[iCard] = Card.CardFromString(cardName);

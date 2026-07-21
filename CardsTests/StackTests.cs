@@ -22,9 +22,9 @@ public class StackTests
     [Test]
     public void TestSplit()
     {
-        var card1 = Card.CardFromString("TC");;
-        var card2 = Card.CardFromString("5S");;
-        var card3 = Card.CardFromString("AH");;
+        var card1 = Card.CardFromString("TC"); ;
+        var card2 = Card.CardFromString("5S"); ;
+        var card3 = Card.CardFromString("AH"); ;
         var card4 = Card.CardFromString("2C");
         List<Card> lstCards = [card1, card2, card3, card4];
         var stack = new Stack(lstCards);
@@ -71,37 +71,37 @@ public class StackTests
         var stack = MixedStack.ParseMixed("|");
         Assert.That(stack.Count == 0);
         Assert.That(stack.CardsUp == 0);
-        
+
         stack = MixedStack.ParseMixed("| TC");
         Assert.That(stack.Count == 1);
         Assert.That(stack[0] == new Card(10, Suit.Club));
         Assert.That(stack.CardsUp == 1);
-        
+
         stack = MixedStack.ParseMixed("|TC");
         Assert.That(stack.Count == 1);
         Assert.That(stack[0] == new Card(10, Suit.Club));
         Assert.That(stack.CardsUp == 1);
-        
+
         stack = MixedStack.ParseMixed("TC |");
         Assert.That(stack.Count == 1);
         Assert.That(stack[0] == new Card(10, Suit.Club));
         Assert.That(stack.CardsUp == 0);
-        
+
         stack = MixedStack.ParseMixed("TC|");
         Assert.That(stack.Count == 1);
         Assert.That(stack.TopCard == new Card(10, Suit.Club));
         Assert.That(stack.CardsUp == 0);
-        
+
         stack = MixedStack.ParseMixed("|TC AS 3C");
         Assert.That(stack.Count == 3);
         Assert.That(stack.TopCard == new Card(3, Suit.Club));
         Assert.That(stack.CardsUp == 3);
-                
+
         stack = MixedStack.ParseMixed("TC | AS 3C");
         Assert.That(stack.Count == 3);
         Assert.That(stack.TopCard == new Card(3, Suit.Club));
         Assert.That(stack.CardsUp == 2);
-        
+
         stack = MixedStack.ParseMixed("TC AS | 3C");
         Assert.That(stack.Count == 3);
         Assert.That(stack.TopCard == new Card(3, Suit.Club));
@@ -112,7 +112,7 @@ public class StackTests
         Assert.That(stack.TopCard == new Card(3, Suit.Club));
         Assert.That(stack.CardsUp == 0);
     }
-    
+
     [Test]
     public void TestMixedToString()
     {

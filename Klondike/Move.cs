@@ -1,6 +1,4 @@
-﻿using Cards;
-
-namespace Klondike;
+﻿namespace Klondike;
 
 public record Move(StackId IdSrc, StackId IdDst, int CardCount = 1)
 {

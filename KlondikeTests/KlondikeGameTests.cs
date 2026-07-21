@@ -33,7 +33,7 @@ public class Tests
     {
         return move.IdSrc == idSrc && move.IdDst == idDst && move.CardCount == cardCount;
     }
-    
+
     [Test]
     public void SelectNextMoveTest()
     {
@@ -42,7 +42,7 @@ public class Tests
         test._foundations[0].Add(Card.CardFromString("8H"));
         // 8H should now go under the 9S we put on the first tableau enabling the 7S on the 4th tableau to make combo
         var ai = new AI(test);
-        
+
         var select = ai.GetNextMove();
         // Fnd1 (8H) -> Tab1 (9S)
         Assert.That(select.IdSrc == StackId.Fnd1);
@@ -53,7 +53,7 @@ public class Tests
         Assert.That(test._tableau[0].Count == 2);
         Assert.That(test._tableau[0].CardsUp == 2);
         Assert.That(test._tableau[0].TopCard == Card.CardFromString("8H"));
-        
+
         // This is the combo move for the previous move from foundations
         select = ai.GetNextMove();
         // Fnd4 (7S) -> Tab1 (8H)
@@ -66,7 +66,7 @@ public class Tests
         Assert.That(test._tableau[0].TopCard == Card.CardFromString("7S"));
         Assert.That(test._tableau[0].Count == 3);
         Assert.That(test._tableau[0].CardsUp == 3);
-        
+
         select = ai.GetNextMove();
         Assert.That(select.IdSrc == StackId.Tab6);
         Assert.That(select.IdDst == StackId.Tab2);

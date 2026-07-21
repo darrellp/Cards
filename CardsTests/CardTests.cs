@@ -14,17 +14,17 @@ public class CardTests
     {
         var card1 = Card.CardFromString("AD");
         var card2 = Card.CardFromString("AC");
-        
+
         Assert.That(card1.IsRed);
         Assert.That(card2.IsBlack);
     }
-    
+
     [Test]
     public void TestColorCompare()
     {
         var card1 = Card.CardFromString("AH");
         var card2 = Card.CardFromString("TH");
-        var card3 = Card.CardFromString("3S");;
+        var card3 = Card.CardFromString("3S"); ;
         Assert.That(card1.IsSameColor(card2));
         Assert.That(!card1.IsSameColor(card3));
     }
@@ -33,10 +33,10 @@ public class CardTests
     public void TestKBelow()
     {
         var cardBelow = Card.CardFromString("5D");
-        var legalCardAbove = Card.CardFromString("6S");;
-        var illegalCardAbove1 = Card.CardFromString("7S");;
-        var illegalCardAbove2 = Card.CardFromString("6H");;
-        var illegalCardAbove3 = Card.CardFromString("7H");;
+        var legalCardAbove = Card.CardFromString("6S"); ;
+        var illegalCardAbove1 = Card.CardFromString("7S"); ;
+        var illegalCardAbove2 = Card.CardFromString("6H"); ;
+        var illegalCardAbove3 = Card.CardFromString("7H"); ;
         Assert.That(cardBelow.IsKBelow(legalCardAbove));
         Assert.That(!cardBelow.IsKBelow(illegalCardAbove1));
         Assert.That(!cardBelow.IsKBelow(illegalCardAbove2));

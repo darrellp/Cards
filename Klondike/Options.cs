@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic.CompilerServices;
-
-namespace Klondike;
+﻿namespace Klondike;
 
 public class Options
 {

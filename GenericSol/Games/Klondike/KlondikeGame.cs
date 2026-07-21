@@ -22,7 +22,6 @@ public class KlondikeGame : GenericGame
     internal Stack _waste { get; private set; } = new Stack();
     internal Stack _stock { get; private set; } = new Stack();
     // ReSharper restore InconsistentNaming
-    #endregion
 
     internal IEnumerable<MixedStack> Tableaus()
     {
@@ -31,6 +30,16 @@ public class KlondikeGame : GenericGame
             yield return _tableau[iStack];
         }
     }
+    #endregion
+
+    #region Initialization
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Deal deck into the klondike stacks. </summary>
+    ///
+    /// <remarks>   Darrell Plank, 7/20/2026. </remarks>
+    ///
+    /// <param name="deck"> The deck. </param>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void DealDeck(Stack deck)
     {
@@ -54,22 +63,18 @@ public class KlondikeGame : GenericGame
         var deck = Stack.ShuffledDeck(_random);
         DealDeck(deck);
     }
+    #endregion
 
-    public int LowFoundationRank(Suit suit)
-    {
-        var top = int.MaxValue;
-        var isBlack = Card.IsBlackSuit(suit);
-        for (var iFnd = 0; iFnd < FndCount; iFnd++)
-        {
-            var fndSuit = _fndSuits[iFnd];
-            if (fndSuit == Suit.None || Card.IsBlackSuit(fndSuit) != isBlack)
-            {
-                top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
-            }
-        }
+    #region Finding Moves
 
-        return top;
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Gets all possible moves. </summary>
+    ///
+    /// <remarks>   These are the raw moves with no AI filtering.
+    ///             Darrell Plank, 7/20/2026. </remarks>
+    ///
+    /// <returns>   All possible moves. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public override IList<IMove> GetMoves()
     {
@@ -139,17 +144,21 @@ public class KlondikeGame : GenericGame
             }
         }
 
-        // Right now I'm not considering Foundation to Tableau to avoid circular logic problems.  I probably should
-        // include them and weed them out the same time I weed out circular dependencies in tableau to tableau moves.
-        // Resolving these circularities I think depends on always turning one more card up.  We need sometimes to
-        // think of one move as extending to two and the second always turns up a card or increases a foundation count.
-        // So if we can play a 3S from under a 4H onto another tableau, the only time we'll do it is if the 4H can be
-        // be played immediately thereafter onto the aces.  For the foundations to tableau we'll only do that if the
-        // next move can be another tableau onto the former foundation card which results in turning up a card.
-        // Really, this probably should be done a level above FindAllMoves which should echo it's name and find ALL
-        // moves, leaving the weeding out to a higher level. 
         return (IList<IMove>)moves;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Determines whether there is a possible move between two tableaux stacks. </summary>
+    ///
+    /// <remarks>   Includes moving from the middle of the faceup cards by using cCards to return
+    ///             the number of cards to be moved.
+    ///             Darrell Plank, 7/20/2026. </remarks>
+    ///
+    /// <param name="iSrc"> Zero-based index of the source. </param>
+    /// <param name="iDst"> Zero-based index of the destination. </param>
+    ///
+    /// <returns>   canPlay - whether a move is available, cCards - number of cards to move. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private (int cCards, bool canPLay) CanPlayTabToTab(int iSrc, int iDst)
     {
@@ -198,6 +207,15 @@ public class KlondikeGame : GenericGame
         return (rankDifference, true);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Determines whether a card can be played to a particular foundation stack. </summary>
+    ///
+    /// <remarks>   Darrell Plank, 7/20/2026. </remarks>
+    ///
+    /// <param name="card"> The card. </param>
+    ///
+    /// <returns>   iFnd - index of the foundation stack, canPlay - whether the card can be played. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     internal (int iFnd, bool canPlay) CanPlayToFoundations(Card card)
     {
@@ -214,6 +232,38 @@ public class KlondikeGame : GenericGame
         }
 
         return (-1, false);
+    }
+
+    #endregion
+
+    #region Foundation manipulation
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Low foundation rank for opposite color. </summary>
+    ///
+    /// <remarks>   When looking for moves to avoid we consider the lowest rank of the foundation stacks
+    ///             for suits of the opposite color.  This is used to avoid moving cards to the foundation that will block
+    ///             progress in the tableaux stacks.
+    ///             Darrell Plank, 7/20/2026. </remarks>
+    ///
+    /// <param name="suit"> The suit we're searching for. </param>
+    ///
+    /// <returns>   The lowest rank of the foundation stacks for suits of the opposite color. </returns>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int LowFoundationRank(Suit suit)
+    {
+        var top = int.MaxValue;
+        var isBlack = Card.IsBlackSuit(suit);
+        for (var iFnd = 0; iFnd < FndCount; iFnd++)
+        {
+            var fndSuit = _fndSuits[iFnd];
+            if (fndSuit == Suit.None || Card.IsBlackSuit(fndSuit) != isBlack)
+            {
+                top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
+            }
+        }
+
+        return top;
     }
 
     /// <summary>
@@ -247,7 +297,9 @@ public class KlondikeGame : GenericGame
         Debug.Assert(indexAssigned >= 0 || indexUnassigned >= 0);
         return indexAssigned >= 0 ? indexAssigned : indexUnassigned;
     }
+    #endregion
 
+    #region Stack name helpers
     internal static string FndNameFromIndex(int index)
     {
         if (index < 0 || index > FndCount)
@@ -299,7 +351,9 @@ public class KlondikeGame : GenericGame
             throw new ArgumentException($"Invalid stack name: {name}");
         }
     }
+    #endregion
 
+    #region Move callbacks
     public override void ApplyAbstractPostMove(IMove move)
     {
         if (!WillWinCheck() && move.DstStack == "stock")
@@ -343,7 +397,9 @@ public class KlondikeGame : GenericGame
             }
         }
     }
+    #endregion
 
+    #region Checking for possible wins
     bool WinCheck()
     {
         if (State != "Won" && _foundations.Select(s => s.Count).All(c => c == 13))
@@ -364,6 +420,5 @@ public class KlondikeGame : GenericGame
 
         return false;
     }
-
-
+    #endregion
 }

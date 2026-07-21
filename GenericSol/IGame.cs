@@ -4,7 +4,7 @@ namespace GenericSol;
 
 public interface IGame
 {
-    Random Random { get;}
+    Random Random { get; }
     IAi Ai { get; }
     int Seed { get; }
     IGameState GameState { get; }

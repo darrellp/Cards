@@ -1,13 +1,12 @@
 ﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Cards;
-using System;
 using GenericSol;
-
-using GenericSol.Games.TestGame;
 using GenericSol.Games.Klondike;
+using GenericSol.Games.TestGame;
+using System;
 
 namespace SolitaireUI.ViewModels;
 

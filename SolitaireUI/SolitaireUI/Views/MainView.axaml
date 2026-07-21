@@ -17,8 +17,8 @@ to set the actual DataContext for runtime, set the DataContext property in code 
 
     <Panel>
         <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*, *">
-            <controls:StackControl Grid.Column="0" HorizontalAlignment="Center" Stack="{Binding From}" FaceUp="true" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
-            <controls:StackControl Grid.Column="1" HorizontalAlignment="Center" Stack="{Binding To}" FaceUp="false" OverlapDistance="35" CardWidth="160" CardHeight="220" Width="180" Height="400"/>
+            <controls:StackControl Grid.Column="0" HorizontalAlignment="Center" Stack="{Binding From}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
+            <controls:StackControl Grid.Column="1" HorizontalAlignment="Center" Stack="{Binding To}" FaceUp="false" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
         </Grid>
 
         <Border IsVisible="{Binding IsGameOverDialogVisible}"

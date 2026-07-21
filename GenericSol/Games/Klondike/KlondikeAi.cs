@@ -36,7 +36,7 @@ internal class KlondikeAi : IAi
         }
 
         var invariantMoves = Game.GetMoves().Where(m => CheckInvariant((KlondikeMove)m, KlondikeGame)).Cast<KlondikeMove>().ToList();
-        var immediate = invariantMoves.FirstOrDefault( IsImmediateMove);
+        var immediate = invariantMoves.FirstOrDefault(IsImmediateMove);
         List<KlondikeMove> moves;
         bool avoidMovesExist = false;
 
