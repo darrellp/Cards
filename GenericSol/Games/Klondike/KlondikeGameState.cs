@@ -30,16 +30,17 @@ public class KlondikeGameState : GenericGameState
             return State;
         }
 
-        //if (State == "WillWin" && gameEvent != "Win")
-        //{
-        //    // We stay in WillWin until we go into Win state
-        //    return State;
-        //}
+        if (State == "WillWin" && gameEvent != "Win")
+        {
+            // We stay in WillWin until we go into Win state
+            return State;
+        }
 
         switch (gameEvent)
         {
-            //case "WillWin":
-            //    return "WillWin";
+            case "WillWin":
+                return "WillWin";
+
             case "NoMoves":
                 return "NoMoves";
 

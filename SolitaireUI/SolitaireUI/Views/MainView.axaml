@@ -17,25 +17,25 @@ to set the actual DataContext for runtime, set the DataContext property in code 
 
     <Panel>
         <!-- Overall Grid -->
-        <Grid ColumnDefinitions="4*, 3*" RowDefinitions="3*, 5*">
-            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Background="Green">
-                <controls:StackControl Stack="{Binding Fnd1}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Fnd2}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Fnd3}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Fnd4}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
+        <Grid ColumnDefinitions="4*, 3*" RowDefinitions="1.5*, 5*" Background="Green">
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="30">
+                <controls:StackControl Stack="{Binding Fnd1}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                <controls:StackControl Stack="{Binding Fnd2}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                <controls:StackControl Stack="{Binding Fnd3}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                <controls:StackControl Stack="{Binding Fnd4}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
             </StackPanel>
-            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
-                <controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+                <controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                <controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="140" CardHeight="180" Width="140" />
             </StackPanel>
-            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal">
-                <controls:StackControl Stack="{Binding Tab1}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab2}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab3}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab4}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab5}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab6}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
-                <controls:StackControl Stack="{Binding Tab7}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140" Height="400"/>
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20">
+                <controls:StackControl Stack="{Binding Tab1}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab2}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab3}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab4}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab5}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab6}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                <controls:StackControl Stack="{Binding Tab7}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
             </StackPanel>
         </Grid>
 

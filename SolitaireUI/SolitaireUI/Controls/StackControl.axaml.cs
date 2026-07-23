@@ -163,7 +163,8 @@ public class StackControl : Control
 
     private void DrawEmptyStackIndicator(DrawingContext context)
     {
-        var pen = new Pen(Brushes.Red, 3.0);
+        var brush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
+        var pen = new Pen(brush, 12.0);
         var rect = new Rect(0, 0, CardWidth, CardHeight);
 
         // Draw red X
