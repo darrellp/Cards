@@ -31,25 +31,25 @@ public partial class MainViewModel : ViewModelBase
 
 
     private static TestGame _testGame = new();
-    private static KlondikeGame _klondikeGame = new();
-    private static IGame _game = _klondikeGame;
+    private static KlondikeGame _klondikeGameModel = new();
+    private static IGame _game = _klondikeGameModel;
 
     [ObservableProperty] public Stack _from = _testGame.StackFromName("From");
     [ObservableProperty] public Stack _to = _testGame.StackFromName("To");
 
-    [ObservableProperty] public Stack _stock = _klondikeGame.StackFromName("stock");
-    [ObservableProperty] public Stack _waste = _klondikeGame.StackFromName("waste");
-    [ObservableProperty] public Stack _fnd1 = _klondikeGame.StackFromName("fnd1");
-    [ObservableProperty] public Stack _fnd2 = _klondikeGame.StackFromName("fnd2");
-    [ObservableProperty] public Stack _fnd3 = _klondikeGame.StackFromName("fnd3");
-    [ObservableProperty] public Stack _fnd4 = _klondikeGame.StackFromName("fnd4");
-    [ObservableProperty] public Stack _tab1 = _klondikeGame.StackFromName("tab1");
-    [ObservableProperty] public Stack _tab2 = _klondikeGame.StackFromName("tab2");
-    [ObservableProperty] public Stack _tab3 = _klondikeGame.StackFromName("tab3");
-    [ObservableProperty] public Stack _tab4 = _klondikeGame.StackFromName("tab4");
-    [ObservableProperty] public Stack _tab5 = _klondikeGame.StackFromName("tab5");
-    [ObservableProperty] public Stack _tab6 = _klondikeGame.StackFromName("tab6");
-    [ObservableProperty] public Stack _tab7 = _klondikeGame.StackFromName("tab7");
+    [ObservableProperty] public Stack _stock = _klondikeGameModel.StackFromName("stock");
+    [ObservableProperty] public Stack _waste = _klondikeGameModel.StackFromName("waste");
+    [ObservableProperty] public Stack _fnd1 = _klondikeGameModel.StackFromName("fnd1");
+    [ObservableProperty] public Stack _fnd2 = _klondikeGameModel.StackFromName("fnd2");
+    [ObservableProperty] public Stack _fnd3 = _klondikeGameModel.StackFromName("fnd3");
+    [ObservableProperty] public Stack _fnd4 = _klondikeGameModel.StackFromName("fnd4");
+    [ObservableProperty] public Stack _tab1 = _klondikeGameModel.StackFromName("tab1");
+    [ObservableProperty] public Stack _tab2 = _klondikeGameModel.StackFromName("tab2");
+    [ObservableProperty] public Stack _tab3 = _klondikeGameModel.StackFromName("tab3");
+    [ObservableProperty] public Stack _tab4 = _klondikeGameModel.StackFromName("tab4");
+    [ObservableProperty] public Stack _tab5 = _klondikeGameModel.StackFromName("tab5");
+    [ObservableProperty] public Stack _tab6 = _klondikeGameModel.StackFromName("tab6");
+    [ObservableProperty] public Stack _tab7 = _klondikeGameModel.StackFromName("tab7");
 
     [ObservableProperty] public bool _isGameOverDialogVisible;
     [ObservableProperty] public string _gameOverMessage = string.Empty;
@@ -100,8 +100,22 @@ public partial class MainViewModel : ViewModelBase
     private void ResetGame()
     {
         UnsubscribeFromGameEvents();
-        _game = new TestGame();
+        _game = _klondikeGameModel = new KlondikeGame();
         SubscribeToGameEvents();
+
+        Stock = _klondikeGameModel.StackFromName("stock");
+        Waste = _klondikeGameModel.StackFromName("waste");
+        Fnd1 = _klondikeGameModel.StackFromName("fnd1");
+        Fnd2 = _klondikeGameModel.StackFromName("fnd2");
+        Fnd3 = _klondikeGameModel.StackFromName("fnd3");
+        Fnd4 = _klondikeGameModel.StackFromName("fnd4");
+        Tab1 = _klondikeGameModel.StackFromName("tab1");
+        Tab2 = _klondikeGameModel.StackFromName("tab2");
+        Tab3 = _klondikeGameModel.StackFromName("tab3");
+        Tab4 = _klondikeGameModel.StackFromName("tab4");
+        Tab5 = _klondikeGameModel.StackFromName("tab5");
+        Tab6 = _klondikeGameModel.StackFromName("tab6");
+        Tab7 = _klondikeGameModel.StackFromName("tab7");
 
         IsGameOverDialogVisible = false;
     }

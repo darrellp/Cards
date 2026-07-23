@@ -143,8 +143,6 @@ internal class KlondikeAi : IAi
         return false;
     }
 
-
-
     private void FlipFeed()
     {
         if (KlondikeGame._stock.Count == 0)
@@ -157,13 +155,14 @@ internal class KlondikeAi : IAi
                 _nextMoves.Enqueue(KlondikeMove.NoMove);
                 return;
             }
-            _nextMoves.Enqueue(new KlondikeMove("Waste", "Stock", KlondikeGame._waste.Count));
+            _nextMoves.Enqueue(new KlondikeMove("waste", "stock", KlondikeGame._waste.Count));
+            //KlondikeGame.GameState.EventOccurred("EndOfStock");
             return;
         }
 
         var turnover = 3;
         var cardCount = Math.Min(turnover, KlondikeGame._stock.Count);
-        _nextMoves.Enqueue(new KlondikeMove("Stock", "Waste", cardCount));
+        _nextMoves.Enqueue(new KlondikeMove("stock", "waste", cardCount));
     }
 
     private (List<KlondikeMove> accept, List<KlondikeMove> avoid) GetAvoids(List<KlondikeMove> moves)
@@ -230,7 +229,7 @@ internal class KlondikeAi : IAi
                 if (KlondikeGame._waste.TopCard.Rank == Card.KING)
                 {
                     // Arrange for the king move to be next
-                    move.comboMove = new KlondikeMove("Waste", move.Src);
+                    move.comboMove = new KlondikeMove("waste", move.Src);
                     kingsAvailable = true;
                 }
 
@@ -244,7 +243,7 @@ internal class KlondikeAi : IAi
                         var comboMoveCount = tab.CardsUp;
                         // If we are moving TO the king, we have to
                         // add our count to the cardcount to be moved since that will alter the King stack
-                        if (move.Dst == KlondikeGame.FndNameFromIndex(iTab))
+                        if (move.Dst == KlondikeGame.TabNameFromIndex(iTab))
                         {
                             comboMoveCount += srcStack.CardsUp;
                         }

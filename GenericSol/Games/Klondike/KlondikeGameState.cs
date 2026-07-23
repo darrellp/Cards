@@ -25,6 +25,11 @@ public class KlondikeGameState : GenericGameState
 {
     public override string NewGameState(string gameEvent)
     {
+        if (State == "Won" || State == "Lost")
+        {
+            return State;
+        }
+
         //if (State == "WillWin" && gameEvent != "Win")
         //{
         //    // We stay in WillWin until we go into Win state
@@ -35,6 +40,8 @@ public class KlondikeGameState : GenericGameState
         {
             //case "WillWin":
             //    return "WillWin";
+            case "NoMoves":
+                return "NoMoves";
 
             case "Lose":
                 return "Lost";
@@ -42,7 +49,7 @@ public class KlondikeGameState : GenericGameState
             case "EndOfStock":
                 return State switch
                 {
-                    "Normal" => "Lost",
+                    "NoMoves" => "Lost",
                     "AvoidedMoves" => "PlayingAvoidedMoves",
                     "PlayingAvoidedMoves" or "Moved" => "NoMoves",
                     _ => "Lost",

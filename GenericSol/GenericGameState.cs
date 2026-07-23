@@ -15,11 +15,11 @@ public class GenericGameState : IGameState
             _ => NewGameState(gameEvent)
         };
 
-        if (gameEvent == "Won")
+        if (State == "Won")
         {
             Won?.Invoke(this, EventArgs.Empty);
         }
-        else if (gameEvent == "Lost")
+        else if (State == "Lost")
         {
             Lost?.Invoke(this, EventArgs.Empty);
         }

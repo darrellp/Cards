@@ -16,6 +16,7 @@ public class KlondikeGame : GenericGame
     KlondikeAi _ai;
 
     public override IAi Ai => (IAi)_ai;
+    public override IGameState GameState { get; set; } = new KlondikeGameState();
     #endregion
 
     #region Stacks
@@ -58,6 +59,7 @@ public class KlondikeGame : GenericGame
             _foundations[iFnd] = new Stack();
         }
 
+        GameState = new KlondikeGameState();
         _waste = new Stack();
         _stock = deck;
         _ai = new KlondikeAi();
@@ -68,6 +70,7 @@ public class KlondikeGame : GenericGame
     {
         var deck = Stack.ShuffledDeck(_random);
         DealDeck(deck);
+        GameState.EventOccurred("NoMoves");
     }
     #endregion
 
@@ -96,7 +99,7 @@ public class KlondikeGame : GenericGame
             if (fCanPlay)
             {
                 // new foundation stack
-                moves.Add(new KlondikeMove("Waste", FndNameFromIndex(fndIndex)));
+                moves.Add(new KlondikeMove("waste", FndNameFromIndex(fndIndex)));
             }
 
             // Discard to tableau moves
@@ -105,7 +108,7 @@ public class KlondikeGame : GenericGame
                 // Check for moves from the discard pile to a tableau
                 if (discard.IsKBelow(_tableau[iTab].TopCard))
                 {
-                    moves.Add(new KlondikeMove("Waste", TabNameFromIndex(iTab)));
+                    moves.Add(new KlondikeMove("waste", TabNameFromIndex(iTab)));
                 }
             }
         }
@@ -118,7 +121,7 @@ public class KlondikeGame : GenericGame
             {
                 if (fndCard.IsKBelow(_tableau[iTabDst].TopCard))
                 {
-                    moves.Add(new KlondikeMove(TabNameFromIndex(iFnd), FndNameFromIndex(iTabDst)));
+                    moves.Add(new KlondikeMove(FndNameFromIndex(iFnd), TabNameFromIndex(iTabDst)));
                 }
             }
         }
@@ -149,8 +152,7 @@ public class KlondikeGame : GenericGame
                 }
             }
         }
-
-        return (IList<IMove>)moves;
+        return moves.Cast<IMove>().ToList();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
