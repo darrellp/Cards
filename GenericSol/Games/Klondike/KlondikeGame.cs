@@ -9,6 +9,7 @@ public class KlondikeGame : GenericGame
     public const int FndCount = 4;
     #endregion
 
+    internal int Turnover { get => field; set => field=value; } = 3;
     #region Private members
     // Whether we have detected any moves yet in the current run through the feed
     private readonly Suit[] _fndSuits = [Suit.None, Suit.None, Suit.None, Suit.None];
@@ -474,31 +475,50 @@ public class KlondikeGame : GenericGame
     #region Mouse Interaction
     public override void OnRightClick(Stack stack)
     {
-        if ((!stack.Name.StartsWith("tab") && stack.Name != "waste") || stack.Count == 0)
+        KlondikeMove move = KlondikeMove.NoMove;
+        string eventName = "MadeMove";
+
+        if (stack.Name == "stock")
         {
-            // We can only auto play from tableau or waste and we need at least one card to play
-            return;
-        }
-        var srcCard = stack.TopCard;
-        var fndIndex = FndIndexFromSuit(srcCard.Suit);
-        KlondikeMove move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
-        if (_foundations[fndIndex].Count == 0)
-        {
-            if (srcCard.Rank != Card.ACE)
-            { 
-                return; 
+            if (stack.Count == 0)
+            {
+                // If the stock is empty then we can only reset the stock from the waste
+                move = new KlondikeMove("waste", "stock", _waste.Count);
+                eventName = "EndOfStock";
+            }
+            else
+            {
+                move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
             }
         }
         else
         {
-            var dstCard = _foundations[fndIndex].TopCard;
-            if (dstCard.Rank != srcCard.Rank - 1)
+            if ((!stack.Name.StartsWith("tab") && stack.Name != "waste") || stack.Count == 0)
             {
+                // We can only auto play from tableau or waste and we need at least one card to play
                 return;
+            }
+            var srcCard = stack.TopCard;
+            var fndIndex = FndIndexFromSuit(srcCard.Suit);
+            move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
+            if (_foundations[fndIndex].Count == 0)
+            {
+                if (srcCard.Rank != Card.ACE)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                var dstCard = _foundations[fndIndex].TopCard;
+                if (dstCard.Rank != srcCard.Rank - 1)
+                {
+                    return;
+                }
             }
         }
         ApplyMove(move);
-        GameState.EventOccurred("MadeMove");
+        GameState.EventOccurred(eventName);
     }
     #endregion
 }

@@ -60,11 +60,15 @@ public partial class MainViewModel : ViewModelBase
     // Drag state
     [ObservableProperty] private Stack? _dragSourceStack;
     [ObservableProperty] private string? _dragSourceName;
-    [ObservableProperty] private Stack? _tempDragStack;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDragging))]
+    private Stack? _tempDragStack;
     [ObservableProperty] private int _dragCardCount;
     [ObservableProperty] private Stack? _currentHoverStack;
     [ObservableProperty] private double _dragX;
     [ObservableProperty] private double _dragY;
+    [ObservableProperty] private double _dragOffsetX;
+    [ObservableProperty] private double _dragOffsetY;
 
     public MainViewModel()
     {
@@ -139,101 +143,103 @@ public partial class MainViewModel : ViewModelBase
         }
     }
 
-    public bool StartDrag(Stack sourceStack, int cardCount, double mouseX, double mouseY)
+    public bool StartDrag(Stack sourceStack, int cardCount, double topLevelX, double topLevelY, double clickOffsetX, double clickOffsetY)
     {
         if (sourceStack == null || cardCount <= 0 || cardCount > sourceStack.Count)
         {
             return false;
         }
 
-        _dragSourceStack = sourceStack;
-        _dragSourceName = sourceStack.Name;
-        _dragCardCount = cardCount;
-        _tempDragStack = sourceStack.Split(cardCount);
+        DragSourceStack = sourceStack;
+        DragSourceName = sourceStack.Name;
+        DragCardCount = cardCount;
+        TempDragStack = sourceStack.Split(cardCount);
 
         // Note: unlike GenericGame.ApplyMove, we intentionally do NOT call game.OnStackSplit here.
         // When dragging with the mouse, the source stack should be left with 0 face-up cards
         // (rendered as a face-down peek) rather than auto-flipping the next card face up. The
         // flip only happens once the drag completes via StackDrop/CompleteDrag, or is reverted
         // on CancelDrag/invalid drop.
-        _currentHoverStack = null;
-        _dragX = mouseX;
-        _dragY = mouseY;
+        CurrentHoverStack = null;
+        DragOffsetX = clickOffsetX;
+        DragOffsetY = clickOffsetY;
+        DragX = topLevelX - clickOffsetX;
+        DragY = topLevelY - clickOffsetY;
         return true;
     }
 
-    public void UpdateDragHover(Stack? hoverStack, double mouseX, double mouseY)
+    public void UpdateDragHover(Stack? hoverStack, double topLevelX, double topLevelY)
     {
-        _dragX = mouseX;
-        _dragY = mouseY;
+        DragX = topLevelX - DragOffsetX;
+        DragY = topLevelY - DragOffsetY;
 
-        if (_tempDragStack == null || _dragSourceName == null)
+        if (TempDragStack == null || DragSourceName == null)
         {
-            _currentHoverStack = null;
+            CurrentHoverStack = null;
             return;
         }
 
         // Don't hover over the source stack
-        if (hoverStack != null && hoverStack == _dragSourceStack)
+        if (hoverStack != null && hoverStack == DragSourceStack)
         {
-            _currentHoverStack = null;
+            CurrentHoverStack = null;
             return;
         }
 
         if (hoverStack != null && _game is GenericGame game)
         {
-            if (game.IsMoveValid(_tempDragStack, _dragSourceName, hoverStack, _dragCardCount))
+            if (game.IsMoveValid(TempDragStack, DragSourceName, hoverStack, DragCardCount))
             {
-                _currentHoverStack = hoverStack;
+                CurrentHoverStack = hoverStack;
                 return;
             }
         }
 
-        _currentHoverStack = null;
+        CurrentHoverStack = null;
     }
 
     public void CompleteDrag()
     {
-        if (_tempDragStack == null || _dragSourceStack == null || _dragSourceName == null)
+        if (TempDragStack == null || DragSourceStack == null || DragSourceName == null)
         {
             return;
         }
 
-        if (_currentHoverStack != null && _game is GenericGame game)
+        if (CurrentHoverStack != null && _game is GenericGame game)
         {
             // Valid drop - commit the move and perform the same post-split bookkeeping
             // (e.g. flipping the next face-down card up) that an AI-driven move would.
-            game.StackDrop(_tempDragStack, _dragSourceName, _currentHoverStack, _dragCardCount);
-            game.OnStackSplit(_dragSourceStack);
+            game.StackDrop(TempDragStack, DragSourceName, CurrentHoverStack, DragCardCount);
+            game.OnStackSplit(DragSourceStack);
         }
         else
         {
             // Invalid drop - merge back to source; nothing was actually removed from the
             // source stack's perspective, so no flip bookkeeping is needed.
-            _dragSourceStack.Merge(_tempDragStack);
+            DragSourceStack.Merge(TempDragStack);
         }
 
         // Clear drag state
-        _dragSourceStack = null;
-        _dragSourceName = null;
-        _tempDragStack = null;
-        _dragCardCount = 0;
-        _currentHoverStack = null;
+        DragSourceStack = null;
+        DragSourceName = null;
+        TempDragStack = null;
+        DragCardCount = 0;
+        CurrentHoverStack = null;
     }
 
     public void CancelDrag()
     {
-        if (_tempDragStack != null && _dragSourceStack != null)
+        if (TempDragStack != null && DragSourceStack != null)
         {
-            _dragSourceStack.Merge(_tempDragStack);
+            DragSourceStack.Merge(TempDragStack);
         }
 
-        _dragSourceStack = null;
-        _dragSourceName = null;
-        _tempDragStack = null;
-        _dragCardCount = 0;
-        _currentHoverStack = null;
+        DragSourceStack = null;
+        DragSourceName = null;
+        TempDragStack = null;
+        DragCardCount = 0;
+        CurrentHoverStack = null;
     }
 
-    public bool IsDragging => _tempDragStack != null;
+    public bool IsDragging => TempDragStack != null;
 }

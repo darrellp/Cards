@@ -99,6 +99,7 @@ public class StackControl : Control
                 var clickY = point.Position.Y;
                 int cardCount = 1;
                 int clickedCardIndex = -1;
+                var clickedCardTopY = 0.0;
 
                 if (Stack is MixedStack mixedStack)
                 {
@@ -124,6 +125,7 @@ public class StackControl : Control
                             {
                                 clickedCardIndex = firstFaceUpIndex + i;
                                 cardCount = mixedStack.Count - clickedCardIndex;
+                                clickedCardTopY = cardY;
                                 break;
                             }
 
@@ -138,15 +140,24 @@ public class StackControl : Control
                     {
                         clickedCardIndex = Stack.Count - 1;
                         cardCount = 1;
+                        clickedCardTopY = 0.0;
                     }
                 }
 
-                if (clickedCardIndex >= 0 && viewModel.StartDrag(Stack, cardCount, point.Position.X, point.Position.Y))
+                if (clickedCardIndex >= 0)
                 {
-                    e.Pointer.Capture(this);
-                    // Immediately invalidate all controls to update visuals after split
-                    InvalidateAllStackControls();
-                    e.Handled = true;
+                    var topLevel = TopLevel.GetTopLevel(this);
+                    var topLevelPoint = topLevel != null ? e.GetPosition(topLevel) : point.Position;
+                    var clickOffsetX = point.Position.X;
+                    var clickOffsetY = point.Position.Y - clickedCardTopY;
+
+                    if (viewModel.StartDrag(Stack, cardCount, topLevelPoint.X, topLevelPoint.Y, clickOffsetX, clickOffsetY))
+                    {
+                        e.Pointer.Capture(this);
+                        // Immediately invalidate all controls to update visuals after split
+                        InvalidateAllStackControls();
+                        e.Handled = true;
+                    }
                 }
             }
         }
@@ -165,8 +176,7 @@ public class StackControl : Control
                 // Hit test to find which stack control is under the pointer
                 var hitStack = FindStackUnderPoint(topLevel, screenPoint);
 
-                var localPoint = e.GetCurrentPoint(this);
-                viewModel.UpdateDragHover(hitStack, localPoint.Position.X, localPoint.Position.Y);
+                viewModel.UpdateDragHover(hitStack, screenPoint.X, screenPoint.Y);
 
                 // Invalidate all stack controls to update visuals
                 InvalidateAllStackControls();

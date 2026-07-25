@@ -39,6 +39,18 @@ to set the actual DataContext for runtime, set the DataContext property in code 
             </StackPanel>
         </Grid>
 
+        <Canvas IsHitTestVisible="False">
+            <controls:StackControl Stack="{Binding TempDragStack}"
+                                    IsVisible="{Binding IsDragging}"
+                                    FaceUp="true"
+                                    OverlapDistance="45"
+                                    CardWidth="140"
+                                    CardHeight="180"
+                                    Width="140"
+                                    Canvas.Left="{Binding DragX}"
+                                    Canvas.Top="{Binding DragY}"/>
+        </Canvas>
+
         <Border IsVisible="{Binding IsGameOverDialogVisible}"
                 Background="#88000000"
                 HorizontalAlignment="Stretch"

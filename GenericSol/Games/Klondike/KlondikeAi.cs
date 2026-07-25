@@ -160,8 +160,7 @@ internal class KlondikeAi : IAi
             return;
         }
 
-        var turnover = 3;
-        var cardCount = Math.Min(turnover, KlondikeGame._stock.Count);
+        var cardCount = Math.Min(KlondikeGame.Turnover, KlondikeGame._stock.Count);
         _nextMoves.Enqueue(new KlondikeMove("stock", "waste", cardCount));
     }
 
