@@ -50,7 +50,7 @@ public class KlondikeGameState : GenericGameState
             case "EndOfStock":
                 return State switch
                 {
-                    "NoMoves" => "Lost",
+                    "NoMoves" =>  "Lost",
                     "AvoidedMoves" => "PlayingAvoidedMoves",
                     "PlayingAvoidedMoves" or "Moved" => "NoMoves",
                     _ => "Lost",

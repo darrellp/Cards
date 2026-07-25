@@ -473,52 +473,62 @@ public class KlondikeGame : GenericGame
     #endregion
 
     #region Mouse Interaction
+    public override void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    {
+        base.StackDrop(stkSrc, srcName, stkDst, cardCount);
+        GameState.EventOccurred("MadeMove");
+    }
+
     public override void OnRightClick(Stack stack)
     {
         KlondikeMove move = KlondikeMove.NoMove;
         string eventName = "MadeMove";
 
+        if ((!stack.Name.StartsWith("tab") && stack.Name != "waste") || stack.Count == 0)
+        {
+            // We can only auto play from tableau or waste and we need at least one card to play
+            return;
+        }
+        var srcCard = stack.TopCard;
+        var fndIndex = FndIndexFromSuit(srcCard.Suit);
+        move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
+        if (_foundations[fndIndex].Count == 0)
+        {
+            if (srcCard.Rank != Card.ACE)
+            {
+                return;
+            }
+        }
+        else
+        {
+            var dstCard = _foundations[fndIndex].TopCard;
+            if (dstCard.Rank != srcCard.Rank - 1)
+            {
+                return;
+            }
+        }
+        ApplyMove(move);
+        GameState.EventOccurred(eventName);
+    }
+
+    public override void OnLeftClick(Stack stack)
+    {
         if (stack.Name == "stock")
         {
             if (stack.Count == 0)
             {
                 // If the stock is empty then we can only reset the stock from the waste
-                move = new KlondikeMove("waste", "stock", _waste.Count);
-                eventName = "EndOfStock";
+                var move = new KlondikeMove("waste", "stock", _waste.Count);
+                ApplyMove(move);
             }
             else
             {
-                move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
+                var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
+                ApplyMove(move);
             }
         }
-        else
-        {
-            if ((!stack.Name.StartsWith("tab") && stack.Name != "waste") || stack.Count == 0)
-            {
-                // We can only auto play from tableau or waste and we need at least one card to play
-                return;
-            }
-            var srcCard = stack.TopCard;
-            var fndIndex = FndIndexFromSuit(srcCard.Suit);
-            move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
-            if (_foundations[fndIndex].Count == 0)
-            {
-                if (srcCard.Rank != Card.ACE)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                var dstCard = _foundations[fndIndex].TopCard;
-                if (dstCard.Rank != srcCard.Rank - 1)
-                {
-                    return;
-                }
-            }
-        }
-        ApplyMove(move);
-        GameState.EventOccurred(eventName);
+        // We have to count this as a "move" because we have no idea what valid moves the user might be passing by.
+        GameState.EventOccurred("MadeMove");
     }
     #endregion
 }
