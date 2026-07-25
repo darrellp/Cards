@@ -119,4 +119,12 @@ public partial class MainViewModel : ViewModelBase
 
         IsGameOverDialogVisible = false;
     }
+
+    public void HandleStackRightClick(Stack stack)
+    {
+        if (_game is GenericGame game)
+        {
+            game.OnRightClick(stack);
+        }
+    }
 }

@@ -20,6 +20,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
 {
     // Event to notify when the stack is modified
     public event EventHandler? StackModified;
+    public string Name { get; set; }
 
     // Actual list of cards in this stack
     protected internal List<Card> _cards = cards;

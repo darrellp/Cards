@@ -52,14 +52,16 @@ public abstract class GenericGame : IGame
         dstStack.Merge(movedCards);
         ApplyAbstractPostMove(move);
         MoveCount++;
-
     }
 
     public virtual void ApplyAbstractPreMove(IMove move) { }
     public virtual void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst) { }
     public virtual void ApplyAbstractPostMove(IMove move) { }
+    public virtual void OnRightClick(Stack stack) { }
 
     public abstract IList<IMove> GetMoves();
+
+    public abstract bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
 
     public abstract Stack StackFromName(string name);
 }

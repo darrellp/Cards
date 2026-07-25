@@ -1,5 +1,4 @@
 ﻿using Cards;
-using GenericSol.Games.TestGame;
 using System.Diagnostics;
 
 namespace GenericSol.Games.Klondike;
@@ -52,18 +51,24 @@ public class KlondikeGame : GenericGame
         for (var iTab = 0; iTab < TabCount; iTab++)
         {
             _tableau[iTab] = MixedStack.FromStack(deck.Split(iTab + 1), 1);
+            _tableau[iTab].Name = TabNameFromIndex(iTab);
         }
 
         for (var iFnd = 0; iFnd < FndCount; iFnd++)
         {
             _foundations[iFnd] = new Stack();
+            _foundations[iFnd].Name = FndNameFromIndex(iFnd);
         }
 
         GameState = new KlondikeGameState();
         _waste = new Stack();
+        _waste.Name = "waste";
         _stock = deck;
-        _ai = new KlondikeAi();
-        _ai.Game = this;
+        _stock.Name = "stock";
+        _ai = new KlondikeAi
+        {
+            Game = this
+        };
     }
 
     override public void Initialize()
@@ -427,6 +432,70 @@ public class KlondikeGame : GenericGame
         }
 
         return false;
+    }
+
+    public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    {
+        if (stkSrc.Count == 0 || srcName == stkDst.Name)
+        {
+            return false;
+        }
+        if (stkDst.Name.StartsWith("fnd"))
+        {
+            if (stkSrc.Count != 1)
+            {
+                return false;
+            }
+            var srcCard = stkSrc.TopCard;
+            if (stkDst.Count == 0)
+            {
+                return srcCard.Rank == Card.ACE;
+            }
+            var dstCard = stkDst.TopCard;
+            return srcCard.Suit == dstCard.Suit && srcCard.Rank == dstCard.Rank + 1;
+
+        }
+        else if (stkDst.Name.StartsWith("tab"))
+        {
+            var dstCard = stkDst.TopCard;
+            var srcCard = stkSrc[0];
+            return srcCard.IsKBelow(dstCard);
+        }
+        else
+        {
+            return false;
+        }
+    }
+    #endregion
+
+    #region Mouse Interaction
+    public override void OnRightClick(Stack stack)
+    {
+        if ((!stack.Name.StartsWith("tab") && stack.Name != "waste") || stack.Count == 0)
+        {
+            // We can only auto play from tableau or waste and we need at least one card to play
+            return;
+        }
+        var srcCard = stack.TopCard;
+        var fndIndex = FndIndexFromSuit(srcCard.Suit);
+        KlondikeMove move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
+        if (_foundations[fndIndex].Count == 0)
+        {
+            if (srcCard.Rank != Card.ACE)
+            { 
+                return; 
+            }
+        }
+        else
+        {
+            var dstCard = _foundations[fndIndex].TopCard;
+            if (dstCard.Rank != srcCard.Rank - 1)
+            {
+                return;
+            }
+        }
+        ApplyMove(move);
+        GameState.EventOccurred("MadeMove");
     }
     #endregion
 }

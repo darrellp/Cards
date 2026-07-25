@@ -14,4 +14,5 @@ public interface IGame
     IList<Stack> Stacks { get; }
     IList<IMove> GetMoves();
     void ApplyMove(IMove move);
+    bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
 }

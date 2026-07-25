@@ -39,4 +39,9 @@ public class TestGame : GenericGame
             GameState.EventOccurred("Won");
         }
     }
+
+    public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    {
+        return srcName == "From" && stkDst.Name == "To" && stkSrc.Count == 1;
+    }
 }

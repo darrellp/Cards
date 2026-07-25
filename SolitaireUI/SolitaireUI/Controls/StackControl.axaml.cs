@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Cards;
 using SolitaireUI.ViewModels;
@@ -38,6 +39,24 @@ public class StackControl : Control
 
         StackProperty.Changed.AddClassHandler<StackControl>((control, args) =>
             control.OnStackChanged(args));
+    }
+
+    public StackControl()
+    {
+        PointerPressed += OnPointerPressed;
+    }
+
+    private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        var point = e.GetCurrentPoint(this);
+        if (point.Properties.IsRightButtonPressed && Stack != null)
+        {
+            if (DataContext is MainViewModel viewModel)
+            {
+                viewModel.HandleStackRightClick(Stack);
+            }
+            e.Handled = true;
+        }
     }
 
     public Stack? Stack
