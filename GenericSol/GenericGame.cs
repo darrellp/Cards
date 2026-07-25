@@ -48,6 +48,7 @@ public abstract class GenericGame : IGame
 
         ApplyAbstractPreMove(move);
         var movedCards = srcStack.Split(cardCount);
+        OnStackSplit(srcStack);
         ApplyAbstractSplit(move, srcStack, movedCards, dstStack);
         dstStack.Merge(movedCards);
         ApplyAbstractPostMove(move);
@@ -58,10 +59,28 @@ public abstract class GenericGame : IGame
     public virtual void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst) { }
     public virtual void ApplyAbstractPostMove(IMove move) { }
     public virtual void OnRightClick(Stack stack) { }
+    public virtual void OnLeftClick(Stack stack) { }
+
+    /// <summary>
+    /// Called immediately after any cards are split off of a stack, regardless of whether the
+    /// split originated from a normal move (<see cref="ApplyMove"/>) or from a UI drag operation.
+    /// Games override this to handle bookkeeping such as flipping the next face-down card up
+    /// once all face-up cards have been removed from a mixed stack.
+    /// </summary>
+    public virtual void OnStackSplit(Stack src) { }
 
     public abstract IList<IMove> GetMoves();
 
     public abstract bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
+
+    public virtual void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    {
+        if (IsMoveValid(stkSrc, srcName, stkDst, cardCount))
+        {
+            stkDst.Merge(stkSrc, cardCount);
+            MoveCount++;
+        }
+    }
 
     public abstract Stack StackFromName(string name);
 }

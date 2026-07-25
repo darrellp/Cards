@@ -399,7 +399,10 @@ public class KlondikeGame : GenericGame
         {
             GameState.EventOccurred("MadeMove");
         }
+    }
 
+    public override void OnStackSplit(Stack src)
+    {
         if (src is MixedStack mixedStack)
         {
             // If we've cleared all the faceup cards and still have facedown cards then
