@@ -40,7 +40,7 @@ public class StackControl : Control
     {
         get
         {
-            if (DataContext is MainViewModel viewModel && Stack != null)
+            if (DataContext is IDragDropViewModel viewModel && Stack != null)
             {
                 return viewModel.CurrentHoverStack == Stack;
             }
@@ -72,7 +72,7 @@ public class StackControl : Control
 
         if (point.Properties.IsRightButtonPressed && Stack != null)
         {
-            if (DataContext is MainViewModel viewModel)
+            if (DataContext is IDragDropViewModel viewModel)
             {
                 viewModel.HandleStackRightClick(Stack);
             }
@@ -82,8 +82,17 @@ public class StackControl : Control
 
         if (point.Properties.IsLeftButtonPressed && Stack != null)
         {
-            if (DataContext is MainViewModel viewModel)
+            if (DataContext is IDragDropViewModel viewModel)
             {
+                // Safety net: if a previous drag was somehow left stuck in progress (e.g. an
+                // exception interrupted it), clear it out now so this new press isn't silently
+                // ignored and mouse dragging doesn't stay broken for the rest of the session.
+                if (viewModel.IsDragging)
+                {
+                    viewModel.CancelDrag();
+                    InvalidateAllStackControls();
+                }
+
                 // Check if Draggable
                 if (!Draggable)
                 {
@@ -151,12 +160,27 @@ public class StackControl : Control
                     var clickOffsetX = point.Position.X;
                     var clickOffsetY = point.Position.Y - clickedCardTopY;
 
-                    if (viewModel.StartDrag(Stack, cardCount, topLevelPoint.X, topLevelPoint.Y, clickOffsetX, clickOffsetY))
+                    try
                     {
-                        e.Pointer.Capture(this);
-                        // Immediately invalidate all controls to update visuals after split
+                        var started = viewModel.StartDrag(Stack, cardCount, topLevelPoint.X, topLevelPoint.Y, clickOffsetX, clickOffsetY);
+                        if (started)
+                        {
+                            e.Pointer.Capture(this);
+                            // Immediately invalidate all controls to update visuals after split
+                            InvalidateAllStackControls();
+                            e.Handled = true;
+                        }
+                    }
+                    catch
+                    {
+                        // If starting the drag failed partway through, make sure we never leave
+                        // the pointer captured or the view model stuck in a "dragging" state -
+                        // otherwise every subsequent mouse press/drag on the board would be
+                        // swallowed by this control.
+                        e.Pointer.Capture(null);
+                        viewModel.CancelDrag();
                         InvalidateAllStackControls();
-                        e.Handled = true;
+                        throw;
                     }
                 }
             }
@@ -165,7 +189,7 @@ public class StackControl : Control
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (DataContext is MainViewModel viewModel && viewModel.IsDragging)
+        if (DataContext is IDragDropViewModel viewModel && viewModel.IsDragging)
         {
             // Get the position relative to the window/top-level
             var topLevel = TopLevel.GetTopLevel(this);
@@ -208,7 +232,7 @@ public class StackControl : Control
 
     private void InvalidateAllStackControls()
     {
-        if (DataContext is MainViewModel viewModel)
+        if (DataContext is IDragDropViewModel)
         {
             // Find the top level and invalidate all StackControls
             var topLevel = TopLevel.GetTopLevel(this);
@@ -236,7 +260,7 @@ public class StackControl : Control
 
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        if (DataContext is MainViewModel viewModel && viewModel.IsDragging)
+        if (DataContext is IDragDropViewModel viewModel && viewModel.IsDragging)
         {
             e.Pointer.Capture(null); // Release pointer capture
             viewModel.CompleteDrag();

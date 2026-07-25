@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:controls="using:SolitaireUI.Controls"
+                xmlns:vm="using:SolitaireUI.ViewModels"
+                mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+                x:Class="SolitaireUI.Views.KlondikeView"
+                x:DataType="vm:KlondikeViewModel"
+                Focusable="True"
+                KeyDown="OnKeyDown">
+
+    <Grid RowDefinitions="*,Auto">
+        <!-- Main game area -->
+        <Panel Grid.Row="0">
+            <!-- Overall Grid -->
+            <Grid ColumnDefinitions="4*, 2*" RowDefinitions="1.5*, 5*" Background="Green">
+                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="30" Margin="20">
+                    <controls:StackControl Stack="{Binding Fnd1}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                    <controls:StackControl Stack="{Binding Fnd2}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                    <controls:StackControl Stack="{Binding Fnd3}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                    <controls:StackControl Stack="{Binding Fnd4}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+                    <controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
+                    <controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="140" CardHeight="180" Width="140" Draggable="False"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="20">
+                    <controls:StackControl Stack="{Binding Tab1}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab2}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab3}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab4}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab5}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab6}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                    <controls:StackControl Stack="{Binding Tab7}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
+                </StackPanel>
+            </Grid>
+
+            <Canvas IsHitTestVisible="False">
+                <controls:StackControl Stack="{Binding TempDragStack}"
+                                        IsVisible="{Binding IsDragging}"
+                                        FaceUp="true"
+                                        OverlapDistance="45"
+                                        CardWidth="140"
+                                        CardHeight="180"
+                                        Width="140"
+                                        Canvas.Left="{Binding DragX}"
+                                        Canvas.Top="{Binding DragY}"/>
+            </Canvas>
+
+            <Border IsVisible="{Binding IsGameOverDialogVisible}"
+                    Background="#88000000"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Border Background="{Binding GameOverBackground}"
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        CornerRadius="8"
+                        Padding="30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <StackPanel Spacing="20" HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding GameOverMessage}"
+                                   FontSize="28"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"/>
+                        <Button Content="OK"
+                                HorizontalAlignment="Center"
+                                IsDefault="True"
+                                Command="{Binding ResetGameCommand}"/>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Panel>
+
+        <!-- Status bar -->
+        <Border Grid.Row="1" Background="#1b5e20" BorderBrush="#0d47a1" BorderThickness="0,2,0,0" Padding="10">
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right"
+                        Content="Back to Game Selection"
+                        Command="{Binding BackToGameSelectCommand}"
+                        Padding="15,5"
+                        FontSize="14" />
+                <TextBlock DockPanel.Dock="Left"
+                           Text="Klondike Solitaire"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           FontWeight="SemiBold"
+                           FontSize="14"
+                           Margin="10,0,0,0" />
+            </DockPanel>
+        </Border>
+    </Grid>
+
+</UserControl>

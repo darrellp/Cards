@@ -1,17 +1,17 @@
-﻿using Avalonia.Media;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GenericSol;
 using GenericSol.Games.Klondike;
-using GenericSol.Games.TestGame;
 using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class MainViewModel : ViewModelBase, IDragDropViewModel
+public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel
 {
+    private readonly MainWindowViewModel _mainWindowViewModel;
     static Bitmap[]? CardImages;
 
     static public Bitmap ImageFromCard(Card card)
@@ -29,15 +29,10 @@ public partial class MainViewModel : ViewModelBase, IDragDropViewModel
         return CardImages[card.Index];
     }
 
-
-    private static TestGame _testGame = new();
     private static KlondikeGame _klondikeGameModel = new();
     private static IGame _game = _klondikeGameModel;
 
     public IGame Game => _game;
-
-    [ObservableProperty] private Stack _from = _testGame.StackFromName("From");
-    [ObservableProperty] private Stack _to = _testGame.StackFromName("To");
 
     [ObservableProperty] private Stack _stock = _klondikeGameModel.StackFromName("stock");
     [ObservableProperty] private Stack _waste = _klondikeGameModel.StackFromName("waste");
@@ -70,8 +65,9 @@ public partial class MainViewModel : ViewModelBase, IDragDropViewModel
     [ObservableProperty] private double _dragOffsetX;
     [ObservableProperty] private double _dragOffsetY;
 
-    public MainViewModel()
+    public KlondikeViewModel(MainWindowViewModel mainWindowViewModel)
     {
+        _mainWindowViewModel = mainWindowViewModel;
         SubscribeToGameEvents();
     }
 
@@ -104,15 +100,6 @@ public partial class MainViewModel : ViewModelBase, IDragDropViewModel
     [RelayCommand]
     private void ApplyAiMove()
     {
-        // Don't let the AI mutate game state while the user has a card picked up mid-drag;
-        // the source stack has already had cards split out for the drag ghost, so an AI move
-        // touching that same stack right now would corrupt it (and could throw, leaving the
-        // mouse pointer capture stuck so no further drags would work).
-        if (IsDragging)
-        {
-            return;
-        }
-
         var nextMove = _game.Ai.GetNextMove();
         if (nextMove is not null)
         {
@@ -142,6 +129,12 @@ public partial class MainViewModel : ViewModelBase, IDragDropViewModel
         Tab7 = _klondikeGameModel.StackFromName("tab7");
 
         IsGameOverDialogVisible = false;
+    }
+
+    [RelayCommand]
+    private void BackToGameSelect()
+    {
+        _mainWindowViewModel.NavigateToGameSelect();
     }
 
     public void HandleStackRightClick(Stack stack)

@@ -6,8 +6,9 @@
         xmlns:views="using:SolitaireUI.Views"
         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="900"
         x:Class="SolitaireUI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Width="1400"
         Title="SolitaireUI">
-        <views:MainView />
+        <ContentControl Content="{Binding CurrentViewModel}" />
 </Window>
