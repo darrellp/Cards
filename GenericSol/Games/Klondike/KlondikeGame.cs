@@ -476,6 +476,13 @@ public class KlondikeGame : GenericGame
     public override void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
     {
         base.StackDrop(stkSrc, srcName, stkDst, cardCount);
+        if (stkDst.Name.StartsWith("fnd"))
+        {
+            // Mark this foundation stack as building in the source card's suit
+            // (redundant after first ace but arguably faster to just do it than make a check)
+            var index = int.Parse(stkDst.Name.Substring(3)) - 1;
+            _fndSuits[index] = stkSrc.TopCard.Suit;
+        }
         GameState.EventOccurred("MadeMove");
     }
 

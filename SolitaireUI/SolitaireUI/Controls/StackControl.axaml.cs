@@ -425,6 +425,10 @@ public class StackControl : Control
         var pen = new Pen(brush, 12.0);
         var rect = new Rect(0, 0, CardWidth, CardHeight);
 
+        // Draw a transparent rectangle over the full card area so that the
+        // entire card size participates in hit testing, not just the X strokes.
+        context.DrawRectangle(Brushes.Transparent, null, rect);
+
         // Draw red X
         context.DrawLine(pen, rect.TopLeft, rect.BottomRight);
         context.DrawLine(pen, rect.TopRight, rect.BottomLeft);
