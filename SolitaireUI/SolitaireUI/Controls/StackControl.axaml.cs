@@ -415,7 +415,7 @@ public class StackControl : Control
     private void DrawHoverTint(DrawingContext context)
     {
         var tintBrush = new SolidColorBrush(Color.FromArgb(80, 0, 120, 255)); // Semi-transparent blue
-        var rect = new Rect(0, 0, Bounds.Width, Bounds.Height);
+        var rect = new Rect(0, 0, Bounds.Width, DesiredSize.Height);
         context.DrawRectangle(tintBrush, null, rect);
     }
 
