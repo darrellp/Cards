@@ -4,7 +4,7 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:controls="using:SolitaireUI.Controls"
                 xmlns:vm="using:SolitaireUI.ViewModels"
-                mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+                mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
                 x:Class="SolitaireUI.Views.MainView"
                 x:DataType="vm:MainViewModel"
                 Focusable="True"
@@ -17,8 +17,8 @@ to set the actual DataContext for runtime, set the DataContext property in code 
 
     <Panel>
         <!-- Overall Grid -->
-        <Grid ColumnDefinitions="4*, 3*" RowDefinitions="1.5*, 5*" Background="Green">
-            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="30">
+        <Grid ColumnDefinitions="4*, 2*" RowDefinitions="1.5*, 5*" Background="Green">
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="30" Margin="20">
                 <controls:StackControl Stack="{Binding Fnd1}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
                 <controls:StackControl Stack="{Binding Fnd2}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
                 <controls:StackControl Stack="{Binding Fnd3}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
@@ -28,7 +28,7 @@ to set the actual DataContext for runtime, set the DataContext property in code 
                 <controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="140" CardHeight="180" Width="140" />
                 <controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="140" CardHeight="180" Width="140" Draggable="False"/>
             </StackPanel>
-            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20">
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="20">
                 <controls:StackControl Stack="{Binding Tab1}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
                 <controls:StackControl Stack="{Binding Tab2}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
                 <controls:StackControl Stack="{Binding Tab3}" FaceUp="true" OverlapDistance="45" CardWidth="140" CardHeight="180" Width="140"/>
