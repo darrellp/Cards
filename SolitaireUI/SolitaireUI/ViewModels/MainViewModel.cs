@@ -153,7 +153,10 @@ public partial class MainViewModel : ViewModelBase
         DragSourceStack = sourceStack;
         DragSourceName = sourceStack.Name;
         DragCardCount = cardCount;
-        TempDragStack = sourceStack.Split(cardCount);
+        var splitStack = sourceStack.Split(cardCount);
+        // Render the drag ghost as a mixed stack with every card face up, regardless of how
+        // the cards were represented in the source stack.
+        TempDragStack = MixedStack.FromStack(splitStack, cardCount);
 
         // Note: unlike GenericGame.ApplyMove, we intentionally do NOT call game.OnStackSplit here.
         // When dragging with the mouse, the source stack should be left with 0 face-up cards
