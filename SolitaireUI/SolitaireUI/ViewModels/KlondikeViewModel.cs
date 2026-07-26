@@ -9,7 +9,7 @@ using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel
+public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGameOverDialogViewModel, IStatusBarViewModel
 {
     private readonly MainWindowViewModel _mainWindowViewModel;
     static Bitmap[]? CardImages;

@@ -10,7 +10,7 @@ using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class MainViewModel : ViewModelBase, IDragDropViewModel
+public partial class MainViewModel : ViewModelBase, IDragDropViewModel, IGameOverDialogViewModel
 {
     static Bitmap[]? CardImages;
 
