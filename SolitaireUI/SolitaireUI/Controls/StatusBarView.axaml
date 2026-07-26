@@ -12,7 +12,13 @@
 		<DockPanel LastChildFill="True">
 			<Button DockPanel.Dock="Right"
 					Foreground="White"
-					Content="Back to Game Selection"
+					Content="Game Selection"
+					Command="{Binding BackToGameSelectCommand}"
+					Padding="15,5"
+					FontSize="14" />
+			<Button DockPanel.Dock="Right"
+					Foreground="White"
+					Content="New Game"
 					Command="{Binding BackToGameSelectCommand}"
 					Padding="15,5"
 					FontSize="14" />
