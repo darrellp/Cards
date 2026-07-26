@@ -9,7 +9,7 @@ using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGameOverDialogViewModel, IStatusBarViewModel
+public partial class KlondikeViewModel : GameViewModelBase, IDragDropViewModel, IStatusBarViewModel
 {
     private readonly MainWindowViewModel _mainWindowViewModel;
     static Bitmap[]? CardImages;
@@ -48,10 +48,6 @@ public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGam
     [ObservableProperty] private Stack _tab6 = _klondikeGameModel.StackFromName("tab6");
     [ObservableProperty] private Stack _tab7 = _klondikeGameModel.StackFromName("tab7");
 
-    [ObservableProperty] private bool _isGameOverDialogVisible;
-    [ObservableProperty] private string _gameOverMessage = string.Empty;
-    [ObservableProperty] private IBrush _gameOverBackground = Brushes.Transparent;
-
     // Drag state
     [ObservableProperty] private Stack? _dragSourceStack;
     [ObservableProperty] private string? _dragSourceName;
@@ -68,33 +64,7 @@ public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGam
     public KlondikeViewModel(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
-        SubscribeToGameEvents();
-    }
-
-    private void SubscribeToGameEvents()
-    {
-        _game.GameState.Won += OnGameWon;
-        _game.GameState.Lost += OnGameLost;
-    }
-
-    private void UnsubscribeFromGameEvents()
-    {
-        _game.GameState.Won -= OnGameWon;
-        _game.GameState.Lost -= OnGameLost;
-    }
-
-    private void OnGameWon(object? sender, EventArgs e)
-    {
-        GameOverMessage = "You Won!";
-        GameOverBackground = Brushes.Green;
-        IsGameOverDialogVisible = true;
-    }
-
-    private void OnGameLost(object? sender, EventArgs e)
-    {
-        GameOverMessage = "You Lost!";
-        GameOverBackground = Brushes.Red;
-        IsGameOverDialogVisible = true;
+        SubscribeToGameEvents(_game);
     }
 
     [RelayCommand]
@@ -107,12 +77,11 @@ public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGam
         }
     }
 
-    [RelayCommand]
-    private void ResetGame()
+    protected override void ResetGameCore()
     {
-        UnsubscribeFromGameEvents();
+        UnsubscribeFromGameEvents(_game);
         _game = _klondikeGameModel = new KlondikeGame();
-        SubscribeToGameEvents();
+        SubscribeToGameEvents(_game);
 
         Stock = _klondikeGameModel.StackFromName("stock");
         Waste = _klondikeGameModel.StackFromName("waste");
@@ -127,8 +96,6 @@ public partial class KlondikeViewModel : ViewModelBase, IDragDropViewModel, IGam
         Tab5 = _klondikeGameModel.StackFromName("tab5");
         Tab6 = _klondikeGameModel.StackFromName("tab6");
         Tab7 = _klondikeGameModel.StackFromName("tab7");
-
-        IsGameOverDialogVisible = false;
     }
 
     [RelayCommand]

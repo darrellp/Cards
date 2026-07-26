@@ -15,6 +15,12 @@ public interface IDragDropViewModel
 
     Stack? CurrentHoverStack { get; }
 
+    Stack? TempDragStack { get; }
+
+    double DragX { get; }
+
+    double DragY { get; }
+
     bool IsDragging { get; }
 
     void HandleStackRightClick(Stack stack);

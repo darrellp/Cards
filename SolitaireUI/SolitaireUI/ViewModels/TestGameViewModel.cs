@@ -9,7 +9,7 @@ using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class TestGameViewModel : ViewModelBase, IDragDropViewModel, IGameOverDialogViewModel, IStatusBarViewModel
+public partial class TestGameViewModel : GameViewModelBase, IDragDropViewModel, IStatusBarViewModel
 {
     private readonly MainWindowViewModel _mainWindowViewModel;
     static Bitmap[]? CardImages;
@@ -37,10 +37,6 @@ public partial class TestGameViewModel : ViewModelBase, IDragDropViewModel, IGam
     [ObservableProperty] private Stack? _from;
     [ObservableProperty] private Stack? _to;
 
-    [ObservableProperty] private bool _isGameOverDialogVisible;
-    [ObservableProperty] private string _gameOverMessage = string.Empty;
-    [ObservableProperty] private IBrush _gameOverBackground = Brushes.Transparent;
-
     // Drag state
     [ObservableProperty] private Stack? _dragSourceStack;
     [ObservableProperty] private string? _dragSourceName;
@@ -59,33 +55,7 @@ public partial class TestGameViewModel : ViewModelBase, IDragDropViewModel, IGam
         _mainWindowViewModel = mainWindowViewModel;
         _from = _testGame.StackFromName("From");
         _to = _testGame.StackFromName("To");
-        SubscribeToGameEvents();
-    }
-
-    private void SubscribeToGameEvents()
-    {
-        _game.GameState.Won += OnGameWon;
-        _game.GameState.Lost += OnGameLost;
-    }
-
-    private void UnsubscribeFromGameEvents()
-    {
-        _game.GameState.Won -= OnGameWon;
-        _game.GameState.Lost -= OnGameLost;
-    }
-
-    private void OnGameWon(object? sender, EventArgs e)
-    {
-        GameOverMessage = "You Won!";
-        GameOverBackground = Brushes.Green;
-        IsGameOverDialogVisible = true;
-    }
-
-    private void OnGameLost(object? sender, EventArgs e)
-    {
-        GameOverMessage = "You Lost!";
-        GameOverBackground = Brushes.Red;
-        IsGameOverDialogVisible = true;
+        SubscribeToGameEvents(_game);
     }
 
     [RelayCommand]
@@ -98,17 +68,14 @@ public partial class TestGameViewModel : ViewModelBase, IDragDropViewModel, IGam
         }
     }
 
-    [RelayCommand]
-    private void ResetGame()
+    protected override void ResetGameCore()
     {
-        UnsubscribeFromGameEvents();
+        UnsubscribeFromGameEvents(_game);
         _game = _testGame = new TestGame();
-        SubscribeToGameEvents();
+        SubscribeToGameEvents(_game);
 
         From = _testGame.StackFromName("From");
         To = _testGame.StackFromName("To");
-
-        IsGameOverDialogVisible = false;
     }
 
     [RelayCommand]

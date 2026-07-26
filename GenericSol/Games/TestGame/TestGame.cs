@@ -28,20 +28,25 @@ public class TestGame : GenericGame
         // The king ends on top as it was in the sorted deck, but we want it to be on the bottom of the stack
         stack.Reverse();
         _from = MixedStack.FromStack(stack, 3);
+        _from.Name = "From";
         _to = new MixedStack([], 0);
-    }
-
-    public override void ApplyMove(IMove move)
-    {
-        base.ApplyMove(move);
-        if (_from.Count == 0)
-        {
-            GameState.EventOccurred("Won");
-        }
+        _to.Name = "To";
     }
 
     public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
     {
         return srcName == "From" && stkDst.Name == "To" && stkSrc.Count == 1;
+    }
+
+    // OnStackSplit runs after every split off of a stack, whether the move came from the AI
+    // (via ApplyMove) or from a manual drag-and-drop (via StackDrop), so checking for a win
+    // here - rather than in an ApplyMove override - ensures dragging the last card also
+    // triggers the win state.
+    public override void OnStackSplit(Stack src)
+    {
+        if (_from.Count == 0)
+        {
+            GameState.EventOccurred("Won");
+        }
     }
 }

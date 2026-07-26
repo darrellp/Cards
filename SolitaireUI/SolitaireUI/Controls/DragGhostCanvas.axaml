@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:controls="using:SolitaireUI.Controls"
+			 xmlns:vm="using:SolitaireUI.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+			 x:Class="SolitaireUI.Controls.DragGhostCanvas"
+			 x:DataType="vm:IDragDropViewModel"
+			 IsHitTestVisible="False"
+			 x:Name="Root">
+
+	<Canvas IsHitTestVisible="False">
+		<controls:StackControl Stack="{Binding TempDragStack}"
+								IsVisible="{Binding IsDragging}"
+								FaceUp="true"
+								OverlapDistance="{Binding #Root.OverlapDistance}"
+								CardWidth="{Binding #Root.CardWidth}"
+								CardHeight="{Binding #Root.CardHeight}"
+								Width="{Binding #Root.CardWidth}"
+								Canvas.Left="{Binding DragX}"
+								Canvas.Top="{Binding DragY}"/>
+	</Canvas>
+</UserControl>
