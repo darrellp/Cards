@@ -45,6 +45,17 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
     }
 
     /// <summary>
+    /// Backs the status bar's "New Game" button. Shares the same reset logic as
+    /// <see cref="ResetGameCommand"/> (used by the game-over dialog's "Play Again" button).
+    /// </summary>
+    [RelayCommand]
+    private void NewGame()
+    {
+        ResetGameCore();
+        IsGameOverDialogVisible = false;
+    }
+
+    /// <summary>
     /// Each concrete game view model recreates its specific game model/stacks here and
     /// re-subscribes to the new instance's events (typically via
     /// <see cref="UnsubscribeFromGameEvents"/>/<see cref="SubscribeToGameEvents"/>).

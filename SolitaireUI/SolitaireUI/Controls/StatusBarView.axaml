@@ -19,7 +19,7 @@
 			<Button DockPanel.Dock="Right"
 					Foreground="White"
 					Content="New Game"
-					Command="{Binding BackToGameSelectCommand}"
+					Command="{Binding NewGameCommand}"
 					Padding="15,5"
 					FontSize="14" />
 			<TextBlock DockPanel.Dock="Left"
