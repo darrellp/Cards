@@ -1,6 +1,7 @@
 using Avalonia.Media.Imaging;
 using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Reflection;
 
 // To create a new game a few things are needed:
 //  1. Create a new ViewModel for the game in ViewModels/Games, inheriting from GameViewModelBase
@@ -15,8 +16,21 @@ namespace SolitaireUI.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     static Bitmap[]? CardImages;
+    static Bitmap? CardBackImage;
 
     static public Bitmap ImageFromCard(Card card)
+    {
+        EnsureImagesLoaded();
+        return CardImages![card.Index];
+    }
+
+    static public Bitmap GetCardBackImage()
+    {
+        EnsureImagesLoaded();
+        return CardBackImage!;
+    }
+
+    static private void EnsureImagesLoaded()
     {
         if (CardImages is null)
         {
@@ -27,8 +41,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 using (var stream = cardCur.ImageStream())
                     CardImages[cardCur.Index] = new Bitmap(stream);
             }
+            CardBackImage = new Bitmap(Card.CardBackImage());
         }
-        return CardImages[card.Index];
     }
 
     [ObservableProperty]

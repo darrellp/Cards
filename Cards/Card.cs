@@ -151,6 +151,13 @@ public record Card(byte Rank, Suit Suit)
         var resourcePath = $"Cards.Resources.Playing_Cards.{ImageFile()}";
         return assembly.GetManifestResourceStream(resourcePath)!;
     }
+
+    public static Stream CardBackImage()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourcePath = $"Cards.Resources.Playing_Cards.CardBack01.jpg";
+        return assembly.GetManifestResourceStream(resourcePath)!;
+    }
     #endregion
 
     #region Queries

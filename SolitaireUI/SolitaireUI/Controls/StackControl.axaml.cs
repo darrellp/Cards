@@ -556,10 +556,9 @@ public class StackControl : Control
         }
         else
         {
-            // Draw face-down card (blue rectangle)
+            // Draw face-down card (card back image)
             var rect = new Rect(0, 0, CardWidth, CardHeight);
-            var cornerRadius = 5.0;
-            context.DrawRectangle(Brushes.DodgerBlue, new Pen(Brushes.Black, 1.0), rect, cornerRadius);
+            context.DrawImage(MainWindowViewModel.GetCardBackImage(), rect);
         }
     }
 
