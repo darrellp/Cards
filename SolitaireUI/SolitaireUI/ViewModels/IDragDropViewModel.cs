@@ -15,6 +15,10 @@ public interface IDragDropViewModel
 
     Stack? CurrentHoverStack { get; }
 
+    Stack? MouseHoverStack { get; }
+
+    Card? MouseHoverCard { get; }
+
     Stack? TempDragStack { get; }
 
     double DragX { get; }
@@ -32,4 +36,8 @@ public interface IDragDropViewModel
     void CompleteDrag();
 
     void CancelDrag();
+
+    void SetMouseHoverStack(Stack? stack);
+
+    void SetMouseHoverCard(Card? card);
 }

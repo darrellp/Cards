@@ -23,12 +23,31 @@
 					Padding="15,5"
 					FontSize="14" />
 			<TextBlock DockPanel.Dock="Left"
-					   Text="{Binding #Root.Title}"
-					   VerticalAlignment="Center"
-					   Foreground="White"
-					   FontWeight="SemiBold"
-					   FontSize="14"
-					   Margin="10,0,0,0" />
+					Text="{Binding #Root.Title}"
+					VerticalAlignment="Center"
+					Foreground="White"
+					FontWeight="SemiBold"
+					FontSize="14"
+					Margin="10,0,0,0" />
+			<TextBlock DockPanel.Dock="Left"
+					Text="{Binding HoverCardText}"
+					VerticalAlignment="Center"
+					Foreground="LightBlue"
+					FontWeight="SemiBold"
+					FontSize="14"
+					Width="40"
+					Margin="10,0,0,0"/>
+			<TextBlock DockPanel.Dock="Left"
+					Text="{Binding HoverStatusText}"
+					VerticalAlignment="Center"
+					Foreground="LightBlue" 
+					FontWeight="SemiBold"
+					FontSize="14" 
+					Width="120"
+					Margin="10,0,0,0"/>
+			<!-- There's surely a better way to do this "child element" -->
+			<TextBlock DockPanel.Dock="Left"
+					Text=""	/>
 		</DockPanel>
 	</Border>
 </UserControl>

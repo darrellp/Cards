@@ -30,12 +30,61 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
     private Stack? _tempDragStack;
     [ObservableProperty] private int _dragCardCount;
     [ObservableProperty] private Stack? _currentHoverStack;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HoverStatusText))]
+    private Stack? _mouseHoverStack;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HoverCardText))]
+    private Card? _mouseHoverCard;
     [ObservableProperty] private double _dragX;
     [ObservableProperty] private double _dragY;
     [ObservableProperty] private double _dragOffsetX;
     [ObservableProperty] private double _dragOffsetY;
 
     public abstract IGame Game { get; }
+
+    /// <summary>
+    /// Status bar text showing the name and card count of whichever stack the mouse is
+    /// currently hovering over, e.g. "Waste: 21 Cards". Empty when no stack is hovered.
+    /// </summary>
+    public string HoverStatusText =>
+        MouseHoverStack == null
+            ? string.Empty
+            : $"{CapitalizeFirst(MouseHoverStack.Name)}: {MouseHoverStack.Count} Cards";
+
+    private static string CapitalizeFirst(string name) =>
+        string.IsNullOrEmpty(name) ? name : char.ToUpperInvariant(name[0]) + name[1..];
+
+    /// <summary>
+    /// Status bar text showing the string representation of whichever face-up card the mouse
+    /// is currently hovering over, e.g. "AS". Empty when no card is hovered.
+    /// </summary>
+    public string HoverCardText => MouseHoverCard?.ToString() ?? string.Empty;
+
+    public void SetMouseHoverStack(Stack? stack)
+    {
+        if (MouseHoverStack != null)
+        {
+            MouseHoverStack.StackModified -= OnMouseHoverStackModified;
+        }
+
+        MouseHoverStack = stack;
+
+        if (MouseHoverStack != null)
+        {
+            MouseHoverStack.StackModified += OnMouseHoverStackModified;
+        }
+    }
+
+    private void OnMouseHoverStackModified(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(HoverStatusText));
+    }
+
+    public void SetMouseHoverCard(Card? card)
+    {
+        MouseHoverCard = card;
+    }
 
     [RelayCommand]
     private void ResetGame()

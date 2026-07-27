@@ -64,6 +64,82 @@ public class StackControl : Control
         PointerPressed += OnPointerPressed;
         PointerMoved += OnPointerMoved;
         PointerReleased += OnPointerReleased;
+        PointerEntered += OnPointerEntered;
+        PointerExited += OnPointerExited;
+    }
+
+    private void OnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        if (Stack != null && DataContext is IDragDropViewModel viewModel)
+        {
+            viewModel.SetMouseHoverStack(Stack);
+            viewModel.SetMouseHoverCard(GetFaceUpCardAt(e.GetPosition(this)));
+        }
+    }
+
+    private void OnPointerExited(object? sender, PointerEventArgs e)
+    {
+        if (DataContext is IDragDropViewModel viewModel)
+        {
+            if (viewModel.MouseHoverStack == Stack)
+            {
+                viewModel.SetMouseHoverStack(null);
+            }
+            viewModel.SetMouseHoverCard(null);
+        }
+    }
+
+    /// <summary>
+    /// Returns the face-up card (if any) located at the given position within this control,
+    /// whether the stack is a plain face-up <see cref="Stack"/> (only the top card counts) or a
+    /// <see cref="MixedStack"/> (any of its face-up cards, using the same overlap geometry as
+    /// rendering/hit-testing for drags).
+    /// </summary>
+    private Card? GetFaceUpCardAt(Point position)
+    {
+        if (Stack == null || Stack.Count == 0)
+        {
+            return null;
+        }
+
+        if (position.X < 0 || position.X > CardWidth)
+        {
+            return null;
+        }
+
+        if (Stack is MixedStack mixedStack)
+        {
+            var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
+            var currentY = faceDownCount * FaceDownPeekHeight;
+
+            if (position.Y >= currentY && mixedStack.CardsUp > 0)
+            {
+                var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, Bounds.Height);
+                var firstFaceUpIndex = mixedStack.Count - mixedStack.CardsUp;
+
+                for (int i = 0; i < mixedStack.CardsUp; i++)
+                {
+                    var cardY = currentY;
+                    var nextY = currentY + (i == mixedStack.CardsUp - 1 ? CardHeight : overlapDistance);
+
+                    if (position.Y >= cardY && position.Y < nextY)
+                    {
+                        return mixedStack[firstFaceUpIndex + i];
+                    }
+
+                    currentY += overlapDistance;
+                }
+            }
+
+            return null;
+        }
+
+        if (FaceUp && position.Y >= 0 && position.Y < CardHeight)
+        {
+            return Stack[^1];
+        }
+
+        return null;
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -189,7 +265,12 @@ public class StackControl : Control
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (DataContext is IDragDropViewModel viewModel && viewModel.IsDragging)
+        if (DataContext is not IDragDropViewModel viewModel)
+        {
+            return;
+        }
+
+        if (viewModel.IsDragging)
         {
             // Get the position relative to the window/top-level
             var topLevel = TopLevel.GetTopLevel(this);
@@ -205,6 +286,12 @@ public class StackControl : Control
                 // Invalidate all stack controls to update visuals
                 InvalidateAllStackControls();
             }
+        }
+        else
+        {
+            // Not dragging: track which face-up card (if any) the mouse is over so the status
+            // bar can display it.
+            viewModel.SetMouseHoverCard(GetFaceUpCardAt(e.GetPosition(this)));
         }
     }
 
