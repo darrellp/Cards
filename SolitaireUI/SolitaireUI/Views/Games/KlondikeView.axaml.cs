@@ -24,8 +24,8 @@ public partial class KlondikeView : UserControl
     {
         if (DataContext is KlondikeViewModel viewModel)
         {
-            viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+            //viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            //viewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
     }
 

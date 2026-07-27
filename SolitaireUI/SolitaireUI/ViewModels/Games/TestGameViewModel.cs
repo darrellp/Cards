@@ -1,5 +1,3 @@
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -12,22 +10,6 @@ namespace SolitaireUI.ViewModels;
 public partial class TestGameViewModel : GameViewModelBase, IStatusBarViewModel
 {
     private readonly MainWindowViewModel _mainWindowViewModel;
-    static Bitmap[]? CardImages;
-
-    static public Bitmap ImageFromCard(Card card)
-    {
-        if (CardImages is null)
-        {
-            CardImages = new Bitmap[52];
-            var deck = Stack.SortedDeck();
-            foreach (var cardCur in deck)
-            {
-                using (var stream = cardCur.ImageStream())
-                    CardImages[cardCur.Index] = new Bitmap(stream);
-            }
-        }
-        return CardImages[card.Index];
-    }
 
     private static TestGame _testGame = new();
     private static IGame _game = _testGame;
@@ -71,4 +53,4 @@ public partial class TestGameViewModel : GameViewModelBase, IStatusBarViewModel
         _mainWindowViewModel.NavigateToGameSelect();
     }
 
-    }
+}

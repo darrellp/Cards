@@ -7,7 +7,7 @@ namespace SolitaireUI.ViewModels;
 /// Implemented by every game view model that hosts draggable <see cref="Cards.Stack"/> piles via
 /// <see cref="SolitaireUI.Controls.StackControl"/>. StackControl talks to whichever view model is
 /// its DataContext purely through this interface so it works regardless of which specific game
-/// (Klondike, TestGame, etc.) is currently active.
+/// is currently active.
 /// </summary>
 public interface IDragDropViewModel
 {

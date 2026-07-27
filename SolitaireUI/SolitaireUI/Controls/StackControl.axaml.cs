@@ -463,7 +463,7 @@ public class StackControl : Control
         if (FaceUp && Stack!.Count > 0)
         {
             var bottomCard = Stack[^1];
-            var bitmap = MainViewModel.ImageFromCard(bottomCard);
+            var bitmap = MainWindowViewModel.ImageFromCard(bottomCard);
             var rect = new Rect(0, 0, CardWidth, CardHeight);
             context.DrawImage(bitmap, rect);
         }
@@ -520,7 +520,7 @@ public class StackControl : Control
             for (int i = 0; i < mixedStack.CardsUp; i++)
             {
                 var card = mixedStack[firstFaceUpIndex + i];
-                var bitmap = MainViewModel.ImageFromCard(card);
+                var bitmap = MainWindowViewModel.ImageFromCard(card);
                 var rect = new Rect(0, currentY, CardWidth, CardHeight);
                 context.DrawImage(bitmap, rect);
                 currentY += overlapDistance;

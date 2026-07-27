@@ -1,43 +1,20 @@
-﻿using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GenericSol;
 using GenericSol.Games.Klondike;
-using GenericSol.Games.TestGame;
 using System;
 
 namespace SolitaireUI.ViewModels;
 
-public partial class MainViewModel : GameViewModelBase
+public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
 {
-    static Bitmap[]? CardImages;
+    private readonly MainWindowViewModel _mainWindowViewModel;
 
-    static public Bitmap ImageFromCard(Card card)
-    {
-        if (CardImages is null)
-        {
-            CardImages = new Bitmap[52];
-            var deck = Stack.SortedDeck();
-            foreach (var cardCur in deck)
-            {
-                using (var stream = cardCur.ImageStream())
-                    CardImages[cardCur.Index] = new Bitmap(stream);
-            }
-        }
-        return CardImages[card.Index];
-    }
-
-
-    private static TestGame _testGame = new();
     private static KlondikeGame _klondikeGameModel = new();
     private static IGame _game = _klondikeGameModel;
 
     public override IGame Game => _game;
-
-    [ObservableProperty] private Stack _from = _testGame.StackFromName("From");
-    [ObservableProperty] private Stack _to = _testGame.StackFromName("To");
 
     [ObservableProperty] private Stack _stock = _klondikeGameModel.StackFromName("stock");
     [ObservableProperty] private Stack _waste = _klondikeGameModel.StackFromName("waste");
@@ -53,23 +30,15 @@ public partial class MainViewModel : GameViewModelBase
     [ObservableProperty] private Stack _tab6 = _klondikeGameModel.StackFromName("tab6");
     [ObservableProperty] private Stack _tab7 = _klondikeGameModel.StackFromName("tab7");
 
-    public MainViewModel()
+    public KlondikeViewModel(MainWindowViewModel mainWindowViewModel)
     {
+        _mainWindowViewModel = mainWindowViewModel;
         SubscribeToGameEvents(_game);
     }
 
     [RelayCommand]
     private void ApplyAiMove()
     {
-        // Don't let the AI mutate game state while the user has a card picked up mid-drag;
-        // the source stack has already had cards split out for the drag ghost, so an AI move
-        // touching that same stack right now would corrupt it (and could throw, leaving the
-        // mouse pointer capture stuck so no further drags would work).
-        if (IsDragging)
-        {
-            return;
-        }
-
         var nextMove = _game.Ai.GetNextMove();
         if (nextMove is not null)
         {
@@ -96,5 +65,11 @@ public partial class MainViewModel : GameViewModelBase
         Tab5 = _klondikeGameModel.StackFromName("tab5");
         Tab6 = _klondikeGameModel.StackFromName("tab6");
         Tab7 = _klondikeGameModel.StackFromName("tab7");
+    }
+
+    [RelayCommand]
+    private void BackToGameSelect()
+    {
+        _mainWindowViewModel.NavigateToGameSelect();
     }
 }
