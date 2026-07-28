@@ -22,6 +22,12 @@
 					Command="{Binding NewGameCommand}"
 					Padding="15,5"
 					FontSize="14" />
+			<Button DockPanel.Dock="Right"
+					Foreground="White"
+					Content="Undo"
+					Command="{Binding UndoCommand}"
+					Padding="15,5"
+					FontSize="14" />
 			<TextBlock DockPanel.Dock="Left"
 					Text="{Binding #Root.Title}"
 					VerticalAlignment="Center"

@@ -8,7 +8,7 @@
         x:Class="SolitaireUI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Width="1400"
+        Width="1200"
         Title="SolitaireUI">
         <ContentControl Content="{Binding CurrentViewModel}" />
 </Window>

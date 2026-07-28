@@ -1,10 +1,12 @@
 ﻿using Cards;
+using System.ComponentModel.DataAnnotations;
 
 namespace GenericSol;
 public abstract class GenericGame : IGame
 {
     int _seed = -1;
     protected Random _random;
+    protected GenericUndoHandler _undoHandler;
 
     protected GenericGame(int seed = -1)
     {
@@ -18,6 +20,7 @@ public abstract class GenericGame : IGame
         }
         _random = new Random(_seed);
         Initialize();
+        _undoHandler = new GenericUndoHandler(this);
     }
 
     public virtual void Initialize() { }
@@ -46,6 +49,8 @@ public abstract class GenericGame : IGame
         var dstStack = StackFromName(move.DstStack);
         var cardCount = move.CardCount;
 
+        _undoHandler.StartUndo();
+        CreateUndo(move);
         ApplyAbstractPreMove(move);
         var movedCards = srcStack.Split(cardCount);
         OnStackSplit(srcStack);
@@ -54,6 +59,28 @@ public abstract class GenericGame : IGame
         ApplyAbstractPostMove(move);
         MoveCount++;
     }
+
+    public virtual void CreateUndo(IMove move)
+    {
+        var srcStack = StackFromName(move.SrcStack);
+        if (srcStack is MixedStack mix)
+        {
+            _undoHandler.AddMove((GenericMove)move, mix.CardsUp);
+        }
+        else
+        {
+            _undoHandler.AddMove((GenericMove)move);
+        }
+    }
+    
+    public virtual void Undo()
+    {
+        _undoHandler.Undo();
+    }
+    internal virtual void UndoPremove(GenericUndo undo) { }
+    internal virtual void UndoSplitMove(GenericUndo undo, Stack src, Stack moved, Stack dst) { }
+    internal virtual void UndoPostMove(GenericUndo undo) { }
+
 
     public virtual void ApplyAbstractPreMove(IMove move) { }
     public virtual void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst) { }
@@ -73,11 +100,23 @@ public abstract class GenericGame : IGame
 
     public abstract bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
 
-    public virtual void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    public virtual void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount, int dragSrcCardsUp)
     {
         if (IsMoveValid(stkSrc, srcName, stkDst, cardCount))
         {
+            // TODO: Look into the following...
+            // We'd like to go through ApplyMove here but that assumes that the source stack is intact but when
+            // we're dragging the source stack has been split into the dragged and undragged portion.  ApplyMove
+            // would do the undo machinery automagically but here we have to kind of do this by hand.  I'd like
+            // to come up with a better solution since we may miss out on other ApplyMove side effects.  This may
+            // come up to cause us problems in the future.
+
+            var move = new GenericMove(srcName, stkDst.Name, cardCount);
+            _undoHandler.StartUndo();
+            _undoHandler.AddMove(move, dragSrcCardsUp);
+            //ApplyMove(move);
             stkDst.Merge(stkSrc, cardCount);
+            
             MoveCount++;
         }
     }

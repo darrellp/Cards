@@ -8,6 +8,8 @@ namespace SolitaireUI.ViewModels;
 
 public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialogViewModel, IDragDropViewModel
 {
+    int _dragSrcCardsUp;
+
     public bool StartDrag(Stack sourceStack, int cardCount, double topLevelX, double topLevelY, double clickOffsetX, double clickOffsetY)
     {
         if (sourceStack == null || cardCount <= 0 || cardCount > sourceStack.Count)
@@ -18,6 +20,10 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
         DragSourceStack = sourceStack;
         DragSourceName = sourceStack.Name;
         DragCardCount = cardCount;
+        if (sourceStack is MixedStack mix)
+        {
+            _dragSrcCardsUp = mix.CardsUp;
+        }
         var splitStack = sourceStack.Split(cardCount);
         // Render the drag ghost as a mixed stack with every card face up, regardless of how
         // the cards were represented in the source stack.
@@ -77,7 +83,7 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
         {
             // Valid drop - commit the move and perform the same post-split bookkeeping
             // (e.g. flipping the next face-down card up) that an AI-driven move would.
-            game.StackDrop(TempDragStack, DragSourceName, CurrentHoverStack, DragCardCount);
+            game.StackDrop(TempDragStack, DragSourceName, CurrentHoverStack, DragCardCount, _dragSrcCardsUp);
             game.OnStackSplit(DragSourceStack);
         }
         else

@@ -155,7 +155,7 @@ public record Card(byte Rank, Suit Suit)
     public static Stream CardBackImage()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var resourcePath = $"Cards.Resources.Playing_Cards.CardBack01.png";
+        var resourcePath = $"Cards.Resources.Playing_Cards.CardBack.png";
         return assembly.GetManifestResourceStream(resourcePath)!;
     }
     #endregion

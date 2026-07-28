@@ -22,11 +22,6 @@ public partial class KlondikeView : UserControl
 
     private void OnDataContextChanged(object? sender, System.EventArgs e)
     {
-        if (DataContext is KlondikeViewModel viewModel)
-        {
-            //viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            //viewModel.PropertyChanged += OnViewModelPropertyChanged;
-        }
     }
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

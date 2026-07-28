@@ -14,9 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\Playing Cards\2_of_clubs.png" />
-      <None Remove="Resources\Playing Cards\CardBack01.jpg" />
-      <None Remove="Resources\Playing Cards\CardBack01.png" />
+      <None Remove="Resources\Playing Cards\CardBack.png" />
+		<None Remove="Resources\Playing Cards\2_of_clubs.png" />
+		<None Remove="Resources\Playing Cards\CardBack02.png" />
       <EmbeddedResource Include="Resources\Playing Cards\2_of_clubs.png" />
       <None Remove="Resources\Playing Cards\2_of_diamonds.png" />
       <EmbeddedResource Include="Resources\Playing Cards\2_of_diamonds.png" />
@@ -101,8 +101,8 @@
       <None Remove="Resources\Playing Cards\black_joker.png" />
       <EmbeddedResource Include="Resources\Playing Cards\black_joker.png" />
       <None Remove="Resources\Playing Cards\jack_of_clubs.png" />
-      <EmbeddedResource Include="Resources\Playing Cards\CardBack01.jpg" />
-      <EmbeddedResource Include="Resources\Playing Cards\CardBack01.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\CardBack.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\CardBack02.png" />
       <EmbeddedResource Include="Resources\Playing Cards\jack_of_clubs.png" />
       <None Remove="Resources\Playing Cards\jack_of_clubs2.png" />
       <EmbeddedResource Include="Resources\Playing Cards\jack_of_clubs2.png" />

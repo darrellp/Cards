@@ -473,7 +473,7 @@ public class KlondikeGame : GenericGame
     #endregion
 
     #region Mouse Interaction
-    public override void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    public override void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount, int dragSrcCardsUp)
     {
         if (stkDst.Name.StartsWith("fnd"))
         {
@@ -482,7 +482,7 @@ public class KlondikeGame : GenericGame
             var index = int.Parse(stkDst.Name.Substring(3)) - 1;
             _fndSuits[index] = stkSrc.TopCard.Suit;
         }
-        base.StackDrop(stkSrc, srcName, stkDst, cardCount);
+        base.StackDrop(stkSrc, srcName, stkDst, cardCount, dragSrcCardsUp);
         GameState.EventOccurred("MadeMove");
     }
 
@@ -536,6 +536,16 @@ public class KlondikeGame : GenericGame
         }
         // We have to count this as a "move" because we have no idea what valid moves the user might be passing by.
         GameState.EventOccurred("MadeMove");
+    }
+    #endregion
+
+    #region Undo
+    override internal void UndoSplitMove(GenericUndo undo, Stack src, Stack moved, Stack dst)
+    {
+        if (src.Name == "stock" || dst.Name == "stock")
+        {
+            moved.Reverse();
+        }
     }
     #endregion
 }
