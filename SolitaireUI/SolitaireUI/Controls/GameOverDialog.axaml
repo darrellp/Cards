@@ -27,6 +27,7 @@
 				<Button Content="OK"
 						HorizontalAlignment="Center"
 						IsDefault="True"
+						Focusable="False"
 						Command="{Binding ResetGameCommand}"/>
 			</StackPanel>
 		</Border>
