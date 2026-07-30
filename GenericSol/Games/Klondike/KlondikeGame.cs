@@ -482,8 +482,10 @@ public class KlondikeGame : GenericGame
             var index = int.Parse(stkDst.Name.Substring(3)) - 1;
             _fndSuits[index] = stkSrc.TopCard.Suit;
         }
+
         base.StackDrop(stkSrc, srcName, stkDst, cardCount, dragSrcCardsUp);
         GameState.EventOccurred("MadeMove");
+        WinCheck();
     }
 
     public override void OnRightClick(Stack stack)
@@ -522,6 +524,9 @@ public class KlondikeGame : GenericGame
     {
         if (stack.Name == "stock")
         {
+            var potentialMove = _ai.GetNextMove();
+            var hasPotential = potentialMove.DstStack != "stock" && potentialMove.SrcStack != "stock" && GameState.State != "DetectedAvoidedMoves";
+
             if (stack.Count == 0)
             {
                 // If the stock is empty then we can only reset the stock from the waste
@@ -532,10 +537,12 @@ public class KlondikeGame : GenericGame
             {
                 var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
                 ApplyMove(move);
+                if (hasPotential) 
+                {
+                    GameState.EventOccurred("MadeMove");
+                }
             }
         }
-        // We have to count this as a "move" because we have no idea what valid moves the user might be passing by.
-        GameState.EventOccurred("MadeMove");
     }
     #endregion
 
