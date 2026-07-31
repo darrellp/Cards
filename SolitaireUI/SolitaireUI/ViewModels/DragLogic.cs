@@ -1,8 +1,5 @@
 ﻿using Cards;
 using GenericSol;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SolitaireUI.ViewModels;
 
@@ -29,11 +26,12 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
         // the cards were represented in the source stack.
         TempDragStack = MixedStack.FromStack(splitStack, cardCount);
 
-        // Note: unlike GenericGame.ApplyMove, we intentionally do NOT call game.OnStackSplit here.
-        // When dragging with the mouse, the source stack should be left with 0 face-up cards
-        // (rendered as a face-down peek) rather than auto-flipping the next card face up. The
-        // flip only happens once the drag completes via StackDrop/CompleteDrag, or is reverted
-        // on CancelDrag/invalid drop.
+        // Note: unlike GenericGame.ApplyMove, StartDrag itself does not trigger any post-split
+        // bookkeeping. When dragging with the mouse, the source stack should be left with 0
+        // face-up cards (rendered as a face-down peek) rather than auto-flipping the next card
+        // face up. The flip only happens once the drag completes via StackDrop/CompleteDrag
+        // (which invokes ApplyAbstractSplit through ApplyMove), or is reverted on
+        // CancelDrag/invalid drop.
         CurrentHoverStack = null;
         DragOffsetX = clickOffsetX;
         DragOffsetY = clickOffsetY;
@@ -81,10 +79,10 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
 
         if (CurrentHoverStack != null && Game is GenericGame game)
         {
-            // Valid drop - commit the move and perform the same post-split bookkeeping
-            // (e.g. flipping the next face-down card up) that an AI-driven move would.
+            // Valid drop - commit the move; ApplyMove (called via StackDrop) performs the same
+            // post-split bookkeeping (e.g. flipping the next face-down card up) that an
+            // AI-driven move would, via ApplyAbstractSplit.
             game.StackDrop(TempDragStack, DragSourceName, CurrentHoverStack, DragCardCount, _dragSrcCardsUp);
-            game.OnStackSplit(DragSourceStack);
         }
         else
         {

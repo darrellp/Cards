@@ -414,9 +414,6 @@ public class KlondikeGame : GenericGame
         }
     }
 
-    public override void OnStackSplit(Stack src)
-    {
-    }
     #endregion
 
     #region Checking for possible wins

@@ -38,11 +38,11 @@ public class TestGame : GenericGame
         return srcName == "From" && stkDst.Name == "To" && stkSrc.Count == 1;
     }
 
-    // OnStackSplit runs after every split off of a stack, whether the move came from the AI
+    // ApplyAbstractSplit runs after every split off of a stack, whether the move came from the AI
     // (via ApplyMove) or from a manual drag-and-drop (via StackDrop), so checking for a win
     // here - rather than in an ApplyMove override - ensures dragging the last card also
     // triggers the win state.
-    public override void OnStackSplit(Stack src)
+    public override void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst)
     {
         if (_from.Count == 0)
         {
