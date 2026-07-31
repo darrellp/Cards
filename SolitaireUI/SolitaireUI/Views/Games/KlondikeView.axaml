@@ -26,17 +26,17 @@
 					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" Draggable="False"/>
 				</StackPanel>
 				<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="0" Margin="20">
-					<controls:StackControl Stack="{Binding Tab1}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab2}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab3}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab4}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab5}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab6}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
-					<controls:StackControl Stack="{Binding Tab7}" FaceUp="true" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab1}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab2}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab3}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab4}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab5}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab6}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab7}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="45" CardWidth="130" CardHeight="170" Width="150"/>
 				</StackPanel>
 			</Grid>
 
-			<controls:DragGhostCanvas CardWidth="140" CardHeight="180" OverlapDistance="45" />
+			<controls:DragGhostCanvas CardWidth="130" CardHeight="170" OverlapDistance="100" />
 
 			<controls:GameOverDialog />
 		</Panel>

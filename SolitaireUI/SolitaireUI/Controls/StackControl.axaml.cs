@@ -36,6 +36,8 @@ public class StackControl : Control
 
     private Stack? _previousStack;
 
+    private static double s_maxMixedStackOverlapDistance = 0.0;
+
     private bool IsHoveredDuringDrag
     {
         get
@@ -564,6 +566,22 @@ public class StackControl : Control
 
     private void RenderMixedStack(DrawingContext context, MixedStack mixedStack)
     {
+        // Draw each peek slightly taller than the spacing between peeks (~10% extra) so it overdraws
+        // down onto the top of the peek below it, covering that card's transparent rounded corners
+        // instead of letting the playing surface show through. Round to a whole pixel so the extra
+        // slice height doesn't introduce a fractional-pixel scale (which would blur/anti-alias it).
+        var peekRectHeight = Math.Max(FaceDownPeekHeight + 1, Math.Round(FaceDownPeekHeight * 1.1));
+        if (peekRectHeight > s_maxMixedStackOverlapDistance)
+        {
+            s_maxMixedStackOverlapDistance = peekRectHeight;
+        }
+
+        var renderScaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
+        var faceDownOverlapBitmap = MainWindowViewModel.GetFaceDownOverlapBitmap(
+            s_maxMixedStackOverlapDistance, CardWidth, CardHeight, renderScaling);
+        var faceDownBackingBitmap = MainWindowViewModel.GetFaceDownBackingBitmap(
+            s_maxMixedStackOverlapDistance, CardWidth, CardHeight, renderScaling);
+
         var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
         var currentY = 0.0;
 
@@ -574,9 +592,16 @@ public class StackControl : Control
             {
                 for (int i = 0; i < faceDownCount; i++)
                 {
-                    var rect = new Rect(0, currentY, CardWidth, FaceDownPeekHeight + 1);
-                    var cornerRadius = 3.0;
-                    context.DrawRectangle(Brushes.DodgerBlue, new Pen(Brushes.Black, 1.0), rect, cornerRadius);
+                    var rect = new Rect(0, currentY, CardWidth, peekRectHeight);
+                    // Every slice except the topmost one needs an opaque backing behind it so its
+                    // transparent rounded corners reveal matching card-back artwork instead of the
+                    // playing surface beneath. The topmost slice (i == 0) has nothing above it, so
+                    // it should legitimately show the playing surface through its corners.
+                    if (i > 0)
+                    {
+                        context.DrawImage(faceDownBackingBitmap, rect);
+                    }
+                    context.DrawImage(faceDownOverlapBitmap, rect);
                     currentY += FaceDownPeekHeight;
                 }
             }
@@ -587,14 +612,17 @@ public class StackControl : Control
             // then draw the topmost face-down card full-size so the stack still shows a card.
             for (int i = 0; i < faceDownCount - 1; i++)
             {
-                var rect = new Rect(0, currentY, CardWidth, FaceDownPeekHeight + 1);
-                var cornerRadius = 3.0;
-                context.DrawRectangle(Brushes.DodgerBlue, new Pen(Brushes.Black, 1.0), rect, cornerRadius);
+                var rect = new Rect(0, currentY, CardWidth, peekRectHeight);
+                if (i > 0)
+                {
+                    context.DrawImage(faceDownBackingBitmap, rect);
+                }
+                context.DrawImage(faceDownOverlapBitmap, rect);
                 currentY += FaceDownPeekHeight;
             }
 
             var topRect = new Rect(0, currentY, CardWidth, CardHeight);
-            context.DrawRectangle(Brushes.DodgerBlue, new Pen(Brushes.Black, 1.0), topRect, 5.0);
+            context.DrawImage(MainWindowViewModel.GetCardBackImage(), topRect);
         }
 
         // Draw face-up cards overlapping

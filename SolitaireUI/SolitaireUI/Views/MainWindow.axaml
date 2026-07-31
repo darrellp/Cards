@@ -9,6 +9,9 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Width="1200"
+        Height="900"
+        MinWidth="1000"
+        MinHeight="800"
         Title="SolitaireUI">
         <ContentControl Content="{Binding CurrentViewModel}" />
 </Window>
