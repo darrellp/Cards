@@ -38,22 +38,28 @@ public abstract class GenericGame : IGame
 
     public virtual IGameState GameState { get; set; } = new GenericGameState();
 
-    public virtual void ApplyMove(IMove move)
+    public virtual void ApplyMove(IMove move, Stack? DragCards = null)
     {
         if (State == "Lost" || State == "Won")
         {
             return;     // No plays on won or lost games
         }
 
-        var srcStack = StackFromName(move.SrcStack);
+        var srcStack = DragCards ?? StackFromName(move.SrcStack);
         var dstStack = StackFromName(move.DstStack);
         var cardCount = move.CardCount;
 
-        _undoHandler.StartUndo();
-        CreateUndo(move);
+        if (DragCards == null)
+        {
+            // Undo's are handled by the drag operation, so we don't need to do anything here.
+            _undoHandler.StartUndo();
+            CreateUndo(move);
+        }
+
         ApplyAbstractPreMove(move);
-        var movedCards = srcStack.Split(cardCount);
-        OnStackSplit(srcStack);
+        var movedCards = DragCards ?? srcStack.Split(cardCount);
+        // TODO: Get rid of OnStackSplit
+        //OnStackSplit(srcStack);
         ApplyAbstractSplit(move, srcStack, movedCards, dstStack);
         dstStack.Merge(movedCards);
         ApplyAbstractPostMove(move);
@@ -93,6 +99,9 @@ public abstract class GenericGame : IGame
     /// split originated from a normal move (<see cref="ApplyMove"/>) or from a UI drag operation.
     /// Games override this to handle bookkeeping such as flipping the next face-down card up
     /// once all face-up cards have been removed from a mixed stack.
+    /// 
+    /// This is mostly archaic - it's functionality is now handled by <see cref="ApplyAbstractSplit(IMove, Stack, Stack, Stack)"/> 
+    /// and <see cref="UndoSplitMove(GenericUndo, Stack, Stack, Stack)"/>.
     /// </summary>
     public virtual void OnStackSplit(Stack src) { }
 
@@ -104,20 +113,11 @@ public abstract class GenericGame : IGame
     {
         if (IsMoveValid(stkSrc, srcName, stkDst, cardCount))
         {
-            // TODO: Look into the following...
-            // We'd like to go through ApplyMove here but that assumes that the source stack is intact but when
-            // we're dragging the source stack has been split into the dragged and undragged portion.  ApplyMove
-            // would do the undo machinery automagically but here we have to kind of do this by hand.  I'd like
-            // to come up with a better solution since we may miss out on other ApplyMove side effects.  This may
-            // come up to cause us problems in the future.
-
             var move = new GenericMove(srcName, stkDst.Name, cardCount);
+            // Games which need to turn multiple stock transfers into a single undoable move can override CreateUndo to handle that.
             _undoHandler.StartUndo();
             _undoHandler.AddMove(move, dragSrcCardsUp);
-            //ApplyMove(move);
-            stkDst.Merge(stkSrc, cardCount);
-            
-            MoveCount++;
+            ApplyMove(move, stkSrc);
         }
     }
 

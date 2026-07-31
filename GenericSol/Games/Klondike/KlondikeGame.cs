@@ -400,11 +400,10 @@ public class KlondikeGame : GenericGame
         {
             GameState.EventOccurred("MadeMove");
         }
-    }
+        bool isDrag = src == moved;
+        Stack origin = StackFromName(move.SrcStack);
 
-    public override void OnStackSplit(Stack src)
-    {
-        if (src is MixedStack mixedStack)
+        if (origin is MixedStack mixedStack)
         {
             // If we've cleared all the faceup cards and still have facedown cards then
             // turn one of them up
@@ -413,6 +412,10 @@ public class KlondikeGame : GenericGame
                 mixedStack.CardsUp = 1;
             }
         }
+    }
+
+    public override void OnStackSplit(Stack src)
+    {
     }
     #endregion
 
@@ -473,21 +476,6 @@ public class KlondikeGame : GenericGame
     #endregion
 
     #region Mouse Interaction
-    public override void StackDrop(Stack stkSrc, string srcName, Stack stkDst, int cardCount, int dragSrcCardsUp)
-    {
-        if (stkDst.Name.StartsWith("fnd"))
-        {
-            // Mark this foundation stack as building in the source card's suit
-            // (redundant after first ace but arguably faster to just do it than make a check)
-            var index = int.Parse(stkDst.Name.Substring(3)) - 1;
-            _fndSuits[index] = stkSrc.TopCard.Suit;
-        }
-
-        base.StackDrop(stkSrc, srcName, stkDst, cardCount, dragSrcCardsUp);
-        GameState.EventOccurred("MadeMove");
-        WinCheck();
-    }
-
     public override void OnRightClick(Stack stack)
     {
         KlondikeMove move = KlondikeMove.NoMove;

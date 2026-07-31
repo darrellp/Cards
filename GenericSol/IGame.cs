@@ -13,7 +13,7 @@ public interface IGame
     String State { get; }
     IList<Stack> Stacks { get; }
     IList<IMove> GetMoves();
-    void ApplyMove(IMove move);
+    void ApplyMove(IMove move, Stack? DragCards = null);
     bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
     void Undo();
 }
