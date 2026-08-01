@@ -576,11 +576,15 @@ public class StackControl : Control
             s_maxMixedStackOverlapDistance = peekRectHeight;
         }
 
-        var renderScaling = TopLevel.GetTopLevel(this)?.RenderScaling ?? 1.0;
-        var faceDownOverlapBitmap = MainWindowViewModel.GetFaceDownOverlapBitmap(
-            s_maxMixedStackOverlapDistance, CardWidth, CardHeight, renderScaling);
-        var faceDownBackingBitmap = MainWindowViewModel.GetFaceDownBackingBitmap(
-            s_maxMixedStackOverlapDistance, CardWidth, CardHeight, renderScaling);
+        // Draw the peek slices directly from the card back artwork straight to the real
+        // DrawingContext (which already accounts for the screen's actual DPI/render scaling)
+        // instead of pre-rendering to an intermediate off-screen bitmap - that indirection
+        // previously risked introducing its own width/height scaling mismatches.
+        var cardBackImage = MainWindowViewModel.GetCardBackImage();
+        var faceDownOverlapSourceRect = MainWindowViewModel.GetFaceDownOverlapSourceRect(
+            s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
+        var faceDownBackingSourceRect = MainWindowViewModel.GetFaceDownBackingSourceRect(
+            s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
 
         var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
         var currentY = 0.0;
@@ -599,9 +603,9 @@ public class StackControl : Control
                     // it should legitimately show the playing surface through its corners.
                     if (i > 0)
                     {
-                        context.DrawImage(faceDownBackingBitmap, rect);
+                        context.DrawImage(cardBackImage, faceDownBackingSourceRect, rect);
                     }
-                    context.DrawImage(faceDownOverlapBitmap, rect);
+                    context.DrawImage(cardBackImage, faceDownOverlapSourceRect, rect);
                     currentY += FaceDownPeekHeight;
                 }
             }
@@ -615,9 +619,9 @@ public class StackControl : Control
                 var rect = new Rect(0, currentY, CardWidth, peekRectHeight);
                 if (i > 0)
                 {
-                    context.DrawImage(faceDownBackingBitmap, rect);
+                    context.DrawImage(cardBackImage, faceDownBackingSourceRect, rect);
                 }
-                context.DrawImage(faceDownOverlapBitmap, rect);
+                context.DrawImage(cardBackImage, faceDownOverlapSourceRect, rect);
                 currentY += FaceDownPeekHeight;
             }
 

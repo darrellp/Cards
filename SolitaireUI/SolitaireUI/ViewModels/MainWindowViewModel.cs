@@ -33,108 +33,42 @@ public partial class MainWindowViewModel : ViewModelBase
         return CardBackImage!;
     }
 
-    static Bitmap? FaceDownOverlapBitmap;
-    static double FaceDownOverlapBitmapHeight = -1;
-    static double FaceDownOverlapBitmapWidth = -1;
-    static double FaceDownOverlapBitmapScaling = -1;
-
-    /// <summary>
-    /// Returns a bitmap containing the top slice of the card back image, <paramref name="height"/>
-    /// device-independent units high (as measured against a card drawn at <paramref name="cardWidth"/> x
-    /// <paramref name="cardHeight"/>). Used to draw the overlapping portions of face-down cards in a
-    /// <see cref="MixedStack"/> using the actual card back artwork instead of a placeholder color.
-    /// </summary>
-    /// <param name="renderScaling">
-    /// The current visual's render scaling (DPI factor). The backing bitmap is rendered at this
-    /// scale so it isn't upsampled/blurred when displayed on high-DPI screens.
-    /// </param>
-    static public Bitmap GetFaceDownOverlapBitmap(double height, double cardWidth, double cardHeight, double renderScaling)
-    {
-        EnsureImagesLoaded();
-
-        if (FaceDownOverlapBitmap == null
-            || FaceDownOverlapBitmapHeight != height
-            || FaceDownOverlapBitmapWidth != cardWidth
-            || FaceDownOverlapBitmapScaling != renderScaling)
-        {
-            var fullBack = CardBackImage!;
-            var sourceHeight = fullBack.Size.Height * (height / cardHeight);
-            var sourceRect = new Rect(0, 0, fullBack.Size.Width, sourceHeight);
-            var destRect = new Rect(0, 0, cardWidth, height);
-
-            // Render at the screen's actual scaling factor (not just 1 device pixel per DIP) so the
-            // slice isn't a low-resolution bitmap that then gets blurrily upscaled by the compositor.
-            var pixelSize = new PixelSize(
-                Math.Max(1, (int)Math.Ceiling(cardWidth * renderScaling)),
-                Math.Max(1, (int)Math.Ceiling(height * renderScaling)));
-            var dpi = new Vector(96 * renderScaling, 96 * renderScaling);
-
-            var renderTarget = new RenderTargetBitmap(pixelSize, dpi);
-            using (var context = renderTarget.CreateDrawingContext())
-            {
-                context.DrawImage(fullBack, sourceRect, destRect);
-            }
-
-            FaceDownOverlapBitmap = renderTarget;
-            FaceDownOverlapBitmapHeight = height;
-            FaceDownOverlapBitmapWidth = cardWidth;
-            FaceDownOverlapBitmapScaling = renderScaling;
-        }
-
-        return FaceDownOverlapBitmap;
-    }
-
-    static Bitmap? FaceDownBackingBitmap;
-    static double FaceDownBackingBitmapHeight = -1;
-    static double FaceDownBackingBitmapWidth = -1;
-    static double FaceDownBackingBitmapScaling = -1;
-
     // Fraction of the card's height, measured from the top, that the rounded corner artwork can
     // occupy. Cropping from at/after this point guarantees fully opaque pixels, since it's well
     // past the top rounded corners.
-    private const double CornerSafeFraction = 0.3;
+    internal const double CornerSafeFraction = 0.3;
 
     /// <summary>
-    /// Returns a bitmap the same size as <see cref="GetFaceDownOverlapBitmap"/> but cropped from
-    /// further down the card back image, past its rounded top corners, so it's guaranteed opaque.
-    /// Drawing this behind a non-topmost peek slice means its transparent rounded corners reveal
-    /// this same card-back artwork instead of the playing surface underneath. (Stretching the same
-    /// top crop used by <see cref="GetFaceDownOverlapBitmap"/> doesn't work because that crop's
-    /// corners remain transparent no matter how much it's stretched vertically.)
+    /// Returns the source rect (in the native card-back image's own coordinate space) for the top
+    /// slice of the card back image that is <paramref name="height"/> device-independent units high
+    /// (as measured against a card drawn at <paramref name="cardWidth"/> x <paramref name="cardHeight"/>).
+    /// Used to draw the overlapping portions of face-down cards in a <see cref="MixedStack"/>, drawn
+    /// directly from the actual card back artwork instead of a placeholder color or an intermediate
+    /// off-screen bitmap (which previously risked introducing its own scaling errors).
     /// </summary>
-    static public Bitmap GetFaceDownBackingBitmap(double height, double cardWidth, double cardHeight, double renderScaling)
+    static public Rect GetFaceDownOverlapSourceRect(double height, double cardWidth, double cardHeight)
     {
         EnsureImagesLoaded();
+        var fullBack = CardBackImage!;
+        var sourceHeight = fullBack.Size.Height * (height / cardHeight);
+        return new Rect(0, 0, fullBack.Size.Width, sourceHeight);
+    }
 
-        if (FaceDownBackingBitmap == null
-            || FaceDownBackingBitmapHeight != height
-            || FaceDownBackingBitmapWidth != cardWidth
-            || FaceDownBackingBitmapScaling != renderScaling)
-        {
-            var fullBack = CardBackImage!;
-            var sourceHeight = fullBack.Size.Height * (height / cardHeight);
-            var sourceTop = fullBack.Size.Height * CornerSafeFraction;
-            var sourceRect = new Rect(0, sourceTop, fullBack.Size.Width, sourceHeight);
-            var destRect = new Rect(0, 0, cardWidth, height);
-
-            var pixelSize = new PixelSize(
-                Math.Max(1, (int)Math.Ceiling(cardWidth * renderScaling)),
-                Math.Max(1, (int)Math.Ceiling(height * renderScaling)));
-            var dpi = new Vector(96 * renderScaling, 96 * renderScaling);
-
-            var renderTarget = new RenderTargetBitmap(pixelSize, dpi);
-            using (var context = renderTarget.CreateDrawingContext())
-            {
-                context.DrawImage(fullBack, sourceRect, destRect);
-            }
-
-            FaceDownBackingBitmap = renderTarget;
-            FaceDownBackingBitmapHeight = height;
-            FaceDownBackingBitmapWidth = cardWidth;
-            FaceDownBackingBitmapScaling = renderScaling;
-        }
-
-        return FaceDownBackingBitmap;
+    /// <summary>
+    /// Returns a source rect the same size as <see cref="GetFaceDownOverlapSourceRect"/> but cropped
+    /// from further down the card back image, past its rounded top corners, so it's guaranteed
+    /// opaque. Drawing this behind a non-topmost peek slice means its transparent rounded corners
+    /// reveal this same card-back artwork instead of the playing surface underneath. (Stretching the
+    /// same top crop used by <see cref="GetFaceDownOverlapSourceRect"/> doesn't work because that
+    /// crop's corners remain transparent no matter how much it's stretched vertically.)
+    /// </summary>
+    static public Rect GetFaceDownBackingSourceRect(double height, double cardWidth, double cardHeight)
+    {
+        EnsureImagesLoaded();
+        var fullBack = CardBackImage!;
+        var sourceHeight = fullBack.Size.Height * (height / cardHeight);
+        var sourceTop = fullBack.Size.Height * CornerSafeFraction;
+        return new Rect(0, sourceTop, fullBack.Size.Width, sourceHeight);
     }
 
     static private void EnsureImagesLoaded()

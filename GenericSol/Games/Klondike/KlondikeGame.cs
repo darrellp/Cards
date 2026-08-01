@@ -376,6 +376,7 @@ public class KlondikeGame : GenericGame
         }
 
         WinCheck();
+        SanityCheck();
     }
 
     public override void ApplyAbstractPreMove(IMove move)
@@ -413,7 +414,6 @@ public class KlondikeGame : GenericGame
             }
         }
     }
-
     #endregion
 
     #region Checking for possible wins
@@ -537,6 +537,60 @@ public class KlondikeGame : GenericGame
         if (src.Name == "stock" || dst.Name == "stock")
         {
             moved.Reverse();
+        }
+    }
+
+    internal override void UndoPostMove(GenericUndo undo)
+    {
+        base.UndoPostMove(undo);
+        SanityCheck();
+    }
+    #endregion
+
+    #region Debugging
+    public void Throw(Exception e)
+    {
+        Debugger.Break();
+        throw (e);
+    }
+
+    public void SanityCheck()
+    {
+        bool[] present = new bool[52];
+        var count = 0;
+        string[] stackNames = {"stock", "waste", "fnd1", "fnd2", "fnd3", "fnd4", "tab1", "tab2", "tab3", "tab4", "tab5", "tab6", "tab7" };
+        foreach (var name in stackNames)
+        {
+            var stack = StackFromName(name);
+            if (stack == null)
+            {
+                Debugger.Break();
+                return;
+            }
+            count += stack.Count;
+            foreach (var card in stack)
+            {
+                if (card == Card.NullCard)
+                {
+                    Debugger.Break();
+                    return;
+                }
+                var index = card.Index;
+                if (present[index])
+                {
+                    Debugger.Break();
+                    return;
+                }
+                present[index] = true;
+            }
+            if (stack is MixedStack mixedStack)
+            {
+                if (mixedStack.CardsUp > mixedStack.Count)
+                {
+                    Debugger.Break();
+                    return;
+                }
+            }
         }
     }
     #endregion
