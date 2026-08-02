@@ -11,8 +11,6 @@ public class KlondikeGame : GenericGame
 
     internal int Turnover { get => field; set => field=value; } = 3;
     #region Private members
-    // Whether we have detected any moves yet in the current run through the feed
-    private readonly Suit[] _fndSuits = [Suit.None, Suit.None, Suit.None, Suit.None];
     KlondikeAi _ai;
 
     public override IAi Ai => (IAi)_ai;
@@ -270,14 +268,18 @@ public class KlondikeGame : GenericGame
         var isBlack = Card.IsBlackSuit(suit);
         for (var iFnd = 0; iFnd < FndCount; iFnd++)
         {
-            var fndSuit = _fndSuits[iFnd];
-            if (fndSuit == Suit.None || Card.IsBlackSuit(fndSuit) != isBlack)
+            if (_foundations[iFnd].Count == 0)
+            {
+                continue;
+            }
+            var fndSuit = _foundations[iFnd][0].Suit;
+            if (Card.IsBlackSuit(fndSuit) != isBlack)
             {
                 top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
             }
         }
 
-        return top;
+        return top == int.MaxValue ? 0 :top;
     }
 
     /// <summary>
@@ -297,14 +299,18 @@ public class KlondikeGame : GenericGame
         var indexUnassigned = -1;
         for (var i = 0; i < FndCount; i++)
         {
-            if (_fndSuits[i] == suit)
+            if (_foundations[i].Count == 0)
+            {
+                if (indexUnassigned < 0)
+                {
+                    indexUnassigned = i;
+                }
+                continue;
+            }
+            else if (_foundations[i][0].Suit == suit)
             {
                 indexAssigned = i;
                 break;
-            }
-            if (_fndSuits[i] == Suit.None && indexUnassigned < 0)
-            {
-                indexUnassigned = i;
             }
         }
 
@@ -377,18 +383,6 @@ public class KlondikeGame : GenericGame
 
         WinCheck();
         SanityCheck();
-    }
-
-    public override void ApplyAbstractPreMove(IMove move)
-    {
-        if (move.DstStack.StartsWith("fnd"))
-        {
-            // Mark this foundation stack as building in the source card's suit
-            // (redundant after first ace but arguably faster to just do it than make a check)
-            var index = int.Parse(move.DstStack.Substring(3)) - 1;
-            var src = StackFromName(move.SrcStack);
-            _fndSuits[index] = src.TopCard.Suit;
-        }
     }
 
     public override void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst)
