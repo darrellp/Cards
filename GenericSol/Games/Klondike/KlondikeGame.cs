@@ -264,7 +264,8 @@ public class KlondikeGame : GenericGame
 
     public int LowFoundationRank(Suit suit)
     {
-        var top = int.MaxValue;
+        var lowest = int.MaxValue;
+        var matches = 0;
         var isBlack = Card.IsBlackSuit(suit);
         for (var iFnd = 0; iFnd < FndCount; iFnd++)
         {
@@ -275,11 +276,16 @@ public class KlondikeGame : GenericGame
             var fndSuit = _foundations[iFnd][0].Suit;
             if (Card.IsBlackSuit(fndSuit) != isBlack)
             {
-                top = Math.Min(top, _foundations[iFnd].TopCard.Rank);
+                matches++;
+                lowest = Math.Min(lowest, _foundations[iFnd].TopCard.Rank);
             }
         }
 
-        return top == int.MaxValue ? 0 :top;
+        return matches switch
+        {
+            0 or 1 => 0,
+            _ => lowest,
+        };
     }
 
     /// <summary>
