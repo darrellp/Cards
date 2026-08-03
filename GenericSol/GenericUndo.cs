@@ -9,10 +9,13 @@ internal class GenericUndo
 {
     internal GenericMove move;
     internal int FaceupPremove;
-    public GenericUndo(GenericMove move, int faceupPremove = -1)
+    internal string State;
+
+    public GenericUndo(GenericMove move, int faceupPremove = -1, string state = "")
     {
         this.move = move;
         this.FaceupPremove = faceupPremove;
+        this.State = state;
     }
 }
 

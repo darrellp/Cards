@@ -16,9 +16,9 @@ public class GenericUndoHandler
         UndoStack.Push(new List<GenericUndo>());
     }
 
-    internal void AddMove(GenericMove move, int faceupPremove = -1)
+    internal void AddMove(GenericMove move, int faceupPremove = -1, string state = "")
     {
-        UndoStack.Peek().Add(new GenericUndo(move, faceupPremove));
+        UndoStack.Peek().Add(new GenericUndo(move, faceupPremove, state));
     }
 
     internal void Undo()
@@ -43,6 +43,9 @@ public class GenericUndoHandler
                 mix.CardsUp = undo.FaceupPremove;
             }
             Game.UndoPostMove(undo);
+            // We set the gamestate raw here based on the assumption that any side
+            // effects will be handled by the move undo machinery.
+            Game.GameState.State = undo.State;
             Game.MoveCount--;
         }
     }

@@ -68,11 +68,11 @@ public abstract class GenericGame : IGame
         var srcStack = StackFromName(move.SrcStack);
         if (srcStack is MixedStack mix)
         {
-            _undoHandler.AddMove((GenericMove)move, mix.CardsUp);
+            _undoHandler.AddMove((GenericMove)move, mix.CardsUp, GameState.State);
         }
         else
         {
-            _undoHandler.AddMove((GenericMove)move);
+            _undoHandler.AddMove((GenericMove)move, -1, GameState.State);
         }
     }
     
@@ -102,7 +102,7 @@ public abstract class GenericGame : IGame
             var move = new GenericMove(srcName, stkDst.Name, cardCount);
             // Games which need to turn multiple stock transfers into a single undoable move can override CreateUndo to handle that.
             _undoHandler.StartUndo();
-            _undoHandler.AddMove(move, dragSrcCardsUp);
+            _undoHandler.AddMove(move, dragSrcCardsUp, GameState.State);
             ApplyMove(move, stkSrc);
         }
     }

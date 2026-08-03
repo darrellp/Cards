@@ -397,7 +397,7 @@ public class KlondikeGame : GenericGame
         {
             moved.Reverse();
         }
-        else
+        else if (move.SrcStack == "waste" && move.DstStack != "stock")
         {
             GameState.EventOccurred("MadeMove");
         }
@@ -475,6 +475,7 @@ public class KlondikeGame : GenericGame
     #region Mouse Interaction
     public override void OnRightClick(Stack stack)
     {
+        SanityCheck();
         KlondikeMove move = KlondikeMove.NoMove;
         string eventName = "MadeMove";
 
@@ -485,6 +486,7 @@ public class KlondikeGame : GenericGame
         }
         var srcCard = stack.TopCard;
         var fndIndex = FndIndexFromSuit(srcCard.Suit);
+        Debug.Assert(_foundations[fndIndex].Count == 0 || srcCard.Suit == _foundations[fndIndex][0].Suit);
         move = new KlondikeMove(stack.Name, FndNameFromIndex(fndIndex));
         if (_foundations[fndIndex].Count == 0)
         {
@@ -503,6 +505,7 @@ public class KlondikeGame : GenericGame
         }
         ApplyMove(move);
         GameState.EventOccurred(eventName);
+        SanityCheck();
     }
 
     public override void OnLeftClick(Stack stack)
@@ -524,6 +527,8 @@ public class KlondikeGame : GenericGame
                 ApplyMove(move);
                 if (hasPotential) 
                 {
+                    // A move exists but we didn't manually make it.  For the purposes of whether the
+                    // game is lost it still counts as a "made move".
                     GameState.EventOccurred("MadeMove");
                 }
             }
@@ -589,6 +594,21 @@ public class KlondikeGame : GenericGame
                 {
                     Debugger.Break();
                     return;
+                }
+            }
+        }
+        for (int i = 0; i < KlondikeGame.FndCount; i++)
+        {
+            if (_foundations[i].Count > 0)
+            {
+                var suit = _foundations[i][0].Suit;
+                foreach (var card in _foundations[i])
+                {
+                    if (card.Suit != suit)
+                    {
+                        Debugger.Break();
+                        return;
+                    }
                 }
             }
         }
