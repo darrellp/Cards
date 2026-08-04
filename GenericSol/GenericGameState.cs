@@ -5,6 +5,7 @@ public class GenericGameState : IGameState
 
     public event EventHandler? Won;
     public event EventHandler? Lost;
+    public event EventHandler? StateChanged;
 
     public void EventOccurred(string gameEvent)
     {
@@ -14,6 +15,8 @@ public class GenericGameState : IGameState
             "Lost" => "Lost",
             _ => NewGameState(gameEvent)
         };
+
+        StateChanged?.Invoke(this, EventArgs.Empty);
 
         if (State == "Won")
         {

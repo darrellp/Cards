@@ -61,6 +61,11 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
     /// </summary>
     public string HoverCardText => MouseHoverCard?.ToString() ?? string.Empty;
 
+    /// <summary>
+    /// Game state display (e.g., "Won", "Lost", or "Playing").
+    /// </summary>
+    public string GameState => Game.GameState.State;
+
     public void SetMouseHoverStack(Stack? stack)
     {
         if (MouseHoverStack != null)
@@ -122,14 +127,24 @@ public abstract partial class GameViewModelBase : ViewModelBase, IGameOverDialog
 
     protected void SubscribeToGameEvents(IGame game)
     {
+        game.GameState.StateChanged += OnGameStateChanged;
         game.GameState.Won += OnGameWon;
         game.GameState.Lost += OnGameLost;
+
+        // Notify that the initial game state has been set
+        OnPropertyChanged(nameof(GameState));
     }
 
     protected void UnsubscribeFromGameEvents(IGame game)
     {
+        game.GameState.StateChanged -= OnGameStateChanged;
         game.GameState.Won -= OnGameWon;
         game.GameState.Lost -= OnGameLost;
+    }
+
+    private void OnGameStateChanged(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(GameState));
     }
 
     private void OnGameWon(object? sender, EventArgs e)

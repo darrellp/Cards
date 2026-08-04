@@ -9,4 +9,5 @@ public interface IStatusBarViewModel
     IRelayCommand UndoCommand { get; }
     string HoverStatusText { get; }
     string HoverCardText { get; }
+    string GameState { get; }
 }
