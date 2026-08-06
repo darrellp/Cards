@@ -382,10 +382,18 @@ public class KlondikeGame : GenericGame
     #region Move callbacks
     public override void ApplyAbstractPostMove(IMove move)
     {
+        // We try to set this whenever we turn over the first stock card.
+        // Check if we can eliminate this code.
         if (!WillWinCheck() && move.DstStack == "stock")
         {
             GameState.EventOccurred("EndOfStock");
         }
+
+        if (((KlondikeAi)Ai).FoundAvoidedMoves)
+        {
+            GameState.EventOccurred("DetectedAvoidedMoves");
+        }
+
 
         WinCheck();
         SanityCheck();
@@ -523,6 +531,10 @@ public class KlondikeGame : GenericGame
             }
             else
             {
+                if (_waste.Count == 0 && !hasPotential)
+                {
+                    GameState.EventOccurred("NoMoves");    
+                }
                 var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
                 ApplyMove(move);
                 if (hasPotential) 

@@ -13,8 +13,10 @@ internal class KlondikeAi : IAi
     public IGame Game { get; set; } = null!;
     private KlondikeGame KlondikeGame => (Game as KlondikeGame)!;
 
+    public bool FoundAvoidedMoves = false;
     public IMove GetNextMove()
     {
+        FoundAvoidedMoves = false;
         EnqueueNextMoves();
         return _nextMoves.Dequeue();
     }
@@ -56,11 +58,7 @@ internal class KlondikeAi : IAi
         // If there are no moves try flipping another card from the feed
         if (moves.Count == 0)
         {
-            if (Game.State != "Moved" && avoidMovesExist)
-            {
-                // We didn't have any usable moves in that stock run but detected some avoid moves
-                Game.GameState.EventOccurred("DetectedAvoidedMoves");
-            }
+            FoundAvoidedMoves = Game.State != "Moved" && avoidMovesExist;
             FlipFeed();
             return;
         }
@@ -156,7 +154,6 @@ internal class KlondikeAi : IAi
                 return;
             }
             _nextMoves.Enqueue(new KlondikeMove("waste", "stock", KlondikeGame._waste.Count));
-            //KlondikeGame.GameState.EventOccurred("EndOfStock");
             return;
         }
 

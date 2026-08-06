@@ -28,6 +28,12 @@ public class GenericGameState : IGameState
         }
     }
 
+    internal void SetState(string newState)
+    {
+        State = newState;
+        StateChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     // Won/Lost are handled generically.  Any other state changes are handled
     // by overriding this method in a derived class.  The default is to return the current state.
     public virtual string NewGameState(string gameEvent)

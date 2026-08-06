@@ -45,7 +45,7 @@ public class GenericUndoHandler
             Game.UndoPostMove(undo);
             // We set the gamestate raw here based on the assumption that any side
             // effects will be handled by the move undo machinery.
-            Game.GameState.State = undo.State;
+            ((GenericGameState)Game.GameState).SetState(undo.State);
             Game.MoveCount--;
         }
     }
