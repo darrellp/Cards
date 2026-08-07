@@ -9,9 +9,9 @@ public class KlondikeGame : GenericGame
     public const int FndCount = 4;
     #endregion
 
-    internal int Turnover { get => field; set => field=value; } = 3;
     #region Private members
     KlondikeAi _ai;
+    internal int Turnover { get => field; set => field=value; } = 3;
 
     public override IAi Ai => (IAi)_ai;
     public override IGameState GameState { get; set; } = new KlondikeGameState();
@@ -44,8 +44,38 @@ public class KlondikeGame : GenericGame
     /// <param name="deck"> The deck. </param>
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    static bool CountingGames = true;
     private void DealDeck(Stack deck)
     {
+#if WINPCT
+        if (CountingGames)
+        {
+            CountingGames = false;
+            int cWins = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                KlondikeGame _game = new();
+                string state;
+                do
+                {
+                    var move = _game._ai.GetNextMove();
+                    if (move == KlondikeMove.NoMove)
+                    {
+                        state = "Lost";
+                        break;
+                    }
+                    _game.ApplyMove(move);
+                    state = _game.GameState.State;
+                } while (state != "Won" && state != "Lost");
+                if (state == "Won")
+                {
+                    cWins++;
+                }
+            }
+            var winPct = cWins * 100.0 / 10000.0;
+            string winslosses = $"Wins: {cWins}, Losses: {10000 - cWins}, Win Pct = winPct";
+        }
+#endif
         Debug.Assert(deck.Count == 52);
         for (var iTab = 0; iTab < TabCount; iTab++)
         {
@@ -76,7 +106,7 @@ public class KlondikeGame : GenericGame
         DealDeck(deck);
         GameState.EventOccurred("NoMoves");
     }
-    #endregion
+#endregion
 
     #region Finding Moves
 
