@@ -1,4 +1,5 @@
 ﻿using Cards;
+using GenericSol.Games.Klondike;
 
 namespace GenericSol;
 public abstract class GenericGame : IGame
@@ -37,6 +38,19 @@ public abstract class GenericGame : IGame
 
     public virtual IGameState GameState { get; set; } = new GenericGameState();
 
+    /// <summary>
+    /// Applies a move to the game.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// We allow for a temporary stack to be the source.  This is primarily to accommodate drag and drop
+    /// which may use a temporary stack to hold the cards being dragged.  The original source stack is used for undo purposes.
+    /// This mechanism for dragging is a bit messy but it allows us to keep the move logic in one place and not have to 
+    /// duplicate it for drag and drop.
+    /// </remarks>
+    /// 
+    /// <param name="move">The move to apply</param>
+    /// <param name="DragCards">The temporary stack containing the cards being dragged, if applicable</param>
     public virtual void ApplyMove(IMove move, Stack? DragCards = null)
     {
         if (State == "Lost" || State == "Won")
@@ -44,16 +58,23 @@ public abstract class GenericGame : IGame
             return;     // No plays on won or lost games
         }
 
-        var srcStack = DragCards ?? StackFromName(move.SrcStack);
+        // The originating stack is the one originally moved or dragged from
+        var origSrc = StackFromName(move.SrcStack);
+        // For drags the srcStack will be the temporary drag stack distinct from the original source stack.
+        var srcStack = DragCards ?? origSrc;
         var dstStack = StackFromName(move.DstStack);
         var cardCount = move.CardCount;
 
-        if (DragCards == null)
+        _undoHandler.StartUndo();
+        // If we're dragging then the move uses the temporary DragCards stack as a source
+        // but for undo purposes we need to indicate the proper source
+        var undoMove = new GenericMove(move.SrcStack, move.DstStack, move.CardCount);
+        var cardsUp = -1;
+        if (DragCards is not null && origSrc is MixedStack mix)
         {
-            // Undo's are handled by the drag operation, so we don't need to do anything here.
-            _undoHandler.StartUndo();
-            CreateUndo(move);
+            cardsUp = DragCards.Count + mix.CardsUp;
         }
+        CreateUndo(undoMove, cardsUp);
 
         ApplyAbstractPreMove(move);
         var movedCards = DragCards ?? srcStack.Split(cardCount);
@@ -63,12 +84,12 @@ public abstract class GenericGame : IGame
         MoveCount++;
     }
 
-    public virtual void CreateUndo(IMove move)
+    public virtual void CreateUndo(IMove move, int cardsUp = -1)
     {
         var srcStack = StackFromName(move.SrcStack);
         if (srcStack is MixedStack mix)
         {
-            _undoHandler.AddMove((GenericMove)move, mix.CardsUp, GameState.State);
+            _undoHandler.AddMove((GenericMove)move, cardsUp >= 0 ? cardsUp : mix.CardsUp, GameState.State);
         }
         else
         {
@@ -100,9 +121,6 @@ public abstract class GenericGame : IGame
         if (IsMoveValid(stkSrc, srcName, stkDst, cardCount))
         {
             var move = new GenericMove(srcName, stkDst.Name, cardCount);
-            // Games which need to turn multiple stock transfers into a single undoable move can override CreateUndo to handle that.
-            _undoHandler.StartUndo();
-            _undoHandler.AddMove(move, dragSrcCardsUp, GameState.State);
             ApplyMove(move, stkSrc);
         }
     }

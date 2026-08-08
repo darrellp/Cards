@@ -37,7 +37,7 @@ public partial class KlondikeView : UserControl
     {
         if (e.Key == Key.Space && DataContext is KlondikeViewModel viewModel)
         {
-            viewModel.ApplyAiMoveCommand.Execute(null);
+            viewModel.MakeAiMoveCommand.Execute(null);
             e.Handled = true;
         }
     }

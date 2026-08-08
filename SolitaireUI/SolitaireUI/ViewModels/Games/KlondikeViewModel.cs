@@ -37,7 +37,7 @@ public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
     }
 
     [RelayCommand]
-    private void ApplyAiMove()
+    private void MakeAiMove()
     {
         var nextMove = _game.Ai.GetNextMove();
         if (nextMove is not null)
