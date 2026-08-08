@@ -40,7 +40,7 @@ public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
     private void MakeAiMove()
     {
         var nextMove = _game.Ai.GetNextMove();
-        if (nextMove is not null)
+        if (nextMove is not null && nextMove.SrcStack != "NoSrc")
         {
             _game.ApplyMove(nextMove);
         }
