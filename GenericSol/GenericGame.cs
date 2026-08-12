@@ -7,6 +7,7 @@ public abstract class GenericGame : IGame
     int _seed = -1;
     protected Random _random;
     protected GenericUndoHandler _undoHandler;
+    string _turnState = "NoMoves";
 
     protected GenericGame(int seed = -1)
     {
@@ -82,6 +83,7 @@ public abstract class GenericGame : IGame
         dstStack.Merge(movedCards);
         ApplyAbstractPostMove(move);
         MoveCount++;
+        _turnState = State;
     }
 
     public virtual void CreateUndo(IMove move, int cardsUp = -1)
@@ -89,11 +91,11 @@ public abstract class GenericGame : IGame
         var srcStack = StackFromName(move.SrcStack);
         if (srcStack is MixedStack mix)
         {
-            _undoHandler.AddMove((GenericMove)move, cardsUp >= 0 ? cardsUp : mix.CardsUp, GameState.State);
+            _undoHandler.AddMove((GenericMove)move, cardsUp >= 0 ? cardsUp : mix.CardsUp, _turnState);
         }
         else
         {
-            _undoHandler.AddMove((GenericMove)move, -1, GameState.State);
+            _undoHandler.AddMove((GenericMove)move, -1, _turnState);
         }
     }
     
