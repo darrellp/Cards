@@ -542,7 +542,10 @@ public class KlondikeGame : GenericGame
             }
         }
         ApplyMove(move);
-        GameState.EventOccurred(eventName);
+        if (_waste.Count != 0)
+        {
+            GameState.EventOccurred(eventName);
+        }
         SanityCheck();
     }
 
@@ -566,13 +569,13 @@ public class KlondikeGame : GenericGame
                     GameState.EventOccurred("NoMoves");    
                 }
                 var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
-                ApplyMove(move);
                 if (hasPotential) 
                 {
                     // A move exists but we didn't manually make it.  For the purposes of whether the
                     // game is lost it still counts as a "made move".
                     GameState.EventOccurred("MadeMove");
                 }
+                ApplyMove(move);
             }
         }
     }
