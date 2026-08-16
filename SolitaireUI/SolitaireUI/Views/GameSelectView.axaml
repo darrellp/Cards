@@ -7,16 +7,18 @@
              x:Class="SolitaireUI.Views.GameSelectView"
              x:DataType="vm:GameSelectViewModel">
 
-    <Grid Background="#2e7d32">
+    <Grid Background="{DynamicResource SystemControlBackgroundBaseHighBrush}">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="30">
             <TextBlock Text="Select a Solitaire Game"
                        FontSize="36"
                        FontWeight="Bold"
-                       Foreground="White"
+                       Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
                        HorizontalAlignment="Center"
                        Margin="0,0,0,20" />
 
-            <Border Background="White"
+            <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+                    BorderThickness="1"
                     CornerRadius="8"
                     Padding="30"
                     MinWidth="400">
@@ -24,17 +26,21 @@
                     <TextBlock Text="Available Games:"
                                FontSize="18"
                                FontWeight="SemiBold"
+                               Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
                                Margin="0,0,0,10" />
 
                     <ListBox ItemsSource="{Binding AvailableGames}"
                              SelectedItem="{Binding SelectedGame}"
                              Height="200"
-                             Padding="5">
+                             Padding="5"
+                             Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                             Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"
                                           FontSize="16"
-                                          Padding="8,5" />
+                                          Padding="8,5"
+                                          Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -44,7 +50,11 @@
                             HorizontalAlignment="Center"
                             Padding="30,10"
                             FontSize="18"
-                            FontWeight="SemiBold" />
+                            FontWeight="SemiBold"
+                            Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+                            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+                            BorderThickness="1" />
                 </StackPanel>
             </Border>
         </StackPanel>
