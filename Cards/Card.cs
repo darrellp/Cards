@@ -52,6 +52,8 @@ public record Card(byte Rank, Suit Suit)
         "queen",
         "king"
     ];
+
+    private static int _selectedCardBackIndex = 1; // Default to CardBack01
     #endregion
 
     #region Properties
@@ -155,7 +157,61 @@ public record Card(byte Rank, Suit Suit)
     public static Stream CardBackImage()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var resourcePath = $"Cards.Resources.Playing_Cards.CardBack.png";
+        var backNumber = _selectedCardBackIndex.ToString("D2");
+        var resourcePath = $"Cards.Resources.Playing_Cards.Backs.CardBack{backNumber}.png";
+        return assembly.GetManifestResourceStream(resourcePath)!;
+    }
+
+    /// <summary>
+    /// Gets all available card back image indices
+    /// </summary>
+    public static IEnumerable<int> GetAvailableCardBackIndices()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceNames = assembly.GetManifestResourceNames();
+        var backsPath = "Cards.Resources.Playing_Cards.Backs.CardBack";
+
+        var cardBackIndices = new List<int>();
+        foreach (var name in resourceNames)
+        {
+            if (name.StartsWith(backsPath) && name.EndsWith(".png"))
+            {
+                // Extract the number from CardBackXX.png pattern
+                var numberPart = name.Substring(backsPath.Length);
+                if (numberPart.Length >= 3 && int.TryParse(numberPart.Substring(0, 2), out var index))
+                {
+                    cardBackIndices.Add(index);
+                }
+            }
+        }
+
+        return cardBackIndices.OrderBy(x => x);
+    }
+
+    /// <summary>
+    /// Gets the current selected card back index
+    /// </summary>
+    public static int GetSelectedCardBackIndex()
+    {
+        return _selectedCardBackIndex;
+    }
+
+    /// <summary>
+    /// Sets the selected card back index
+    /// </summary>
+    public static void SetSelectedCardBackIndex(int index)
+    {
+        _selectedCardBackIndex = index;
+    }
+
+    /// <summary>
+    /// Gets a stream for a specific card back image by index
+    /// </summary>
+    public static Stream GetCardBackImageByIndex(int index)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var backNumber = index.ToString("D2");
+        var resourcePath = $"Cards.Resources.Playing_Cards.Backs.CardBack{backNumber}.png";
         return assembly.GetManifestResourceStream(resourcePath)!;
     }
     #endregion

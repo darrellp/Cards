@@ -14,9 +14,20 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Resources\Playing Cards\CardBack.png" />
-		<None Remove="Resources\Playing Cards\2_of_clubs.png" />
-		<None Remove="Resources\Playing Cards\CardBack02.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack01.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack02.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack03.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack04.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack05.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack06.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack07.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack08.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack09.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack10.png" />
+      <None Remove="Resources\Playing Cards\Backs\CardBack11.png" />
+      <None Remove="Resources\Playing Cards\back\CardBack.png" />
+	    <None Remove="Resources\Playing Cards\2_of_clubs.png" />
       <EmbeddedResource Include="Resources\Playing Cards\2_of_clubs.png" />
       <None Remove="Resources\Playing Cards\2_of_diamonds.png" />
       <EmbeddedResource Include="Resources\Playing Cards\2_of_diamonds.png" />
@@ -99,10 +110,20 @@
       <None Remove="Resources\Playing Cards\ace_of_spades2.png" />
       <EmbeddedResource Include="Resources\Playing Cards\ace_of_spades2.png" />
       <None Remove="Resources\Playing Cards\black_joker.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack01.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack02.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack03.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack04.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack05.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack06.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack07.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack08.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack09.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack10.png" />
+      <EmbeddedResource Include="Resources\Playing Cards\Backs\CardBack11.png" />
       <EmbeddedResource Include="Resources\Playing Cards\black_joker.png" />
       <None Remove="Resources\Playing Cards\jack_of_clubs.png" />
-      <EmbeddedResource Include="Resources\Playing Cards\CardBack.png" />
-      <EmbeddedResource Include="Resources\Playing Cards\CardBack02.png" />
       <EmbeddedResource Include="Resources\Playing Cards\jack_of_clubs.png" />
       <None Remove="Resources\Playing Cards\jack_of_clubs2.png" />
       <EmbeddedResource Include="Resources\Playing Cards\jack_of_clubs2.png" />

@@ -74,6 +74,12 @@ public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
     }
 
     [RelayCommand]
+    private void CardBackSelect()
+    {
+        _mainWindowViewModel.NavigateToCardBackSelect();
+    }
+
+    [RelayCommand]
     private void Undo()
     {
         _game.Undo();

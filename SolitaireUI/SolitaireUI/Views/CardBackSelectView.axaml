@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:SolitaireUI.ViewModels"
+			 mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+			 x:Class="SolitaireUI.Views.CardBackSelectView"
+			 x:DataType="vm:CardBackSelectViewModel">
+
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="OkayButtonBackground">#1976D2</SolidColorBrush>
+		<SolidColorBrush x:Key="OkayButtonForeground">White</SolidColorBrush>
+		<SolidColorBrush x:Key="OkayButtonBorder">#1565C0</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonBackground">#D32F2F</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonForeground">White</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonBorder">#C62828</SolidColorBrush>
+	</UserControl.Resources>
+
+	<Grid Background="{DynamicResource SystemControlBackgroundBaseHighBrush}">
+		<StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Spacing="20">
+			<!-- Title -->
+			<TextBlock Text="Select Card Back"
+					   FontSize="36"
+					   FontWeight="Bold"
+					   Foreground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+					   HorizontalAlignment="Center"
+					   Margin="0,20,0,0" />
+
+			<!-- Card backs grid/scroll panel -->
+			<Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+					BorderBrush="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+					BorderThickness="1"
+					CornerRadius="8"
+					Padding="20"
+					Margin="20,0,20,0"
+					MinHeight="400">
+				<ScrollViewer>
+					<ItemsControl ItemsSource="{Binding AvailableCardBacks}" x:Name="CardBacksItemsControl">
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Button Width="150" Height="220" Padding="5" 
+										Command="{Binding $parent[ItemsControl].DataContext.SelectCardBackCommand}"
+										CommandParameter="{Binding Index}"
+										Margin="5">
+									<Button.Content>
+										<Border x:Name="SelectionBorder"
+												BorderBrush="Transparent"
+												BorderThickness="4"
+												CornerRadius="6"
+												Padding="1">
+											<Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+													BorderThickness="2"
+													CornerRadius="4">
+												<Image Source="{Binding Image}" Stretch="UniformToFill" />
+											</Border>
+										</Border>
+									</Button.Content>
+								</Button>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Border>
+
+			<!-- Buttons -->
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,0,0,20">
+				<Button Content="Okay"
+						Command="{Binding OkayCommand}"
+						Padding="30,10"
+						FontSize="16"
+						FontWeight="SemiBold"
+						Foreground="{StaticResource OkayButtonForeground}"
+						Background="{StaticResource OkayButtonBackground}"
+						BorderBrush="{StaticResource OkayButtonBorder}"
+						BorderThickness="2" />
+				<Button Content="Cancel"
+						Command="{Binding CancelCommand}"
+						Padding="30,10"
+						FontSize="16"
+						FontWeight="SemiBold"
+						Foreground="{StaticResource CancelButtonForeground}"
+						Background="{StaticResource CancelButtonBackground}"
+						BorderBrush="{StaticResource CancelButtonBorder}"
+						BorderThickness="2" />
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</UserControl>

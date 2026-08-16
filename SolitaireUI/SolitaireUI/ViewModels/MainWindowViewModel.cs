@@ -92,12 +92,15 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly GameSelectViewModel _gameSelectViewModel;
     private readonly KlondikeViewModel _klondikeViewModel;
     private readonly TestGameViewModel _testGameViewModel;
+    private readonly CardBackSelectViewModel _cardBackSelectViewModel;
+    private ViewModelBase? _previousViewModel;
 
     public MainWindowViewModel()
     {
         _gameSelectViewModel = new GameSelectViewModel(this);
         _klondikeViewModel = new KlondikeViewModel(this);
         _testGameViewModel = new TestGameViewModel(this);
+        _cardBackSelectViewModel = new CardBackSelectViewModel(this);
 
         // Start with game selection view
         _currentViewModel = _gameSelectViewModel;
@@ -116,5 +119,25 @@ public partial class MainWindowViewModel : ViewModelBase
     public void NavigateToTestGame()
     {
         CurrentViewModel = _testGameViewModel;
+    }
+
+    public void NavigateToCardBackSelect()
+    {
+        _previousViewModel = _currentViewModel;
+        CurrentViewModel = _cardBackSelectViewModel;
+    }
+
+    public void NavigateBack()
+    {
+        if (_previousViewModel != null)
+        {
+            CurrentViewModel = _previousViewModel;
+            _previousViewModel = null;
+        }
+    }
+
+    public void RefreshCardBackImage()
+    {
+        CardBackImage = new Bitmap(Card.CardBackImage());
     }
 }
