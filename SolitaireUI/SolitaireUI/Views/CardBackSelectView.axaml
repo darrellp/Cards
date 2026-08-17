@@ -11,9 +11,77 @@
 		<SolidColorBrush x:Key="OkayButtonBackground">#1976D2</SolidColorBrush>
 		<SolidColorBrush x:Key="OkayButtonForeground">White</SolidColorBrush>
 		<SolidColorBrush x:Key="OkayButtonBorder">#1565C0</SolidColorBrush>
+		<SolidColorBrush x:Key="OkayButtonHoverBackground">#1565C0</SolidColorBrush>
+		<SolidColorBrush x:Key="OkayButtonPressedBackground">#0D47A1</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonBackground">#D32F2F</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonForeground">White</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonBorder">#C62828</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonHoverBackground">#C62828</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonPressedBackground">#B71C1C</SolidColorBrush>
+
+		<ControlTheme x:Key="OkayButtonTheme" TargetType="Button">
+			<Setter Property="Background" Value="{StaticResource OkayButtonBackground}"/>
+			<Setter Property="Foreground" Value="{StaticResource OkayButtonForeground}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource OkayButtonBorder}"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="Padding" Value="30,10"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Name="border"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="4">
+						<ContentPresenter Name="contentPresenter"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Padding="{TemplateBinding Padding}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:pointerover /template/ Border#border">
+				<Setter Property="Background" Value="{StaticResource OkayButtonHoverBackground}"/>
+			</Style>
+			<Style Selector="^:pressed /template/ Border#border">
+				<Setter Property="Background" Value="{StaticResource OkayButtonPressedBackground}"/>
+			</Style>
+		</ControlTheme>
+
+		<ControlTheme x:Key="CancelButtonTheme" TargetType="Button">
+			<Setter Property="Background" Value="{StaticResource CancelButtonBackground}"/>
+			<Setter Property="Foreground" Value="{StaticResource CancelButtonForeground}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource CancelButtonBorder}"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="Padding" Value="30,10"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Name="border"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="4">
+						<ContentPresenter Name="contentPresenter"
+										  Content="{TemplateBinding Content}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Padding="{TemplateBinding Padding}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+			<Style Selector="^:pointerover /template/ Border#border">
+				<Setter Property="Background" Value="{StaticResource CancelButtonHoverBackground}"/>
+			</Style>
+			<Style Selector="^:pressed /template/ Border#border">
+				<Setter Property="Background" Value="{StaticResource CancelButtonPressedBackground}"/>
+			</Style>
+		</ControlTheme>
 	</UserControl.Resources>
 
 	<Grid Background="{DynamicResource SystemControlBackgroundBaseHighBrush}">
@@ -71,22 +139,10 @@
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,0,0,20">
 				<Button Content="Okay"
 						Command="{Binding OkayCommand}"
-						Padding="30,10"
-						FontSize="16"
-						FontWeight="SemiBold"
-						Foreground="{StaticResource OkayButtonForeground}"
-						Background="{StaticResource OkayButtonBackground}"
-						BorderBrush="{StaticResource OkayButtonBorder}"
-						BorderThickness="2" />
+						Theme="{StaticResource OkayButtonTheme}" />
 				<Button Content="Cancel"
 						Command="{Binding CancelCommand}"
-						Padding="30,10"
-						FontSize="16"
-						FontWeight="SemiBold"
-						Foreground="{StaticResource CancelButtonForeground}"
-						Background="{StaticResource CancelButtonBackground}"
-						BorderBrush="{StaticResource CancelButtonBorder}"
-						BorderThickness="2" />
+						Theme="{StaticResource CancelButtonTheme}" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>
