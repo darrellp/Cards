@@ -133,10 +133,7 @@ public abstract class GenericGame : IGame
     public virtual void SetupInfo(Grid options, out string markdown)
     {
         markdown = """
-            # H1
-            ### H3
-            Hi - the rules are...
-            Well, frankly I don't seem to have any **rules**!
+            Hi - the rules are...Well, frankly I don't seem to have any **rules**!
             """;
     }
 

@@ -1,4 +1,7 @@
-﻿using Cards;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+using Cards;
 using System.Diagnostics;
 
 namespace GenericSol.Games.Klondike;
@@ -594,6 +597,53 @@ public class KlondikeGame : GenericGame
     {
         base.UndoPostMove(undo);
         SanityCheck();
+    }
+    #endregion
+
+    #region Info
+    override public void SetupInfo(Grid options, out string markdown)
+    {
+        markdown = """
+            # Klondike Solitaire
+            Klondike solitaire uses a standard 52 card deck of playing cards.
+            The goal is to Klondike Solitaire uses a standard 52-card deck. 
+            The goal is to move all cards into four foundation piles by suit, 
+            from Ace up to King. Deal seven tableau piles with 1 to 7 cards (top cards face-up). 
+            Build tableau columns down in alternating colors. 
+            Fill empty spaces only with a King.
+            #### **Game Setup**
+            - **Tableau:** Seven piles from left to right, containing one to seven cards. Only the top card in each pile is face-up.
+            - **Stock:** The leftover face-down cards form the draw pile.
+            - **Foundations:** Four target spots above the tableau, starting empty.
+            #### **How to Play**
+            - **Foundations:** Build up by suit sequentially from Ace to King (Ace, 2, 3...).
+            - **Tableau Moves:** Place cards on top of other tableau cards in descending order using alternating colors (red on black, black on red).
+            - **Moving Groups:** Move face-up stacks together as a single unit.
+            - **Uncovering Cards:** Turning the top card of a tableau pile exposes the face-down card beneath it.
+            - **Empty Spaces:** Only a King (or a stack starting with a King) can fill an empty tableau spot.
+            - **Stock Pile:** Draw cards from the stock one-by-one or three-at-a-time into a waste pile, playing the top exposed card when possible.
+            """;
+
+        string xaml = @"
+<StackPanel xmlns='https://github.com/avaloniaui'>
+    <CheckBox Name='OneCardTurnover' Content='Turn over a single card from Stock' />
+</StackPanel>";
+
+        StackPanel panel = AvaloniaRuntimeXamlLoader.Parse<StackPanel>(xaml);
+        var cbOneCardTurnover = panel.FindControl<CheckBox>("OneCardTurnover");
+        if (cbOneCardTurnover != null)
+        {
+            cbOneCardTurnover.IsChecked = Turnover == 1;
+        }
+        options.Children.Add(panel);
+    }
+
+    public override void SetOptions(Grid options)
+    {
+        var cbOneCardTurnover = options.GetVisualDescendants().OfType<CheckBox>()
+            .FirstOrDefault(cb => cb.Name == "OneCardTurnover");
+        Debug.Assert(cbOneCardTurnover != null);
+        Turnover = cbOneCardTurnover.IsChecked == true ? 1 : 3;
     }
     #endregion
 
