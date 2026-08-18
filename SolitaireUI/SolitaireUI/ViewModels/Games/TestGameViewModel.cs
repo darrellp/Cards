@@ -64,4 +64,10 @@ public partial class TestGameViewModel : GameViewModelBase, IStatusBarViewModel
     {
         _game.Undo();
     }
+
+    [RelayCommand]
+    private void Info()
+    {
+        _mainWindowViewModel.NavigateToGameInfo(_game);
+    }
 }

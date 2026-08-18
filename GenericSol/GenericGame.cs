@@ -1,4 +1,5 @@
-﻿using Cards;
+﻿using Avalonia.Controls;
+using Cards;
 using GenericSol.Games.Klondike;
 
 namespace GenericSol;
@@ -128,4 +129,16 @@ public abstract class GenericGame : IGame
     }
 
     public abstract Stack StackFromName(string name);
+
+    public virtual void SetupInfo(Grid options, out string markdown)
+    {
+        markdown = """
+            # H1
+            ### H3
+            Hi - the rules are...
+            Well, frankly I don't seem to have any **rules**!
+            """;
+    }
+
+    public virtual void SetOptions(Grid options) { }
 }

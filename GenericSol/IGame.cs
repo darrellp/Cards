@@ -1,4 +1,5 @@
-﻿using Cards;
+﻿using Avalonia.Controls;
+using Cards;
 
 namespace GenericSol;
 
@@ -16,4 +17,6 @@ public interface IGame
     void ApplyMove(IMove move, Stack? DragCards = null);
     bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount);
     void Undo();
+    void SetupInfo(Grid options, out string markdown);
+    void SetOptions(Grid options);
 }

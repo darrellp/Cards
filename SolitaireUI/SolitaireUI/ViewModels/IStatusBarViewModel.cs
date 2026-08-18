@@ -8,6 +8,7 @@ public interface IStatusBarViewModel
     IRelayCommand NewGameCommand { get; }
     IRelayCommand UndoCommand { get; }
     IRelayCommand CardBackSelectCommand { get; }
+    IRelayCommand InfoCommand { get; }
     string HoverStatusText { get; }
     string HoverCardText { get; }
     string GameState { get; }

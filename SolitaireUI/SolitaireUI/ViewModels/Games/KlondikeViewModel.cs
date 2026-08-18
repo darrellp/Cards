@@ -84,4 +84,10 @@ public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
     {
         _game.Undo();
     }
+
+    [RelayCommand]
+    private void Info()
+    {
+        _mainWindowViewModel.NavigateToGameInfo(_game);
+    }
 }

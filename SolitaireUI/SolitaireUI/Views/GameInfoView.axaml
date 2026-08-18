@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:SolitaireUI.ViewModels"
+			 xmlns:md="using:Markdown.Avalonia"
+			 mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
+			 x:Class="SolitaireUI.Views.GameInfoView"
+			 x:DataType="vm:GameInfoViewModel">
+
+	<Grid RowDefinitions="*,Auto" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+		<TabControl Grid.Row="0" Margin="10">
+			<TabItem Header="Options">
+				<ContentControl Content="{Binding OptionsGrid}" Margin="10" />
+			</TabItem>
+			<TabItem Header="Rules">
+				<md:MarkdownScrollViewer Markdown="{Binding Markdown}" Margin="10" />
+			</TabItem>
+		</TabControl>
+
+		<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" Margin="0,10,0,20">
+			<Button Content="Okay" Command="{Binding OkayCommand}" Padding="30,10" />
+			<Button Content="Cancel" Command="{Binding CancelCommand}" Padding="30,10" />
+		</StackPanel>
+	</Grid>
+</UserControl>

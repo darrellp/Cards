@@ -19,6 +19,13 @@
 					FontSize="14" />
 			<Button DockPanel.Dock="Right"
 					Foreground="White"
+					Content="Info"
+					Command="{Binding InfoCommand}"
+					Padding="15,5"
+					Focusable="False"
+					FontSize="14" />
+			<Button DockPanel.Dock="Right"
+					Foreground="White"
 					Content="Card Backs"
 					Command="{Binding CardBackSelectCommand}"
 					Padding="15,5"
