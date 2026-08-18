@@ -9,14 +9,14 @@
 
 	<UserControl.Resources>
 		<SolidColorBrush x:Key="OkayButtonBackground">#1976D2</SolidColorBrush>
+		<SolidColorBrush x:Key="OkayButtonHoverBackground">#16549c</SolidColorBrush>
 		<SolidColorBrush x:Key="OkayButtonForeground">White</SolidColorBrush>
 		<SolidColorBrush x:Key="OkayButtonBorder">#1565C0</SolidColorBrush>
-		<SolidColorBrush x:Key="OkayButtonHoverBackground">#1565C0</SolidColorBrush>
 		<SolidColorBrush x:Key="OkayButtonPressedBackground">#0D47A1</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonBackground">#D32F2F</SolidColorBrush>
+		<SolidColorBrush x:Key="CancelButtonHoverBackground">#ab2929</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonForeground">White</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonBorder">#C62828</SolidColorBrush>
-		<SolidColorBrush x:Key="CancelButtonHoverBackground">#C62828</SolidColorBrush>
 		<SolidColorBrush x:Key="CancelButtonPressedBackground">#B71C1C</SolidColorBrush>
 
 		<ControlTheme x:Key="OkayButtonTheme" TargetType="Button">
