@@ -41,6 +41,7 @@ public partial class TestGameViewModel : GameViewModelBase, IStatusBarViewModel
     {
         UnsubscribeFromGameEvents(_game);
         _game = _testGame = new TestGame();
+        _mainWindowViewModel.ApplyStoredGameOptions(_game);
         SubscribeToGameEvents(_game);
 
         From = _testGame.StackFromName("From");

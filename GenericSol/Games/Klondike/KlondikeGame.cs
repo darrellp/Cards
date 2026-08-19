@@ -658,11 +658,16 @@ public class KlondikeGame : GenericGame
         return OptionsCur;
     }
 
-    class Options : IJsonSerializable
+    public override IJsonSerializable DeserializeOptions(string json)
+    {
+        return Options.FromJson(json);
+    }
+
+    class Options : IJsonSerializable<Options>
     {
         public int Turnover { get; set; } = 3;
 
-        public IJsonSerializable FromJson(string json)
+        public static Options FromJson(string json)
         {
             return JsonSerializer.Deserialize<Options>(json)!;
         }

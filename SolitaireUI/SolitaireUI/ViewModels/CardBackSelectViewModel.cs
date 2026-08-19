@@ -64,6 +64,7 @@ public partial class CardBackSelectViewModel : ViewModelBase
     {
         Card.SetSelectedCardBackIndex(SelectedCardBackIndex);
         _mainWindowViewModel.RefreshCardBackImage();
+        _mainWindowViewModel.SaveCardBackIndex(SelectedCardBackIndex);
         _mainWindowViewModel.NavigateBack();
     }
 

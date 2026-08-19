@@ -44,4 +44,13 @@ public interface IGame
     /// </summary>
     /// <returns>A serializable object containing the values for the options</returns>
     IJsonSerializable GetOptions();
+
+    /// <summary>
+    /// Deserialize a JSON string, previously produced by <see cref="GetOptions"/>'s
+    /// <see cref="IJsonSerializable.ToJson"/>, into an options object suitable for
+    /// <see cref="SetOptions"/>. Returns null if this game has no options to deserialize.
+    /// </summary>
+    /// <param name="json">A JSON string representing this game's options</param>
+    /// <returns>A deserialized options object, or null if this game has no options</returns>
+    IJsonSerializable? DeserializeOptions(string json);
 }

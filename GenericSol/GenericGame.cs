@@ -144,4 +144,9 @@ public abstract class GenericGame : IGame
     {
         return null;
     }
+
+    public virtual IJsonSerializable? DeserializeOptions(string json)
+    {
+        return null;
+    }
 }

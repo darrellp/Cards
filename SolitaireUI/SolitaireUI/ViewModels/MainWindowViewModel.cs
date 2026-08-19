@@ -3,6 +3,8 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Cards;
 using CommunityToolkit.Mvvm.ComponentModel;
+using GenericSol;
+using SolitaireUI.Services;
 using System;
 using System.Reflection;
 
@@ -96,16 +98,71 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly GameInfoViewModel _gameInfoViewModel;
     private ViewModelBase? _previousViewModel;
 
+    private readonly AppSettings _appSettings;
+
     public MainWindowViewModel()
     {
+        _appSettings = AppSettingsService.Load();
+        Card.SetSelectedCardBackIndex(_appSettings.CardBackIndex);
+
         _gameSelectViewModel = new GameSelectViewModel(this);
         _klondikeViewModel = new KlondikeViewModel(this);
         _testGameViewModel = new TestGameViewModel(this);
         _cardBackSelectViewModel = new CardBackSelectViewModel(this);
         _gameInfoViewModel = new GameInfoViewModel(this);
 
+        ApplyStoredGameOptions(_klondikeViewModel.Game);
+        ApplyStoredGameOptions(_testGameViewModel.Game);
+
         // Start with game selection view
         _currentViewModel = _gameSelectViewModel;
+    }
+
+    /// <summary>
+    /// Applies any persisted options for the given game, e.g. after a new instance of the
+    /// game model has been created (initial construction or "New Game").
+    /// </summary>
+    public void ApplyStoredGameOptions(IGame game)
+    {
+        if (_appSettings.GameOptions.TryGetValue(game.GetType().Name, out var json))
+        {
+            try
+            {
+                var options = game.DeserializeOptions(json);
+                if (options != null)
+                {
+                    game.SetOptions(options);
+                }
+            }
+            catch
+            {
+                // Ignore malformed/outdated stored options and keep the game's defaults.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Persists the given game's current options so they're restored on the next run.
+    /// </summary>
+    public void SaveGameOptions(IGame game)
+    {
+        var options = game.GetOptions();
+        if (options == null)
+        {
+            return;
+        }
+
+        _appSettings.GameOptions[game.GetType().Name] = options.ToJson();
+        AppSettingsService.Save(_appSettings);
+    }
+
+    /// <summary>
+    /// Persists the selected card back index so it's restored on the next run.
+    /// </summary>
+    public void SaveCardBackIndex(int index)
+    {
+        _appSettings.CardBackIndex = index;
+        AppSettingsService.Save(_appSettings);
     }
 
     public void NavigateToGameSelect()

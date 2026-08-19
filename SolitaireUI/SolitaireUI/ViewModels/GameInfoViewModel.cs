@@ -34,6 +34,10 @@ public partial class GameInfoViewModel : ViewModelBase
     private void Okay()
     {
         _game?.SetOptionsFromUI(OptionsGrid);
+        if (_game != null)
+        {
+            _mainWindowViewModel.SaveGameOptions(_game);
+        }
         _mainWindowViewModel.NavigateBack();
     }
 

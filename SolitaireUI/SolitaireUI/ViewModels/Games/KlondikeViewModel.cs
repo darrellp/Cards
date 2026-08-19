@@ -50,6 +50,7 @@ public partial class KlondikeViewModel : GameViewModelBase, IStatusBarViewModel
     {
         UnsubscribeFromGameEvents(_game);
         _game = _klondikeGameModel = new KlondikeGame();
+        _mainWindowViewModel.ApplyStoredGameOptions(_game);
         SubscribeToGameEvents(_game);
 
         Stock = _klondikeGameModel.StackFromName("stock");
