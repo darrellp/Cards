@@ -8,6 +8,7 @@
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <SelfContained>false</SelfContained>
         <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+        <CopyDebugSymbolFilesFromPackages Condition="'$(Configuration)' == 'Release'">false</CopyDebugSymbolFilesFromPackages>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -25,4 +26,21 @@
     <ItemGroup>
         <ProjectReference Include="..\SolitaireUI\SolitaireUI.csproj"/>
     </ItemGroup>
+
+    <!-- SkiaSharp/HarfBuzzSharp ship large native .pdb symbol files that are resolved as regular
+         copy-local runtime assets (not governed by DebugType/CopyDebugSymbolFilesFromPackages).
+         Strip them from both the build output and the publish/ClickOnce payload. -->
+    <Target Name="RemoveNativeSkiaSharpPdb" AfterTargets="ResolveReferences;ResolvePackageAssets">
+        <ItemGroup>
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.pdb' and ('%(Filename)' == 'libSkiaSharp' or '%(Filename)' == 'libHarfBuzzSharp')" />
+        </ItemGroup>
+    </Target>
+
+    <Target Name="RemoveNativeSkiaSharpPdbFromPublish" AfterTargets="_DeploymentComputeClickOnceManifestInfo" BeforeTargets="_CopyResolvedFilesToPublishAlways;_CopyResolvedFilesToPublishPreserveNewest;_CopyFilesToPublishFolder;GenerateApplicationManifest;GenerateDeploymentManifest">
+        <ItemGroup>
+            <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb' and ('%(Filename)' == 'libSkiaSharp' or '%(Filename)' == 'libHarfBuzzSharp')" />
+            <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Extension)' == '.pdb' and ('%(Filename)' == 'libSkiaSharp' or '%(Filename)' == 'libHarfBuzzSharp')" />
+            <_DeploymentManifestFiles Remove="@(_DeploymentManifestFiles)" Condition="'%(Extension)' == '.pdb' and ('%(Filename)' == 'libSkiaSharp' or '%(Filename)' == 'libHarfBuzzSharp')" />
+        </ItemGroup>
+    </Target>
 </Project>
