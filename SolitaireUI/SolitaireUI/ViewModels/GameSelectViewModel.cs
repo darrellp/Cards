@@ -19,6 +19,7 @@ public partial class GameSelectViewModel : ViewModelBase
         AvailableGames = new ObservableCollection<string>
         {
             "Klondike",
+            "Golf",
             "TestGame"
         };
 
@@ -32,6 +33,10 @@ public partial class GameSelectViewModel : ViewModelBase
         if (SelectedGame == "Klondike")
         {
             _mainWindowViewModel.NavigateToKlondike();
+        }
+        else if (SelectedGame == "Golf")
+        {
+            _mainWindowViewModel.NavigateToGolf();
         }
         else if (SelectedGame == "TestGame")
         {

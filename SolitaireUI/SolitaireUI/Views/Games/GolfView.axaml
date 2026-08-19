@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:controls="using:SolitaireUI.Controls"
+			xmlns:vm="using:SolitaireUI.ViewModels"
+			mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="900"
+			x:Class="SolitaireUI.Views.GolfView"
+			x:DataType="vm:GolfViewModel"
+			Focusable="True"
+			KeyDown="OnKeyDown">
+
+	<Grid RowDefinitions="*,Auto">
+		<!-- Main game area -->
+		<Panel Grid.Row="0">
+			<!-- Overall Grid -->
+			<Grid ColumnDefinitions="4*, 2*" RowDefinitions="200, *" Background="Green">
+				<StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="30" Margin="20">
+					<controls:StackControl Stack="{Binding Fnd1}" FaceUp="true" CardWidth="130" CardHeight="170" Width="140" />
+					<controls:StackControl Stack="{Binding Fnd2}" FaceUp="true" CardWidth="130" CardHeight="170" Width="140" />
+					<controls:StackControl Stack="{Binding Fnd3}" FaceUp="true" CardWidth="130" CardHeight="170" Width="140" />
+					<controls:StackControl Stack="{Binding Fnd4}" FaceUp="true" CardWidth="130" CardHeight="170" Width="140" />
+				</StackPanel>
+				<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
+					<controls:StackControl Stack="{Binding Waste}" FaceUp="true" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" />
+					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" Draggable="False"/>
+				</StackPanel>
+				<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="0" Margin="20">
+					<controls:StackControl Stack="{Binding Tab1}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab2}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab3}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab4}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab5}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab6}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+					<controls:StackControl Stack="{Binding Tab7}" FaceUp="true" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
+				</StackPanel>
+			</Grid>
+
+			<controls:DragGhostCanvas CardWidth="130" CardHeight="170" OverlapDistance="35" />
+
+			<controls:GameOverDialog />
+		</Panel>
+
+		<!-- Status bar -->
+		<controls:StatusBarView Grid.Row="1" Title="Golf Solitaire" />
+	</Grid>
+
+</UserControl>

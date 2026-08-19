@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Cards;
-using GenericSol.Games;
 
 namespace GenericSol;
 public abstract class GenericGame : IGame

@@ -93,6 +93,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private readonly GameSelectViewModel _gameSelectViewModel;
     private readonly KlondikeViewModel _klondikeViewModel;
+    private readonly GolfViewModel _golfViewModel;
     private readonly TestGameViewModel _testGameViewModel;
     private readonly CardBackSelectViewModel _cardBackSelectViewModel;
     private readonly GameInfoViewModel _gameInfoViewModel;
@@ -107,11 +108,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         _gameSelectViewModel = new GameSelectViewModel(this);
         _klondikeViewModel = new KlondikeViewModel(this);
+        _golfViewModel = new GolfViewModel(this);
         _testGameViewModel = new TestGameViewModel(this);
         _cardBackSelectViewModel = new CardBackSelectViewModel(this);
         _gameInfoViewModel = new GameInfoViewModel(this);
 
         ApplyStoredGameOptions(_klondikeViewModel.Game);
+        ApplyStoredGameOptions(_golfViewModel.Game);
         ApplyStoredGameOptions(_testGameViewModel.Game);
 
         // Start with game selection view
@@ -173,6 +176,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public void NavigateToKlondike()
     {
         CurrentViewModel = _klondikeViewModel;
+    }
+
+    public void NavigateToGolf()
+    {
+        CurrentViewModel = _golfViewModel;
     }
 
     public void NavigateToTestGame()

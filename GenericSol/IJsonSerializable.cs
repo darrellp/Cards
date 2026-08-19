@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GenericSol.Games;
+namespace GenericSol;
 
 /// <summary>
 /// Non-generic marker used wherever the concrete options type isn't known statically

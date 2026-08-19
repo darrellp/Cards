@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Cards;
-using GenericSol.Games;
 using System.Runtime.Serialization;
 
 namespace GenericSol;
