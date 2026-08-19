@@ -3,6 +3,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Cards;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace GenericSol.Games.Klondike;
 public class KlondikeGame : GenericGame
@@ -14,10 +15,10 @@ public class KlondikeGame : GenericGame
 
     #region Private members
     KlondikeAi _ai;
-    internal int Turnover { get => field; set => field=value; } = 3;
-
     public override IAi Ai => (IAi)_ai;
     public override IGameState GameState { get; set; } = new KlondikeGameState();
+    Options OptionsCur = new Options();
+    public int Turnover => OptionsCur.Turnover;
     #endregion
 
     #region Stacks
@@ -571,7 +572,7 @@ public class KlondikeGame : GenericGame
                 {
                     GameState.EventOccurred("NoMoves");    
                 }
-                var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, Turnover));
+                var move = new KlondikeMove("stock", "waste", Math.Min(_stock.Count, OptionsCur.Turnover));
                 if (hasPotential) 
                 {
                     // A move exists but we didn't manually make it.  For the purposes of whether the
@@ -633,17 +634,43 @@ public class KlondikeGame : GenericGame
         var cbOneCardTurnover = panel.FindControl<CheckBox>("OneCardTurnover");
         if (cbOneCardTurnover != null)
         {
-            cbOneCardTurnover.IsChecked = Turnover == 1;
+            cbOneCardTurnover.IsChecked = OptionsCur.Turnover == 1;
         }
         options.Children.Add(panel);
     }
 
-    public override void SetOptions(Grid options)
+    public override void SetOptionsFromUI(Grid options)
     {
         var cbOneCardTurnover = options.GetVisualDescendants().OfType<CheckBox>()
             .FirstOrDefault(cb => cb.Name == "OneCardTurnover");
         Debug.Assert(cbOneCardTurnover != null);
-        Turnover = cbOneCardTurnover.IsChecked == true ? 1 : 3;
+        OptionsCur.Turnover = cbOneCardTurnover.IsChecked == true ? 1 : 3;
+    }
+
+    public override void SetOptions(IJsonSerializable options)
+    {
+        Debug.Assert(options != null);
+        OptionsCur = options as Options;
+    }
+
+    public override IJsonSerializable GetOptions()
+    {
+        return OptionsCur;
+    }
+
+    class Options : IJsonSerializable
+    {
+        public int Turnover { get; set; } = 3;
+
+        public IJsonSerializable FromJson(string json)
+        {
+            return JsonSerializer.Deserialize<Options>(json)!;
+        }
+
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
     #endregion
 

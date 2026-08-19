@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Cards;
-using GenericSol.Games.Klondike;
+using GenericSol.Games;
 
 namespace GenericSol;
 public abstract class GenericGame : IGame
@@ -137,5 +137,11 @@ public abstract class GenericGame : IGame
             """;
     }
 
-    public virtual void SetOptions(Grid options) { }
+    public virtual void SetOptionsFromUI(Grid options) { }
+    public virtual void SetOptions(IJsonSerializable options) { }
+
+    public virtual IJsonSerializable GetOptions()
+    {
+        return null;
+    }
 }

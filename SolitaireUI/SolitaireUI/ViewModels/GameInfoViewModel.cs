@@ -33,7 +33,7 @@ public partial class GameInfoViewModel : ViewModelBase
     [RelayCommand]
     private void Okay()
     {
-        _game?.SetOptions(OptionsGrid);
+        _game?.SetOptionsFromUI(OptionsGrid);
         _mainWindowViewModel.NavigateBack();
     }
 
