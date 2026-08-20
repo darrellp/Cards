@@ -31,10 +31,8 @@ public class StackControl : Control
         AvaloniaProperty.Register<StackControl, StackOrientation>(nameof(Orientation), defaultValue: StackOrientation.Down);
 
     /// <summary>
-    /// Only meaningful for <see cref="MixedStack"/>s. When true (the default), a left click on a
-    /// mixed stack starts a drag; when false, it instead invokes <c>OnLeftClick</c> on the game.
-    /// Fixed (non-mixed) stacks are never draggable - a left click always invokes
-    /// <c>OnLeftClick</c> regardless of this property's value.
+    /// When true (the default), a left click on the stack starts a drag. When false, a left
+    /// click instead invokes <c>OnLeftClick</c> on the game. Applies to all stacks, mixed or not.
     /// </summary>
     public static readonly StyledProperty<bool> DraggableProperty =
         AvaloniaProperty.Register<StackControl, bool>(nameof(Draggable), defaultValue: true);
@@ -201,9 +199,8 @@ public class StackControl : Control
                     InvalidateAllStackControls();
                 }
 
-                // Only MixedStacks can be dragged, and only when Draggable is true. Fixed
-                // (non-mixed) stacks always invoke OnLeftClick instead of starting a drag.
-                if (Stack is not MixedStack || !Draggable)
+                // Check if Draggable
+                if (!Draggable)
                 {
                     if (viewModel.Game is GenericGame game)
                     {
@@ -407,10 +404,8 @@ public class StackControl : Control
     }
 
     /// <summary>
-    /// Only meaningful for <see cref="MixedStack"/>s. When true (the default), a left click on a
-    /// mixed stack starts a drag; when false, it instead invokes <c>OnLeftClick</c> on the game.
-    /// Fixed (non-mixed) stacks are never draggable - a left click always invokes
-    /// <c>OnLeftClick</c> regardless of this property's value.
+    /// When true (the default), a left click on the stack starts a drag. When false, a left
+    /// click instead invokes <c>OnLeftClick</c> on the game. Applies to all stacks, mixed or not.
     /// </summary>
     public bool Draggable
     {

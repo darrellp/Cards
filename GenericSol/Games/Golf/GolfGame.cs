@@ -95,36 +95,60 @@ public class GolfGame : GenericGame
     #region Mouse Interaction
     public override void OnLeftClick(Stack stack)
     {
+        GenericMove finalMove = GenericMove.NoMove;
         if (stack.Name == "stock")
         {
-            var move = new GenericMove("stock", "foundation");
-
-            ApplyMove(move);
+            finalMove = new GenericMove("stock", "foundation");
         }
         else if (stack.Name.StartsWith("tab"))
         {
-            var finalMove = GenericMove.NoMove;
             if (_foundation.Count == 0)
             {
                 finalMove = new GenericMove(stack.Name, "foundation");
             }
             else
             {
-                var tabStack = StackFromName(stack.Name);
-                var card = tabStack.TopCard;
-                // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
-                var zbRankSrc = card.Rank - 1;
-                var zbRankDest = _foundation.TopCard.Rank - 1;
-                if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
-                {
-                    finalMove = new GenericMove(stack.Name, "foundation");
-                }
-            }
-            if (finalMove != GenericMove.NoMove)
-            {
-                ApplyMove(finalMove);
+                finalMove = CheckStack(stack.Name);
             }
         }
+
+        if (finalMove != GenericMove.NoMove)
+        {
+            ApplyMove(finalMove);
+            if (_foundation.Count == 52)
+            {
+                GameState.EventOccurred("Won");
+            }
+            else if (CheckLoss())
+            {
+                GameState.EventOccurred("Lost");
+            }
+        }
+    }
+
+    bool CheckLoss()
+    {
+        return _stock.Count == 0 && Enumerable.Range(1, 7).Select(i => $"tab{i}").All(n => CheckStack(n) == GenericMove.NoMove);
+    }
+
+    private GenericMove CheckStack(string stackName)
+    {
+        var ret = GenericMove.NoMove;
+        var tabStack = StackFromName(stackName);
+        if (tabStack.Count == 0)
+        {
+            ret = GenericMove.NoMove;
+        }
+        var card = tabStack.TopCard;
+        // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
+        var zbRankSrc = card.Rank - 1;
+        var zbRankDest = _foundation.TopCard.Rank - 1;
+        if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
+        {
+            ret = new GenericMove(stackName, "foundation");
+        }
+
+        return ret;
     }
 
     public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)

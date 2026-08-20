@@ -22,7 +22,7 @@
 					<controls:StackControl Stack="{Binding Fnd4}" FaceUp="true" CardWidth="130" CardHeight="170" Width="140" />
 				</StackPanel>
 				<StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
-					<controls:StackControl Stack="{Binding Waste}" FaceUp="true" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" />
+					<controls:StackControl Stack="{Binding Waste}" FaceUp="true" Draggable="True" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" />
 					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" VerticalAlignment="Center" CardWidth="130" CardHeight="170" Width="150" Draggable="False"/>
 				</StackPanel>
 				<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Spacing="0" Margin="20">

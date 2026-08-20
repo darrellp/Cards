@@ -25,7 +25,7 @@
 					<controls:StackControl Stack="{Binding Tab7}" FaceUp="true" Draggable="False" FaceDownPeekHeight ="15" OverlapDistance="35" CardWidth="130" CardHeight="170" Width="150"/>
 				</StackPanel>
 				<StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Spacing="30" Margin="20">
-					<controls:StackControl Stack="{Binding Fnd}" FaceUp="true" Orientation="Right" CardWidth="130" OverlapDistance="15" CardHeight="170" Width="1000" />
+					<controls:StackControl Stack="{Binding Fnd}" FaceUp="true" Draggable="False" Orientation="Right" VerticalAlignment="Center" CardWidth="130" OverlapDistance="15" CardHeight="170" Width="1000" />
 				</StackPanel>
 				<StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Spacing="20">
 					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" VerticalAlignment="Center" Margin="10" CardWidth="130" CardHeight="170" Width="150" Draggable="False"/>
