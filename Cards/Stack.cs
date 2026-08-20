@@ -199,7 +199,7 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
 
     public Card this[int index]
     {
-        get => _cards[index];
+        get => index < 0 || index >= this.Count ? Card.NullCard : _cards[index];
     }
 
     public override string ToString()

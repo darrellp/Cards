@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
 using Cards;
@@ -122,14 +123,6 @@ public class GolfGame : GenericGame
         if (finalMove != GenericMove.NoMove)
         {
             ApplyMove(finalMove);
-            if (Tableaus().Select(s => s.Count).Sum() == 0)
-            {
-                GameState.EventOccurred("Won");
-            }
-            else if (CheckLoss())
-            {
-                GameState.EventOccurred("Lost");
-            }
         }
     }
 
@@ -146,32 +139,61 @@ public class GolfGame : GenericGame
             return GenericMove.NoMove;
         }
         var ret = GenericMove.NoMove;
-        var card = tabStack.TopCard;
-        // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
-        var zbRankSrc = card.Rank - 1;
-        var zbRankDest = _foundation.TopCard.Rank - 1;
+
+        var playable = CheckPlayability(tabStack.TopCard, _foundation.TopCard);
+        if (playable)
+        {
+            ret = new GenericMove(stackName, "foundation");
+        }
+
+        return ret;
+    }
+
+    public bool CheckPlayability(Card cardSrc, Card cardDst)
+    {
+        if (cardSrc == Card.NullCard)
+        {
+            return false;
+        }
+        var zbRankSrc = cardSrc.Rank - 1;
+        var zbRankDest = cardDst.Rank - 1;
         if (OptionsCur.AceKingWrap)
         {
             if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
             {
-                ret = new GenericMove(stackName, "foundation");
+                return true;
             }
         }
         else
         {
             if (Math.Abs(zbRankSrc - zbRankDest) == 1)
             {
-                ret = new GenericMove(stackName, "foundation");
+                return true;
             }
         }
 
-        return ret;
+        return false;
     }
 
     public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
     {
         // We never drag in Golf - just left click
         return false;
+    }
+    #endregion
+
+    #region Move overrides
+    public override void ApplyAbstractPostMove(IMove move)
+    {
+        if (Tableaus().Select(s => s.Count).Sum() == 0)
+        {
+            GameState.EventOccurred("Won");
+        }
+        else if (CheckLoss())
+        {
+            GameState.EventOccurred("Lost");
+        }
+
     }
     #endregion
 
