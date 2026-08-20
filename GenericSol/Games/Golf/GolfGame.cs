@@ -1,8 +1,9 @@
-﻿using Cards;
-using GenericSol.Games.Golf;
-using GenericSol.Games.Klondike;
+﻿using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+using Cards;
 using System.Diagnostics;
-using System.Security.Principal;
+using System.Text.Json;
 
 namespace GenericSol.Games.Golf;
 public class GolfGame : GenericGame
@@ -85,8 +86,10 @@ public class GolfGame : GenericGame
             _tableau[i] = MixedStack.FromStack(deck.Split(TabSize), TabSize);
             _tableau[i].Name = $"tab{i + 1}";
         }
-        _foundation = new MixedStack(new List<Card>(), 0);
-        _foundation.Name = "foundation";
+        _foundation = new MixedStack(new List<Card>(), 0)
+        {
+            Name = "foundation"
+        };
 
         _stock = deck;
         _stock.Name = "stock";
@@ -147,9 +150,19 @@ public class GolfGame : GenericGame
         // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
         var zbRankSrc = card.Rank - 1;
         var zbRankDest = _foundation.TopCard.Rank - 1;
-        if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
+        if (OptionsCur.AceKingWrap)
         {
-            ret = new GenericMove(stackName, "foundation");
+            if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
+            {
+                ret = new GenericMove(stackName, "foundation");
+            }
+        }
+        else
+        {
+            if (Math.Abs(zbRankSrc - zbRankDest) == 1)
+            {
+                ret = new GenericMove(stackName, "foundation");
+            }
         }
 
         return ret;
@@ -159,6 +172,109 @@ public class GolfGame : GenericGame
     {
         // We never drag in Golf - just left click
         return false;
+    }
+    #endregion
+
+    #region Info
+    Options OptionsCur = new Options();
+
+    override public void SetupInfo(Grid options, out string markdown)
+    {
+        markdown = """
+            # Golf Solitaire
+            Golf Solitaire is a fast-paced card game where the goal is to clear
+            a layout of 35 cards (seven columns of five overlapping face-up cards) 
+            by moving cards to a single waste pile. 
+            You can transfer any exposed bottom tableau card to the waste pile if 
+            it is strictly one rank higher or lower than the current top waste card, 
+            regardless of suit.
+            #### **Game Setup**
+            - Shuffle a standard 52-card deck.
+            - Deal 35 cards face-up into seven columns (or "tableau" piles) with five cards overlapping in each column.
+            - Place the remaining 17 cards face-down next to the layout to form the stock pile.
+            - Flip the top card of the stock pile face-up to start the waste (discard) foundation pile or, optionally, select a starting card from the tableau to begin the waste pile.
+            #### **Rules of Play**
+            - **Matching:** Only the bottommost, exposed card of each of the seven columns is available to play.
+            - **Sequencing:** Move a card from the column to the top of the waste pile if its rank is one higher or one lower than the current waste card. Suits do not matter.
+            - **Ranking:** Aces are low (1) and Kings are high (13). In standard rules, sequences do not "wrap around"—you cannot place an Ace on a King or a King on an Ace (though a popular "easy mode" variant allows wrapping).
+            - **Drawing from Stock:** When no more moves are available from the seven columns, flip the top card of the stock pile onto the waste pile and continue matching from the columns. There is no redeal from the stock.
+            #### **Winning and Scoring**
+            - **Win Condition:** Clear all 35 cards from the columns into the waste pile before running out of cards in the stock.
+            """;
+
+        string xaml = @"
+<StackPanel xmlns='https://github.com/avaloniaui'>
+    <CheckBox Name='AceKingWrap' Content='Allow Ace to King wrapping' />
+    <CheckBox Name='SelectStartCard' Content='Play starting card from tableaux' />
+</StackPanel>";
+
+        StackPanel panel = AvaloniaRuntimeXamlLoader.Parse<StackPanel>(xaml);
+        var cbAceKingWrap = panel.FindControl<CheckBox>("AceKingWrap");
+        if (cbAceKingWrap != null)
+        {
+            cbAceKingWrap.IsChecked = OptionsCur.AceKingWrap;
+        }
+        var cbSelectStartCard = panel.FindControl<CheckBox>("SelectStartCard");
+        if (cbSelectStartCard != null)
+        {
+            cbSelectStartCard.IsChecked = OptionsCur.SelectStartCard;
+        }
+        options.Children.Add(panel);
+    }
+
+    public override void SetOptionsFromUI(Grid options)
+    {
+        var cbAceKingWrap = options.GetVisualDescendants().OfType<CheckBox>()
+            .FirstOrDefault(cb => cb.Name == "AceKingWrap");
+        Debug.Assert(cbAceKingWrap != null);
+        OptionsCur.AceKingWrap = cbAceKingWrap.IsChecked == true;
+
+        var cbSelectStartCard = options.GetVisualDescendants().OfType<CheckBox>()
+            .FirstOrDefault(cb => cb.Name == "SelectStartCard");
+        Debug.Assert(cbSelectStartCard != null);
+        OptionsCur.SelectStartCard = cbSelectStartCard.IsChecked == true;
+    }
+
+    public override void SetOptions(IJsonSerializable options)
+    {
+        Debug.Assert(options != null);
+        OptionsCur = options as Options;
+
+        // We'd like to do this in the game constructor but the options are created after the constructor runs.
+        // Note: we mutate the existing _foundation/_stock stacks in place (rather than reassigning _foundation
+        // to a new MixedStack) because external references to these stack objects (e.g. bound view-model
+        // properties) may already have been captured before SetOptions runs, particularly at app startup.
+        if (!OptionsCur.SelectStartCard && _foundation.Count == 0)
+        {
+            _foundation.Merge(_stock.Split(1), 1);
+        }
+
+    }
+
+    public override IJsonSerializable GetOptions()
+    {
+        return OptionsCur;
+    }
+
+    public override IJsonSerializable DeserializeOptions(string json)
+    {
+        return Options.FromJson(json);
+    }
+
+    class Options : IJsonSerializable<Options>
+    {
+        public bool AceKingWrap { get; set; } = true;
+        public bool SelectStartCard { get; set; } = true;
+
+        public static Options FromJson(string json)
+        {
+            return JsonSerializer.Deserialize<Options>(json)!;
+        }
+
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
     #endregion
 
