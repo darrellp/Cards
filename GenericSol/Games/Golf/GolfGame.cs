@@ -1,12 +1,35 @@
 ﻿using Cards;
 using GenericSol.Games.Golf;
+using GenericSol.Games.Klondike;
+using System.Diagnostics;
+using System.Security.Principal;
 
 namespace GenericSol.Games.Golf;
 public class GolfGame : GenericGame
 {
-    Stack _from;
-    Stack _to;
+    #region Constants
+    public const int TabCount = 7;
+    public const int TabSize = 5;
+    #endregion
+
     GolfAi _ai;
+
+    #region Stacks
+    // These are only internal for unit testing purposes
+    // ReSharper disable InconsistentNaming
+    internal MixedStack[] _tableau { get; } = new MixedStack[TabCount];
+    internal MixedStack _foundation;
+    internal Stack _stock;
+    // ReSharper restore InconsistentNaming
+
+    internal IEnumerable<MixedStack> Tableaus()
+    {
+        for (var iStack = 0; iStack < TabCount; iStack++)
+        {
+            yield return _tableau[iStack];
+        }
+    }
+    #endregion
 
     public override IAi Ai => (IAi)_ai;
 
@@ -15,39 +38,100 @@ public class GolfGame : GenericGame
         return new List<IMove> { new GenericMove("From", "To") };
     }
 
+    #region Stack name helpers
+    internal static string TabNameFromIndex(int index)
+    {
+        if (index < 0 || index >= TabCount)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), "Tableau index must be between 0 and 6.");
+        }
+        return $"tab{index + 1}";
+    }
+
     public override Stack StackFromName(string name)
     {
-        return name == "From" ? _from : _to;
+        if (name.StartsWith("tab"))
+        {
+            var index = int.Parse(name.Substring(3));
+            if (index > TabCount || index < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(name), "Tableau index must be between 0 and 6.");
+            }
+            return _tableau[index - 1];
+        }
+        else if (name == "foundation")
+        {
+            return _foundation;
+        }
+        else if (name == "stock")
+        {
+            return _stock;
+        }
+        else
+        {
+            throw new ArgumentException($"Invalid stack name: {name}");
+        }
     }
+    #endregion
 
     public GolfGame(int seed = -1) : base(seed)
     {
         _ai = new GolfAi();
         _ai.Game = this;
         var deck = Stack.ShuffledDeck();
-        var stack = deck.Split(3);
-        // The king ends on top as it was in the sorted deck, but we want it to be on the bottom of the stack
-        stack.Reverse();
-        _from = MixedStack.FromStack(stack, 3);
-        _from.Name = "From";
-        _to = new MixedStack([], 0);
-        _to.Name = "To";
+
+        for (int i = 0; i < TabCount; i++)
+        {
+            _tableau[i] = MixedStack.FromStack(deck.Split(TabSize), TabSize);
+            _tableau[i].Name = $"tab{i + 1}";
+        }
+        _foundation = new MixedStack(new List<Card>(), 0);
+        _foundation.Name = "foundation";
+
+        _stock = deck;
+        _stock.Name = "stock";
+    }
+
+    #region Mouse Interaction
+    public override void OnLeftClick(Stack stack)
+    {
+        if (stack.Name == "stock")
+        {
+            var move = new GenericMove("stock", "foundation");
+
+            ApplyMove(move);
+        }
+        else if (stack.Name.StartsWith("tab"))
+        {
+            var finalMove = GenericMove.NoMove;
+            if (_foundation.Count == 0)
+            {
+                finalMove = new GenericMove(stack.Name, "foundation");
+            }
+            else
+            {
+                var tabStack = StackFromName(stack.Name);
+                var card = tabStack.TopCard;
+                // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
+                var zbRankSrc = card.Rank - 1;
+                var zbRankDest = _foundation.TopCard.Rank - 1;
+                if ((zbRankSrc + 1) % 13 == zbRankDest || (zbRankSrc + 12) % 13 == zbRankDest)
+                {
+                    finalMove = new GenericMove(stack.Name, "foundation");
+                }
+            }
+            if (finalMove != GenericMove.NoMove)
+            {
+                ApplyMove(finalMove);
+            }
+        }
     }
 
     public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
     {
-        return srcName == "From" && stkDst.Name == "To" && stkSrc.Count == 1;
+        // We never drag in Golf - just left click
+        return false;
     }
+    #endregion
 
-    // ApplyAbstractSplit runs after every split off of a stack, whether the move came from the AI
-    // (via ApplyMove) or from a manual drag-and-drop (via StackDrop), so checking for a win
-    // here - rather than in an ApplyMove override - ensures dragging the last card also
-    // triggers the win state.
-    public override void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst)
-    {
-        if (_from.Count == 0)
-        {
-            GameState.EventOccurred("Won");
-        }
-    }
 }

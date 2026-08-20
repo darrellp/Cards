@@ -11,6 +11,14 @@ using System;
 
 namespace SolitaireUI.Controls;
 
+public enum StackOrientation
+{
+    Up,
+    Down,
+    Left,
+    Right
+}
+
 public class StackControl : Control
 {
     public static readonly StyledProperty<Stack?> StackProperty =
@@ -19,6 +27,15 @@ public class StackControl : Control
     public static readonly StyledProperty<bool> FaceUpProperty =
         AvaloniaProperty.Register<StackControl, bool>(nameof(FaceUp), defaultValue: true);
 
+    public static readonly StyledProperty<StackOrientation> OrientationProperty =
+        AvaloniaProperty.Register<StackControl, StackOrientation>(nameof(Orientation), defaultValue: StackOrientation.Down);
+
+    /// <summary>
+    /// Only meaningful for <see cref="MixedStack"/>s. When true (the default), a left click on a
+    /// mixed stack starts a drag; when false, it instead invokes <c>OnLeftClick</c> on the game.
+    /// Fixed (non-mixed) stacks are never draggable - a left click always invokes
+    /// <c>OnLeftClick</c> regardless of this property's value.
+    /// </summary>
     public static readonly StyledProperty<bool> DraggableProperty =
         AvaloniaProperty.Register<StackControl, bool>(nameof(Draggable), defaultValue: true);
 
@@ -53,9 +70,9 @@ public class StackControl : Control
     static StackControl()
     {
         AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty,
-            CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty);
+            CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty, OrientationProperty);
         AffectsMeasure<StackControl>(StackProperty, CardWidthProperty, CardHeightProperty,
-            OverlapDistanceProperty, FaceDownPeekHeightProperty);
+            OverlapDistanceProperty, FaceDownPeekHeightProperty, OrientationProperty);
 
         StackProperty.Changed.AddClassHandler<StackControl>((control, args) =>
             control.OnStackChanged(args));
@@ -104,35 +121,48 @@ public class StackControl : Control
             return null;
         }
 
-        if (position.X < 0 || position.X > CardWidth)
-        {
-            return null;
-        }
-
         if (Stack is MixedStack mixedStack)
         {
-            var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
-            var currentY = faceDownCount * FaceDownPeekHeight;
+            var vertical = IsVerticalOrientation;
+            var crossSize = vertical ? CardWidth : CardHeight;
+            var crossPos = vertical ? position.X : position.Y;
 
-            if (position.Y >= currentY && mixedStack.CardsUp > 0)
+            if (crossPos < 0 || crossPos > crossSize)
             {
-                var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, Bounds.Height);
+                return null;
+            }
+
+            var axisPos = vertical ? position.Y : position.X;
+            var axisCardSize = vertical ? CardHeight : CardWidth;
+            var totalAxisSize = vertical ? Bounds.Height : Bounds.Width;
+
+            var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
+            var currentDistance = faceDownCount * FaceDownPeekHeight;
+
+            if (axisPos >= currentDistance && mixedStack.CardsUp > 0)
+            {
+                var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, totalAxisSize, axisCardSize);
                 var firstFaceUpIndex = mixedStack.Count - mixedStack.CardsUp;
 
                 for (int i = 0; i < mixedStack.CardsUp; i++)
                 {
-                    var cardY = currentY;
-                    var nextY = currentY + (i == mixedStack.CardsUp - 1 ? CardHeight : overlapDistance);
+                    var sliceStart = currentDistance;
+                    var sliceEnd = currentDistance + (i == mixedStack.CardsUp - 1 ? axisCardSize : overlapDistance);
 
-                    if (position.Y >= cardY && position.Y < nextY)
+                    if (axisPos >= sliceStart && axisPos < sliceEnd)
                     {
                         return mixedStack[firstFaceUpIndex + i];
                     }
 
-                    currentY += overlapDistance;
+                    currentDistance += overlapDistance;
                 }
             }
 
+            return null;
+        }
+
+        if (position.X < 0 || position.X > CardWidth)
+        {
             return null;
         }
 
@@ -171,8 +201,9 @@ public class StackControl : Control
                     InvalidateAllStackControls();
                 }
 
-                // Check if Draggable
-                if (!Draggable)
+                // Only MixedStacks can be dragged, and only when Draggable is true. Fixed
+                // (non-mixed) stacks always invoke OnLeftClick instead of starting a drag.
+                if (Stack is not MixedStack || !Draggable)
                 {
                     if (viewModel.Game is GenericGame game)
                     {
@@ -183,40 +214,43 @@ public class StackControl : Control
                 }
 
                 // Draggable is true - start drag operation
-                var clickY = point.Position.Y;
+                var vertical = IsVerticalOrientation;
+                var clickAxisPos = vertical ? point.Position.Y : point.Position.X;
                 int cardCount = 1;
                 int clickedCardIndex = -1;
-                var clickedCardTopY = 0.0;
+                var clickedCardAxisPos = 0.0;
 
                 if (Stack is MixedStack mixedStack)
                 {
                     // Calculate which card was clicked in a mixed stack
+                    var axisCardSize = vertical ? CardHeight : CardWidth;
+                    var totalAxisSize = vertical ? Bounds.Height : Bounds.Width;
                     var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
-                    var currentY = 0.0;
+                    var currentDistance = 0.0;
 
                     // Skip past face-down cards
-                    currentY += faceDownCount * FaceDownPeekHeight;
+                    currentDistance += faceDownCount * FaceDownPeekHeight;
 
                     // Check face-up cards
-                    if (clickY >= currentY && mixedStack.CardsUp > 0)
+                    if (clickAxisPos >= currentDistance && mixedStack.CardsUp > 0)
                     {
-                        var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, Bounds.Height);
+                        var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, totalAxisSize, axisCardSize);
                         var firstFaceUpIndex = mixedStack.Count - mixedStack.CardsUp;
 
                         for (int i = 0; i < mixedStack.CardsUp; i++)
                         {
-                            var cardY = currentY;
-                            var nextY = currentY + (i == mixedStack.CardsUp - 1 ? CardHeight : overlapDistance);
+                            var sliceStart = currentDistance;
+                            var sliceEnd = currentDistance + (i == mixedStack.CardsUp - 1 ? axisCardSize : overlapDistance);
 
-                            if (clickY >= cardY && clickY < nextY)
+                            if (clickAxisPos >= sliceStart && clickAxisPos < sliceEnd)
                             {
                                 clickedCardIndex = firstFaceUpIndex + i;
                                 cardCount = mixedStack.Count - clickedCardIndex;
-                                clickedCardTopY = cardY;
+                                clickedCardAxisPos = sliceStart;
                                 break;
                             }
 
-                            currentY += overlapDistance;
+                            currentDistance += overlapDistance;
                         }
                     }
                 }
@@ -227,7 +261,7 @@ public class StackControl : Control
                     {
                         clickedCardIndex = Stack.Count - 1;
                         cardCount = 1;
-                        clickedCardTopY = 0.0;
+                        clickedCardAxisPos = 0.0;
                     }
                 }
 
@@ -235,8 +269,8 @@ public class StackControl : Control
                 {
                     var topLevel = TopLevel.GetTopLevel(this);
                     var topLevelPoint = topLevel != null ? e.GetPosition(topLevel) : point.Position;
-                    var clickOffsetX = point.Position.X;
-                    var clickOffsetY = point.Position.Y - clickedCardTopY;
+                    var clickOffsetX = vertical ? point.Position.X : point.Position.X - clickedCardAxisPos;
+                    var clickOffsetY = vertical ? point.Position.Y - clickedCardAxisPos : point.Position.Y;
 
                     try
                     {
@@ -372,6 +406,12 @@ public class StackControl : Control
         set => SetValue(FaceUpProperty, value);
     }
 
+    /// <summary>
+    /// Only meaningful for <see cref="MixedStack"/>s. When true (the default), a left click on a
+    /// mixed stack starts a drag; when false, it instead invokes <c>OnLeftClick</c> on the game.
+    /// Fixed (non-mixed) stacks are never draggable - a left click always invokes
+    /// <c>OnLeftClick</c> regardless of this property's value.
+    /// </summary>
     public bool Draggable
     {
         get => GetValue(DraggableProperty);
@@ -400,6 +440,12 @@ public class StackControl : Control
     {
         get => GetValue(FaceDownPeekHeightProperty);
         set => SetValue(FaceDownPeekHeightProperty, value);
+    }
+
+    public StackOrientation Orientation
+    {
+        get => GetValue(OrientationProperty);
+        set => SetValue(OrientationProperty, value);
     }
 
     private void OnStackChanged(AvaloniaPropertyChangedEventArgs args)
@@ -444,52 +490,88 @@ public class StackControl : Control
 
         if (Stack is MixedStack mixedStack)
         {
+            var vertical = IsVerticalOrientation;
+            var axisCardSize = vertical ? CardHeight : CardWidth;
+            var crossCardSize = vertical ? CardWidth : CardHeight;
+            var availableAxisSize = vertical ? availableSize.Height : availableSize.Width;
+
             var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
             var faceUpCount = mixedStack.CardsUp;
 
-            double faceDownHeight;
+            double faceDownAxisSize;
             if (faceUpCount > 0)
             {
                 // All face-down cards render as small peeks; the face-up cards below take over
                 // showing full-size cards.
-                faceDownHeight = faceDownCount > 0 ? faceDownCount * FaceDownPeekHeight : 0;
+                faceDownAxisSize = faceDownCount > 0 ? faceDownCount * FaceDownPeekHeight : 0;
             }
             else
             {
                 // No face-up cards (e.g. mid-drag): all but the topmost face-down card render as
                 // peeks, and the topmost renders full-size so the stack still shows a card.
-                faceDownHeight = faceDownCount > 0
-                    ? (faceDownCount - 1) * FaceDownPeekHeight + CardHeight
+                faceDownAxisSize = faceDownCount > 0
+                    ? (faceDownCount - 1) * FaceDownPeekHeight + axisCardSize
                     : 0;
             }
 
-            var overlapDistance = CalculateOverlapDistance(faceUpCount, availableSize.Height);
-            var faceUpHeight = faceUpCount > 0
-                ? CardHeight + (faceUpCount - 1) * overlapDistance
+            var overlapDistance = CalculateOverlapDistance(faceUpCount, availableAxisSize, axisCardSize);
+            var faceUpAxisSize = faceUpCount > 0
+                ? axisCardSize + (faceUpCount - 1) * overlapDistance
                 : 0;
 
-            var totalHeight = faceDownHeight + faceUpHeight;
-            return new Size(CardWidth, totalHeight);
+            var totalAxisSize = faceDownAxisSize + faceUpAxisSize;
+            return vertical ? new Size(crossCardSize, totalAxisSize) : new Size(totalAxisSize, crossCardSize);
         }
 
+        // Fixed (non-mixed) stack: Orientation has no effect here; always render a single card.
         return new Size(CardWidth, CardHeight);
     }
 
-    private double CalculateOverlapDistance(int cardCount, double availableHeight)
+    /// <summary>
+    /// True when <see cref="Orientation"/> grows the stack vertically (Down/Up) rather than
+    /// horizontally (Left/Right). Only meaningful for <see cref="MixedStack"/>.
+    /// </summary>
+    private bool IsVerticalOrientation => Orientation is StackOrientation.Down or StackOrientation.Up;
+
+    /// <summary>
+    /// True when <see cref="Orientation"/> anchors the stack at the far edge (Up/Left), i.e. the
+    /// stack grows toward the near (0,0) edge instead of away from it (Down/Right).
+    /// </summary>
+    private bool IsReversedOrientation => Orientation is StackOrientation.Up or StackOrientation.Left;
+
+    /// <summary>
+    /// Computes the rect for a card/peek slice positioned <paramref name="distanceAlongAxis"/> from
+    /// the stack's anchor edge, sized <paramref name="sizeAlongAxis"/> along the growth axis, given
+    /// the control's total size along that axis.
+    /// </summary>
+    private Rect GetSliceRect(double distanceAlongAxis, double sizeAlongAxis, double totalAxisSize)
     {
-        if (cardCount <= 1 || double.IsInfinity(availableHeight))
+        var vertical = IsVerticalOrientation;
+        var crossSize = vertical ? CardWidth : CardHeight;
+        var axisPos = IsReversedOrientation
+            ? totalAxisSize - distanceAlongAxis - sizeAlongAxis
+            : distanceAlongAxis;
+
+        return vertical
+            ? new Rect(0, axisPos, crossSize, sizeAlongAxis)
+            : new Rect(axisPos, 0, sizeAlongAxis, crossSize);
+    }
+
+    private double CalculateOverlapDistance(int cardCount, double availableSizeAlongAxis, double cardSizeAlongAxis)
+    {
+        if (cardCount <= 1 || double.IsInfinity(availableSizeAlongAxis))
         {
             return OverlapDistance;
         }
 
-        var totalHeightNeeded = CardHeight + (cardCount - 1) * OverlapDistance;
-        if (totalHeightNeeded <= availableHeight)
+        var totalSizeNeeded = cardSizeAlongAxis + (cardCount - 1) * OverlapDistance;
+        if (totalSizeNeeded <= availableSizeAlongAxis)
         {
             return OverlapDistance;
         }
 
-        // Reduce overlap distance to fit within available height
-        var maxOverlap = (availableHeight - CardHeight) / (cardCount - 1);
+        // Reduce overlap distance to fit within available size
+        var maxOverlap = (availableSizeAlongAxis - cardSizeAlongAxis) / (cardCount - 1);
         return Math.Max(5.0, maxOverlap); // Minimum 5 pixels overlap
     }
 
@@ -566,82 +648,120 @@ public class StackControl : Control
 
     private void RenderMixedStack(DrawingContext context, MixedStack mixedStack)
     {
-        // Draw each peek slightly taller than the spacing between peeks (~10% extra) so it overdraws
-        // down onto the top of the peek below it, covering that card's transparent rounded corners
-        // instead of letting the playing surface show through. Round to a whole pixel so the extra
-        // slice height doesn't introduce a fractional-pixel scale (which would blur/anti-alias it).
-        var peekRectHeight = Math.Max(FaceDownPeekHeight + 1, Math.Round(FaceDownPeekHeight * 1.1));
-        if (peekRectHeight > s_maxMixedStackOverlapDistance)
-        {
-            s_maxMixedStackOverlapDistance = peekRectHeight;
-        }
-
-        // Draw the peek slices directly from the card back artwork straight to the real
-        // DrawingContext (which already accounts for the screen's actual DPI/render scaling)
-        // instead of pre-rendering to an intermediate off-screen bitmap - that indirection
-        // previously risked introducing its own width/height scaling mismatches.
+        var vertical = IsVerticalOrientation;
+        var axisCardSize = vertical ? CardHeight : CardWidth;
+        var totalAxisSize = vertical ? Bounds.Height : Bounds.Width;
         var cardBackImage = MainWindowViewModel.GetCardBackImage();
-        var faceDownOverlapSourceRect = MainWindowViewModel.GetFaceDownOverlapSourceRect(
-            s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
-        var faceDownBackingSourceRect = MainWindowViewModel.GetFaceDownBackingSourceRect(
-            s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
-
         var faceDownCount = mixedStack.Count - mixedStack.CardsUp;
-        var currentY = 0.0;
+        var currentDistance = 0.0;
 
-        if (mixedStack.CardsUp > 0)
+        if (vertical)
         {
-            // Draw face-down cards as small peeks; face-up cards below will be full-size.
-            if (faceDownCount > 0)
+            // Draw each peek slightly taller than the spacing between peeks (~10% extra) so it
+            // overdraws onto the peek below it, covering that card's transparent rounded corners
+            // instead of letting the playing surface show through. Round to a whole pixel so the
+            // extra slice height doesn't introduce a fractional-pixel scale (which would
+            // blur/anti-alias it). This crop-based peek rendering only applies to the vertical
+            // (Down/Up) orientations, since the source-rect crops are height-based.
+            var peekRectHeight = Math.Max(FaceDownPeekHeight + 1, Math.Round(FaceDownPeekHeight * 1.1));
+            if (peekRectHeight > s_maxMixedStackOverlapDistance)
             {
-                for (int i = 0; i < faceDownCount; i++)
+                s_maxMixedStackOverlapDistance = peekRectHeight;
+            }
+
+            // Draw the peek slices directly from the card back artwork straight to the real
+            // DrawingContext (which already accounts for the screen's actual DPI/render scaling)
+            // instead of pre-rendering to an intermediate off-screen bitmap - that indirection
+            // previously risked introducing its own width/height scaling mismatches.
+            var faceDownOverlapSourceRect = MainWindowViewModel.GetFaceDownOverlapSourceRect(
+                s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
+            var faceDownBackingSourceRect = MainWindowViewModel.GetFaceDownBackingSourceRect(
+                s_maxMixedStackOverlapDistance, CardWidth, CardHeight);
+
+            if (mixedStack.CardsUp > 0)
+            {
+                // Draw face-down cards as small peeks; face-up cards below will be full-size.
+                if (faceDownCount > 0)
                 {
-                    var rect = new Rect(0, currentY, CardWidth, peekRectHeight);
-                    // Every slice except the topmost one needs an opaque backing behind it so its
-                    // transparent rounded corners reveal matching card-back artwork instead of the
-                    // playing surface beneath. The topmost slice (i == 0) has nothing above it, so
-                    // it should legitimately show the playing surface through its corners.
+                    for (int i = 0; i < faceDownCount; i++)
+                    {
+                        var rect = GetSliceRect(currentDistance, peekRectHeight, totalAxisSize);
+                        // Every slice except the topmost one needs an opaque backing behind it so
+                        // its transparent rounded corners reveal matching card-back artwork
+                        // instead of the playing surface beneath. The topmost slice (i == 0) has
+                        // nothing above it, so it should legitimately show the playing surface
+                        // through its corners.
+                        if (i > 0)
+                        {
+                            context.DrawImage(cardBackImage, faceDownBackingSourceRect, rect);
+                        }
+                        context.DrawImage(cardBackImage, faceDownOverlapSourceRect, rect);
+                        currentDistance += FaceDownPeekHeight;
+                    }
+                }
+            }
+            else if (faceDownCount > 0)
+            {
+                // No face-up cards (e.g. mid-drag): draw all but the last face-down card as
+                // peeks, then draw the topmost face-down card full-size so the stack still shows
+                // a card.
+                for (int i = 0; i < faceDownCount - 1; i++)
+                {
+                    var rect = GetSliceRect(currentDistance, peekRectHeight, totalAxisSize);
                     if (i > 0)
                     {
                         context.DrawImage(cardBackImage, faceDownBackingSourceRect, rect);
                     }
                     context.DrawImage(cardBackImage, faceDownOverlapSourceRect, rect);
-                    currentY += FaceDownPeekHeight;
+                    currentDistance += FaceDownPeekHeight;
                 }
+
+                var topRect = GetSliceRect(currentDistance, axisCardSize, totalAxisSize);
+                context.DrawImage(cardBackImage, topRect);
             }
         }
-        else if (faceDownCount > 0)
+        else
         {
-            // No face-up cards (e.g. mid-drag): draw all but the last face-down card as peeks,
-            // then draw the topmost face-down card full-size so the stack still shows a card.
-            for (int i = 0; i < faceDownCount - 1; i++)
+            // Horizontal (Left/Right) orientation: no width-based crop artwork is available, so
+            // draw full card-back images offset along the growth axis instead. Later slices are
+            // drawn after (and therefore visually on top of) earlier ones, which still produces a
+            // correct thin-peek overlap illusion.
+            if (mixedStack.CardsUp > 0)
             {
-                var rect = new Rect(0, currentY, CardWidth, peekRectHeight);
-                if (i > 0)
+                if (faceDownCount > 0)
                 {
-                    context.DrawImage(cardBackImage, faceDownBackingSourceRect, rect);
+                    for (int i = 0; i < faceDownCount; i++)
+                    {
+                        var rect = GetSliceRect(currentDistance, axisCardSize, totalAxisSize);
+                        context.DrawImage(cardBackImage, rect);
+                        currentDistance += FaceDownPeekHeight;
+                    }
                 }
-                context.DrawImage(cardBackImage, faceDownOverlapSourceRect, rect);
-                currentY += FaceDownPeekHeight;
             }
-
-            var topRect = new Rect(0, currentY, CardWidth, CardHeight);
-            context.DrawImage(MainWindowViewModel.GetCardBackImage(), topRect);
+            else if (faceDownCount > 0)
+            {
+                for (int i = 0; i < faceDownCount; i++)
+                {
+                    var rect = GetSliceRect(currentDistance, axisCardSize, totalAxisSize);
+                    context.DrawImage(cardBackImage, rect);
+                    currentDistance += FaceDownPeekHeight;
+                }
+            }
         }
 
         // Draw face-up cards overlapping
         if (mixedStack.CardsUp > 0)
         {
-            var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, Bounds.Height);
+            var overlapDistance = CalculateOverlapDistance(mixedStack.CardsUp, totalAxisSize, axisCardSize);
             var firstFaceUpIndex = mixedStack.Count - mixedStack.CardsUp;
 
             for (int i = 0; i < mixedStack.CardsUp; i++)
             {
                 var card = mixedStack[firstFaceUpIndex + i];
                 var bitmap = MainWindowViewModel.ImageFromCard(card);
-                var rect = new Rect(0, currentY, CardWidth, CardHeight);
+                var rect = GetSliceRect(currentDistance, axisCardSize, totalAxisSize);
                 context.DrawImage(bitmap, rect);
-                currentY += overlapDistance;
+                currentDistance += overlapDistance;
             }
         }
     }

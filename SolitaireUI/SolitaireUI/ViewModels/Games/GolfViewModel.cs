@@ -17,11 +17,7 @@ public partial class GolfViewModel : GameViewModelBase, IStatusBarViewModel
     public override IGame Game => _game;
 
     [ObservableProperty] private Stack _stock = _golfGameModel.StackFromName("stock");
-    [ObservableProperty] private Stack _waste = _golfGameModel.StackFromName("waste");
-    [ObservableProperty] private Stack _fnd1 = _golfGameModel.StackFromName("fnd1");
-    [ObservableProperty] private Stack _fnd2 = _golfGameModel.StackFromName("fnd2");
-    [ObservableProperty] private Stack _fnd3 = _golfGameModel.StackFromName("fnd3");
-    [ObservableProperty] private Stack _fnd4 = _golfGameModel.StackFromName("fnd4");
+    [ObservableProperty] private Stack _fnd = _golfGameModel.StackFromName("foundation");
     [ObservableProperty] private Stack _tab1 = _golfGameModel.StackFromName("tab1");
     [ObservableProperty] private Stack _tab2 = _golfGameModel.StackFromName("tab2");
     [ObservableProperty] private Stack _tab3 = _golfGameModel.StackFromName("tab3");
@@ -54,11 +50,7 @@ public partial class GolfViewModel : GameViewModelBase, IStatusBarViewModel
         SubscribeToGameEvents(_game);
 
         Stock = _golfGameModel.StackFromName("stock");
-        Waste = _golfGameModel.StackFromName("waste");
-        Fnd1 = _golfGameModel.StackFromName("fnd1");
-        Fnd2 = _golfGameModel.StackFromName("fnd2");
-        Fnd3 = _golfGameModel.StackFromName("fnd3");
-        Fnd4 = _golfGameModel.StackFromName("fnd4");
+        Fnd = _golfGameModel.StackFromName("foundation");
         Tab1 = _golfGameModel.StackFromName("tab1");
         Tab2 = _golfGameModel.StackFromName("tab2");
         Tab3 = _golfGameModel.StackFromName("tab3");
