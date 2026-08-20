@@ -95,6 +95,10 @@ public class GolfGame : GenericGame
     #region Mouse Interaction
     public override void OnLeftClick(Stack stack)
     {
+        if (stack.Count == 0)
+        {
+            return;
+        }
         GenericMove finalMove = GenericMove.NoMove;
         if (stack.Name == "stock")
         {
@@ -115,7 +119,7 @@ public class GolfGame : GenericGame
         if (finalMove != GenericMove.NoMove)
         {
             ApplyMove(finalMove);
-            if (_foundation.Count == 52)
+            if (Tableaus().Select(s => s.Count).Sum() == 0)
             {
                 GameState.EventOccurred("Won");
             }
@@ -133,12 +137,12 @@ public class GolfGame : GenericGame
 
     private GenericMove CheckStack(string stackName)
     {
-        var ret = GenericMove.NoMove;
         var tabStack = StackFromName(stackName);
         if (tabStack.Count == 0)
         {
-            ret = GenericMove.NoMove;
+            return GenericMove.NoMove;
         }
+        var ret = GenericMove.NoMove;
         var card = tabStack.TopCard;
         // Ranks normally range from 1 to 13.  We want a range of 0 to 12.
         var zbRankSrc = card.Rank - 1;
