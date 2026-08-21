@@ -20,6 +20,7 @@ public partial class GameSelectViewModel : ViewModelBase
         {
             "Klondike",
             "Golf",
+            "Pyramid",
             "TestGame"
         };
 
@@ -41,6 +42,10 @@ public partial class GameSelectViewModel : ViewModelBase
         else if (SelectedGame == "TestGame")
         {
             _mainWindowViewModel.NavigateToTestGame();
+        }
+        else if (SelectedGame == "Pyramid")
+        {
+            _mainWindowViewModel.NavigateToPyramid();
         }
     }
 }

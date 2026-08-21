@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:controls="using:SolitaireUI.Controls"
+			xmlns:vm="using:SolitaireUI.ViewModels"
+			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+			x:Class="SolitaireUI.Views.PyramidView"
+			x:DataType="vm:PyramidViewModel"
+			Focusable="True"
+			KeyDown="OnKeyDown">
+
+	<Grid RowDefinitions="*,Auto">
+		<!-- Main game area -->
+		<Panel Grid.Row="0">
+			<Grid Background="Green">
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="100">
+					<StackPanel Spacing="10">
+						<TextBlock Text="From" 
+								   FontSize="20" 
+								   FontWeight="Bold" 
+								   Foreground="White" 
+								   HorizontalAlignment="Center"/>
+						<controls:StackControl Stack="{Binding From}" 
+											   FaceUp="true" 
+											   CardWidth="140" 
+											   CardHeight="180" 
+											   Width="140" />
+					</StackPanel>
+
+					<StackPanel Spacing="10">
+						<TextBlock Text="To" 
+								   FontSize="20" 
+								   FontWeight="Bold" 
+								   Foreground="White" 
+								   HorizontalAlignment="Center"/>
+						<controls:StackControl Stack="{Binding To}" 
+											   Draggable="False"
+											   FaceUp="true" 
+											   CardWidth="140" 
+											   CardHeight="180" 
+											   Width="140" />
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+
+			<controls:DragGhostCanvas CardWidth="140" CardHeight="180" />
+
+			<controls:GameOverDialog />
+		</Panel>
+
+		<!-- Status bar -->
+		<controls:StatusBarView Grid.Row="1" Title="Pyramid" />
+	</Grid>
+
+</UserControl>
