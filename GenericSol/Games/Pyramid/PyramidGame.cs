@@ -182,15 +182,55 @@ public class PyramidGame : GenericGame
             SetPreviousSelection(pyramidStack);
             return;
         }
-        else if (stack.Name == "stock")
+        else if (stack.Name == "stock" || stack.Name == "waste")
         {
-            if (_stock.Count > 0)
+            if (PreviousSelection != null && PreviousSelection.Name == stack.Name)
+            {
+                UnsetPreviousSelection();
+                return;
+            }
+            else if (stack.TopCard.Rank == Card.KING)
+            {
+                var move = new GenericMove(stack.Name, "discards");
+                ApplyMove(move);
+                UnsetPreviousSelection();
+            }
+            else if (stack.Count > 0)
             {
                 if (MakeMove(stack))
                 {
                     return;
                 }
                 SetPreviousSelection(stack);
+            }
+        }
+    }
+
+    public override void OnRightClick(Stack stack)
+    {
+        if (stack.Name == "stock")
+        {
+            if (stack.Count > 0)
+            {
+                var move = new GenericMove("stock", "waste", 1);
+                ApplyMove(move);
+                UnsetPreviousSelection();
+            }
+            else
+            {
+                var move = new GenericMove("waste", "stock", _waste.Count);
+                ApplyMove(move);
+                UnsetPreviousSelection();
+            }
+        }
+        if (stack.Name == "waste")
+        {
+            if (stack.Count > 0)
+            {
+                stack.Reverse();
+                var move = new GenericMove("waste", "stock", stack.Count);
+                ApplyMove(move);
+                UnsetPreviousSelection();
             }
         }
     }
