@@ -72,7 +72,8 @@ public class PyramidGame : GenericGame
     #endregion
 
     #region Game fields
-    MixedStack? PreviousSelection = null;
+    Stack? PreviousSelection = null;
+
     #endregion
 
     PyramidAi _ai;
@@ -163,6 +164,10 @@ public class PyramidGame : GenericGame
                 SetPreviousSelection(pyramidStack);
                 return;
             }
+            if (MakeMove(pyramidStack))
+            {
+                return;
+            }
             if (PreviousSelection.TopCard.Rank + pyramidStack.TopCard.Rank == 13)
             {
                 var move = new GenericMove(PreviousSelection.Name, "discards", 1);
@@ -174,12 +179,37 @@ public class PyramidGame : GenericGame
                 UnsetPreviousSelection();
                 return;
             }
-            else
+            SetPreviousSelection(pyramidStack);
+            return;
+        }
+        else if (stack.Name == "stock")
+        {
+            if (_stock.Count > 0)
             {
-                SetPreviousSelection(pyramidStack);
-                return;
+                if (MakeMove(stack))
+                {
+                    return;
+                }
+                SetPreviousSelection(stack);
             }
         }
+    }
+
+    // Makes a move if the previous selection and the current stack can be combined to make 13. Returns true if a move was made, false otherwise.
+    bool MakeMove(Stack stk)
+    {
+        if (PreviousSelection != null && PreviousSelection.TopCard.Rank + stk.TopCard.Rank == 13)
+        {
+            var move = new GenericMove(PreviousSelection.Name, "discards", 1);
+            ApplyMove(move);
+            _startNewUndo = false;
+            move = new GenericMove(stk.Name, "discards", 1);
+            ApplyMove(move);
+            _startNewUndo = true;
+            UnsetPreviousSelection();
+            return true;
+        }
+        return false;
     }
 
     void UnsetPreviousSelection()
@@ -191,7 +221,7 @@ public class PyramidGame : GenericGame
         }
     }
 
-    void SetPreviousSelection(MixedStack stack)
+    void SetPreviousSelection(Stack stack)
     {
         UnsetPreviousSelection();
         PreviousSelection = stack;

@@ -18,7 +18,7 @@ public class GenericUndoHandler
 
     internal void AddMove(GenericMove move, int faceupPremove = -1, string state = "")
     {
-        UndoStack.Peek().Add(new GenericUndo(move, faceupPremove, state));
+        UndoStack.Peek().Insert(0, new GenericUndo(move, faceupPremove, state));
     }
 
     internal void Undo()

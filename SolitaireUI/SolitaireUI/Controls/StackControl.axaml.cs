@@ -789,10 +789,12 @@ public class StackControl : Control
     }
 
     /// <summary>
-    /// If <see cref="Stack.IsHilit"/> is set on <paramref name="stack"/> and <paramref name="cardIndex"/>
-    /// falls within its tinted range (<see cref="Stack.StartTintIndex"/>/<see cref="Stack.TintCount"/>),
-    /// paints <paramref name="rect"/> with <see cref="Stack.TintColor"/>. Highlighting only ever
-    /// applies to face-up cards, which the caller is expected to guarantee.
+    /// If <see cref="Stack.IsHilit"/> is set on <paramref name="stack"/>, paints <paramref name="rect"/>
+    /// with <see cref="Stack.TintColor"/>. For <see cref="MixedStack"/>s, <paramref name="cardIndex"/> must
+    /// also fall within the tinted range (<see cref="Stack.StartTintIndex"/>/<see cref="Stack.TintCount"/>).
+    /// For plain (non-mixed) stacks the index/count range is ignored since only the single top card is
+    /// ever rendered. Highlighting only ever applies to face-up cards, which the caller is expected to
+    /// guarantee.
     /// </summary>
     private static void DrawTintIfHighlighted(DrawingContext context, Stack stack, int cardIndex, Rect rect)
     {
@@ -801,13 +803,16 @@ public class StackControl : Control
             return;
         }
 
-        if (cardIndex < stack.StartTintIndex || cardIndex >= stack.StartTintIndex + stack.TintCount)
+        if (stack is MixedStack mixedStack)
         {
-            return;
-        }
+            if (cardIndex < stack.StartTintIndex || cardIndex >= stack.StartTintIndex + stack.TintCount)
+            {
+                return;
+            }
 
-        Debug.Assert(stack is not MixedStack mixedStack || cardIndex >= mixedStack.Count - mixedStack.CardsUp,
-            "Only face-up cards may be tinted.");
+            Debug.Assert(cardIndex >= mixedStack.Count - mixedStack.CardsUp,
+                "Only face-up cards may be tinted.");
+        }
 
         // Overlay the tint translucently on top of the already-drawn card image rather than
         // replacing it, so the card artwork remains visible underneath the color wash.
