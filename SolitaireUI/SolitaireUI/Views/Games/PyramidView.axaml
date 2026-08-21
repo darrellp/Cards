@@ -13,34 +13,45 @@
 	<Grid RowDefinitions="*,Auto">
 		<!-- Main game area -->
 		<Panel Grid.Row="0">
-			<Grid Background="Green">
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="100">
-					<StackPanel Spacing="10">
-						<TextBlock Text="From" 
-								   FontSize="20" 
-								   FontWeight="Bold" 
-								   Foreground="White" 
-								   HorizontalAlignment="Center"/>
-						<controls:StackControl Stack="{Binding From}" 
-											   FaceUp="true" 
-											   CardWidth="140" 
-											   CardHeight="180" 
-											   Width="140" />
-					</StackPanel>
-
-					<StackPanel Spacing="10">
-						<TextBlock Text="To" 
-								   FontSize="20" 
-								   FontWeight="Bold" 
-								   Foreground="White" 
-								   HorizontalAlignment="Center"/>
-						<controls:StackControl Stack="{Binding To}" 
-											   Draggable="False"
-											   FaceUp="true" 
-											   CardWidth="140" 
-											   CardHeight="180" 
-											   Width="140" />
-					</StackPanel>
+			<Grid Background="Green" RowDefinitions="*,75">
+				<!-- Pyramid: each of the 28 stacks is positioned via PyramidLeft/PyramidTop, computed in
+						PyramidViewModel so row 0 is centered at top and each subsequent row cascades downward
+						(overlapping vertically) while cards within a row sit side by side (no horizontal overlap). -->
+				<Canvas Width="{Binding PyramidCanvasWidth}" Height="{Binding PyramidCanvasHeight}"
+						HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0">
+					<controls:StackControl Stack="{Binding Pyramid[0]}" Canvas.Left="{Binding PyramidLeft[0]}" Canvas.Top="{Binding PyramidTop[0]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[1]}" Canvas.Left="{Binding PyramidLeft[1]}" Canvas.Top="{Binding PyramidTop[1]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[2]}" Canvas.Left="{Binding PyramidLeft[2]}" Canvas.Top="{Binding PyramidTop[2]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[3]}" Canvas.Left="{Binding PyramidLeft[3]}" Canvas.Top="{Binding PyramidTop[3]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[4]}" Canvas.Left="{Binding PyramidLeft[4]}" Canvas.Top="{Binding PyramidTop[4]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[5]}" Canvas.Left="{Binding PyramidLeft[5]}" Canvas.Top="{Binding PyramidTop[5]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[6]}" Canvas.Left="{Binding PyramidLeft[6]}" Canvas.Top="{Binding PyramidTop[6]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[7]}" Canvas.Left="{Binding PyramidLeft[7]}" Canvas.Top="{Binding PyramidTop[7]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[8]}" Canvas.Left="{Binding PyramidLeft[8]}" Canvas.Top="{Binding PyramidTop[8]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[9]}" Canvas.Left="{Binding PyramidLeft[9]}" Canvas.Top="{Binding PyramidTop[9]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[10]}" Canvas.Left="{Binding PyramidLeft[10]}" Canvas.Top="{Binding PyramidTop[10]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[11]}" Canvas.Left="{Binding PyramidLeft[11]}" Canvas.Top="{Binding PyramidTop[11]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[12]}" Canvas.Left="{Binding PyramidLeft[12]}" Canvas.Top="{Binding PyramidTop[12]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[13]}" Canvas.Left="{Binding PyramidLeft[13]}" Canvas.Top="{Binding PyramidTop[13]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[14]}" Canvas.Left="{Binding PyramidLeft[14]}" Canvas.Top="{Binding PyramidTop[14]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[15]}" Canvas.Left="{Binding PyramidLeft[15]}" Canvas.Top="{Binding PyramidTop[15]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[16]}" Canvas.Left="{Binding PyramidLeft[16]}" Canvas.Top="{Binding PyramidTop[16]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[17]}" Canvas.Left="{Binding PyramidLeft[17]}" Canvas.Top="{Binding PyramidTop[17]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[18]}" Canvas.Left="{Binding PyramidLeft[18]}" Canvas.Top="{Binding PyramidTop[18]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[19]}" Canvas.Left="{Binding PyramidLeft[19]}" Canvas.Top="{Binding PyramidTop[19]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[20]}" Canvas.Left="{Binding PyramidLeft[20]}" Canvas.Top="{Binding PyramidTop[20]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[21]}" Canvas.Left="{Binding PyramidLeft[21]}" Canvas.Top="{Binding PyramidTop[21]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[22]}" Canvas.Left="{Binding PyramidLeft[22]}" Canvas.Top="{Binding PyramidTop[22]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[23]}" Canvas.Left="{Binding PyramidLeft[23]}" Canvas.Top="{Binding PyramidTop[23]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[24]}" Canvas.Left="{Binding PyramidLeft[24]}" Canvas.Top="{Binding PyramidTop[24]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[25]}" Canvas.Left="{Binding PyramidLeft[25]}" Canvas.Top="{Binding PyramidTop[25]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[26]}" Canvas.Left="{Binding PyramidLeft[26]}" Canvas.Top="{Binding PyramidTop[26]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+					<controls:StackControl Stack="{Binding Pyramid[27]}" Canvas.Left="{Binding PyramidLeft[27]}" Canvas.Top="{Binding PyramidTop[27]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
+				</Canvas>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
+					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" />
+					<controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
+					<controls:StackControl Stack="{Binding Discards}" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
 				</StackPanel>
 			</Grid>
 

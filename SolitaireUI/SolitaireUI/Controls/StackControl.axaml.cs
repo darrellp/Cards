@@ -49,6 +49,13 @@ public class StackControl : Control
     public static readonly StyledProperty<double> FaceDownPeekHeightProperty =
         AvaloniaProperty.Register<StackControl, double>(nameof(FaceDownPeekHeight), defaultValue: 5.0);
 
+    /// <summary>
+    /// When true (the default), an X is drawn on the card area when the stack is empty. When
+    /// false, nothing is drawn for an empty stack.
+    /// </summary>
+    public static readonly StyledProperty<bool> EmptyXProperty =
+        AvaloniaProperty.Register<StackControl, bool>(nameof(EmptyX), defaultValue: true);
+
     private Stack? _previousStack;
 
     private static double s_maxMixedStackOverlapDistance = 0.0;
@@ -68,7 +75,7 @@ public class StackControl : Control
     static StackControl()
     {
         AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty,
-            CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty, OrientationProperty);
+            CardHeightProperty, OverlapDistanceProperty, FaceDownPeekHeightProperty, OrientationProperty, EmptyXProperty);
         AffectsMeasure<StackControl>(StackProperty, CardWidthProperty, CardHeightProperty,
             OverlapDistanceProperty, FaceDownPeekHeightProperty, OrientationProperty);
 
@@ -404,6 +411,16 @@ public class StackControl : Control
     }
 
     /// <summary>
+    /// When true (the default), an X is drawn on the card area when the stack is empty. When
+    /// false, nothing is drawn for an empty stack.
+    /// </summary>
+    public bool EmptyX
+    {
+        get => GetValue(EmptyXProperty);
+        set => SetValue(EmptyXProperty, value);
+    }
+
+    /// <summary>
     /// When true (the default), a left click on the stack starts a drag. When false, a left
     /// click instead invokes <c>OnLeftClick</c> on the game. Applies to all stacks, mixed or not.
     /// </summary>
@@ -611,13 +628,19 @@ public class StackControl : Control
 
     private void DrawEmptyStackIndicator(DrawingContext context)
     {
-        var brush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
-        var pen = new Pen(brush, 12.0);
         var rect = new Rect(0, 0, CardWidth, CardHeight);
 
         // Draw a transparent rectangle over the full card area so that the
         // entire card size participates in hit testing, not just the X strokes.
         context.DrawRectangle(Brushes.Transparent, null, rect);
+
+        if (!EmptyX)
+        {
+            return;
+        }
+
+        var brush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
+        var pen = new Pen(brush, 12.0);
 
         // Draw red X
         context.DrawLine(pen, rect.TopLeft, rect.BottomRight);
