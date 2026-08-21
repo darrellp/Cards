@@ -16,8 +16,6 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
 
     public override IGame Game => _game;
 
-    [ObservableProperty] private Stack? _from;
-    [ObservableProperty] private Stack? _to;
     [ObservableProperty] private Stack _stock = _pyramidGame.StackFromName("stock");
     [ObservableProperty] private Stack _waste = _pyramidGame.StackFromName("waste");
     [ObservableProperty] private Stack _discards = _pyramidGame.StackFromName("discards");
@@ -42,8 +40,6 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
     public PyramidViewModel(MainWindowViewModel mainWindowViewModel)
     {
         _mainWindowViewModel = mainWindowViewModel;
-        _from = _pyramidGame.StackFromName("From");
-        _to = _pyramidGame.StackFromName("To");
         _stock = _pyramidGame.StackFromName("stock");
         _waste = _pyramidGame.StackFromName("waste");
         _discards = _pyramidGame.StackFromName("discards");
@@ -87,8 +83,6 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
         _mainWindowViewModel.ApplyStoredGameOptions(_game);
         SubscribeToGameEvents(_game);
 
-        From = _pyramidGame.StackFromName("From");
-        To = _pyramidGame.StackFromName("To");
         Stock = _pyramidGame.StackFromName("stock");
         Waste = _pyramidGame.StackFromName("waste");
         Discards = _pyramidGame.StackFromName("discards");

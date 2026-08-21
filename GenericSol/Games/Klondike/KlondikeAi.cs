@@ -21,6 +21,11 @@ internal class KlondikeAi : IAi
         return _nextMoves.Dequeue();
     }
 
+    internal void DrainMoveQueue()
+    {
+        _nextMoves.Clear();
+    }
+
     /// <summary>
     /// Selects from among several potential new moves and enques the best one
     /// </summary>

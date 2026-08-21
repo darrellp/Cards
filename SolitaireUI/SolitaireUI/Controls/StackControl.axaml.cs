@@ -8,6 +8,7 @@ using Cards;
 using GenericSol;
 using SolitaireUI.ViewModels;
 using System;
+using System.Diagnostics;
 
 namespace SolitaireUI.Controls;
 
@@ -655,6 +656,7 @@ public class StackControl : Control
             var bitmap = MainWindowViewModel.ImageFromCard(bottomCard);
             var rect = new Rect(0, 0, CardWidth, CardHeight);
             context.DrawImage(bitmap, rect);
+            DrawTintIfHighlighted(context, Stack!, Stack!.Count - 1, rect);
         }
         else
         {
@@ -775,12 +777,43 @@ public class StackControl : Control
 
             for (int i = 0; i < mixedStack.CardsUp; i++)
             {
-                var card = mixedStack[firstFaceUpIndex + i];
+                var index = firstFaceUpIndex + i;
+                var card = mixedStack[index];
                 var bitmap = MainWindowViewModel.ImageFromCard(card);
                 var rect = GetSliceRect(currentDistance, axisCardSize, totalAxisSize);
                 context.DrawImage(bitmap, rect);
+                DrawTintIfHighlighted(context, mixedStack, index, rect);
                 currentDistance += overlapDistance;
             }
         }
+    }
+
+    /// <summary>
+    /// If <see cref="Stack.IsHilit"/> is set on <paramref name="stack"/> and <paramref name="cardIndex"/>
+    /// falls within its tinted range (<see cref="Stack.StartTintIndex"/>/<see cref="Stack.TintCount"/>),
+    /// paints <paramref name="rect"/> with <see cref="Stack.TintColor"/>. Highlighting only ever
+    /// applies to face-up cards, which the caller is expected to guarantee.
+    /// </summary>
+    private static void DrawTintIfHighlighted(DrawingContext context, Stack stack, int cardIndex, Rect rect)
+    {
+        if (!stack.IsHilit)
+        {
+            return;
+        }
+
+        if (cardIndex < stack.StartTintIndex || cardIndex >= stack.StartTintIndex + stack.TintCount)
+        {
+            return;
+        }
+
+        Debug.Assert(stack is not MixedStack mixedStack || cardIndex >= mixedStack.Count - mixedStack.CardsUp,
+            "Only face-up cards may be tinted.");
+
+        // Overlay the tint translucently on top of the already-drawn card image rather than
+        // replacing it, so the card artwork remains visible underneath the color wash.
+        var tintColor = stack.TintColor;
+        const byte overlayAlpha = 100;
+        var brush = new SolidColorBrush(Color.FromArgb(overlayAlpha, tintColor.R, tintColor.G, tintColor.B));
+        context.DrawRectangle(brush, null, rect);
     }
 }

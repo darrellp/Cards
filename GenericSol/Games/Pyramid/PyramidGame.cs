@@ -1,4 +1,5 @@
 ﻿using Cards;
+using System.Drawing;
 
 namespace GenericSol.Games.PyramidGame;
 public class PyramidGame : GenericGame
@@ -36,8 +37,6 @@ public class PyramidGame : GenericGame
     }
     #endregion
 
-    Stack _from;
-    Stack _to;
     PyramidAi _ai;
 
     public override IAi Ai => (IAi)_ai;
@@ -60,13 +59,16 @@ public class PyramidGame : GenericGame
         }
         return name switch
         {
-            "From" => _from,
-            "To" => _to,
             "stock" => _stock,
             "waste" => _waste,
             "discards" => _discards,
             _ => throw new ArgumentOutOfRangeException(nameof(name), $"Unknown stack name: {name}")
         };
+    }
+
+    public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    {
+        return false;
     }
 
     public PyramidGame(int seed = -1) : base(seed)
@@ -85,36 +87,19 @@ public class PyramidGame : GenericGame
             }
         }
 
-        var stack = deck.Split(3);
-        // The king ends on top as it was in the sorted deck, but we want it to be on the bottom of the stack
-        stack.Reverse();
-        _from = MixedStack.FromStack(stack, 3);
-        _from.Name = "From";
-        _to = new MixedStack([], 0);
-        _to.Name = "To";
-
         _stock = deck;
         _stock.Name = "stock";
-        _waste = new Stack();
-        _waste.Name = "waste";
-        _discards = new Stack();
-        _discards.Name = "discards";
+        _waste = new Stack() { Name="waste" };
+        _discards = new Stack() { Name="discards" };
     }
 
-    public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
+    #region Mouse Handling
+    public override void OnLeftClick(Stack stack)
     {
-        return srcName == "From" && stkDst.Name == "To" && stkSrc.Count == 1;
-    }
-
-    // ApplyAbstractSplit runs after every split off of a stack, whether the move came from the AI
-    // (via ApplyMove) or from a manual drag-and-drop (via StackDrop), so checking for a win
-    // here - rather than in an ApplyMove override - ensures dragging the last card also
-    // triggers the win state.
-    public override void ApplyAbstractSplit(IMove move, Stack src, Stack moved, Stack dst)
-    {
-        if (_from.Count == 0)
+        if (stack.Name.StartsWith("pyr"))
         {
-            GameState.EventOccurred("Won");
+            stack.SetHighlight(true, Color.LightBlue, 0, 1);
         }
     }
+    #endregion
 }

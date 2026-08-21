@@ -26,6 +26,45 @@ public class Stack(List<Card> cards) : IEnumerable<Card>
     protected internal List<Card> _cards = cards;
     public int Count => _cards.Count;
 
+    #region Highlighting
+
+    /// <summary>
+    /// Tells whether highlighting should occur for this stack.
+    /// </summary>
+    public bool IsHilit { get; set; }
+
+    /// <summary>
+    /// The color the highlighted cards should be tinted.
+    /// </summary>
+    public System.Drawing.Color TintColor { get; set; }
+
+    /// <summary>
+    /// Index of the first card to be tinted. Only meaningful for the face-up cards of a
+    /// <see cref="MixedStack"/> - the caller is responsible for ensuring the tinted range only
+    /// covers face-up cards.
+    /// </summary>
+    public int StartTintIndex { get; set; }
+
+    /// <summary>
+    /// Count of cards to be tinted starting at <see cref="StartTintIndex"/>.
+    /// </summary>
+    public int TintCount { get; set; }
+
+    /// <summary>
+    /// Sets the highlight state for this stack and notifies listeners (e.g. the UI) that the
+    /// stack has been modified so it can be re-rendered.
+    /// </summary>
+    public void SetHighlight(bool isHilit, System.Drawing.Color tintColor = default, int startTintIndex = 0, int tintCount = 0)
+    {
+        IsHilit = isHilit;
+        TintColor = tintColor;
+        StartTintIndex = startTintIndex;
+        TintCount = tintCount;
+        OnStackModified();
+    }
+
+    #endregion
+
     public Stack() : this([]) { }
 
     protected virtual void OnStackModified()

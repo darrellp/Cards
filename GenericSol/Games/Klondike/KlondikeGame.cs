@@ -428,7 +428,6 @@ public class KlondikeGame : GenericGame
             GameState.EventOccurred("DetectedAvoidedMoves");
         }
 
-
         WinCheck();
         SanityCheck();
     }
@@ -444,6 +443,13 @@ public class KlondikeGame : GenericGame
             GameState.EventOccurred("MadeMove");
         }
         bool isDrag = src == moved;
+        if (isDrag)
+        {
+            // If we've made a move manually in the middle of an AI combo then we may have wrecked the assumptions
+            // made when the combo was formulated which would make the ensuing moves of the combo invalid so we
+            // clear the AI move queue and let it re-evaluate the situation.
+            _ai.DrainMoveQueue();
+        }
         Stack origin = StackFromName(move.SrcStack);
 
         if (origin is MixedStack mixedStack)
@@ -551,6 +557,7 @@ public class KlondikeGame : GenericGame
             GameState.EventOccurred(eventName);
         }
         SanityCheck();
+        _ai.DrainMoveQueue();
     }
 
     public override void OnLeftClick(Stack stack)
@@ -581,6 +588,7 @@ public class KlondikeGame : GenericGame
                 }
                 ApplyMove(move);
             }
+            _ai.DrainMoveQueue();
         }
     }
     #endregion
@@ -597,6 +605,8 @@ public class KlondikeGame : GenericGame
     internal override void UndoPostMove(GenericUndo undo)
     {
         base.UndoPostMove(undo);
+        // We could be undoing the first move of a combo which would render the second move invalid so clear it out
+        _ai.DrainMoveQueue();
         SanityCheck();
     }
     #endregion
