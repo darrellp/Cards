@@ -49,9 +49,9 @@
 					<controls:StackControl Stack="{Binding Pyramid[27]}" Canvas.Left="{Binding PyramidLeft[27]}" Canvas.Top="{Binding PyramidTop[27]}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" EmptyX="false" Draggable="false" />
 				</Canvas>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
-					<controls:StackControl Stack="{Binding Stock}" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" />
-					<controls:StackControl Stack="{Binding Waste}" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
-					<controls:StackControl Stack="{Binding Discards}" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
+					<controls:StackControl Stack="{Binding Stock}" Draggable="false" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" />
+					<controls:StackControl Stack="{Binding Waste}" Draggable="false" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
+					<controls:StackControl Stack="{Binding Discards}" Draggable="false" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
 				</StackPanel>
 			</Grid>
 

@@ -629,16 +629,16 @@ public class StackControl : Control
 
     private void DrawEmptyStackIndicator(DrawingContext context)
     {
+        if (!EmptyX)
+        {
+            return;
+        }
+
         var rect = new Rect(0, 0, CardWidth, CardHeight);
 
         // Draw a transparent rectangle over the full card area so that the
         // entire card size participates in hit testing, not just the X strokes.
         context.DrawRectangle(Brushes.Transparent, null, rect);
-
-        if (!EmptyX)
-        {
-            return;
-        }
 
         var brush = new SolidColorBrush(Color.FromArgb(255, 0, 200, 0));
         var pen = new Pen(brush, 12.0);

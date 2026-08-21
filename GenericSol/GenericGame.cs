@@ -5,6 +5,7 @@ namespace GenericSol;
 public abstract class GenericGame : IGame
 {
     int _seed = -1;
+    protected bool _startNewUndo = true;
     protected Random _random;
     protected GenericUndoHandler _undoHandler;
     string _turnState = "NoMoves";
@@ -66,7 +67,11 @@ public abstract class GenericGame : IGame
         var dstStack = StackFromName(move.DstStack);
         var cardCount = move.CardCount;
 
-        _undoHandler.StartUndo();
+        if (_startNewUndo)
+        {
+            _undoHandler.StartUndo();
+        }
+
         // If we're dragging then the move uses the temporary DragCards stack as a source
         // but for undo purposes we need to indicate the proper source
         var undoMove = new GenericMove(move.SrcStack, move.DstStack, move.CardCount);

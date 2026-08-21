@@ -1,4 +1,5 @@
 ﻿using Cards;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace GenericSol.Games.PyramidGame;
@@ -31,10 +32,47 @@ public class PyramidGame : GenericGame
         return $"pyr{index}";
     }
 
+    internal static int IndexFromPyramidName(string name)
+    {
+        if (!name.StartsWith("pyr"))
+        {
+            throw new ArgumentException("Invalid pyramid stack name", nameof(name));
+        }
+        var index = int.Parse(name.Substring(3));
+        if (index < 0 || index >= 28)
+        {
+            throw new ArgumentOutOfRangeException(nameof(name), "Pyramid index must be between 0 and 27.");
+        }
+        return index;
+    }
+
+    internal (MixedStack? left, MixedStack? right) GetPyramidChildren(int index)
+    {
+        if (index < 0 || index >= 28)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), "Pyramid index must be between 0 and 27.");
+        }
+        var row = (int)((Math.Sqrt(8 * index + 1) - 1) / 2);
+        var col = index - row * (row + 1) / 2;
+        if (row == 6)
+        {
+            return (null, null);
+        }
+        var leftChildIndex = PyramidIndex(row + 1, col);
+        var rightChildIndex = PyramidIndex(row + 1, col + 1);
+        var leftChild = _pyramid[leftChildIndex].Count > 0 ? _pyramid[leftChildIndex] : null;
+        var rightChild = _pyramid[rightChildIndex].Count > 0 ? _pyramid[rightChildIndex] : null;
+        return (leftChild, rightChild);
+    }
+
     public MixedStack[] PyramidStacks()
     {
         return _pyramid;
     }
+    #endregion
+
+    #region Game fields
+    MixedStack? PreviousSelection = null;
     #endregion
 
     PyramidAi _ai;
@@ -98,8 +136,66 @@ public class PyramidGame : GenericGame
     {
         if (stack.Name.StartsWith("pyr"))
         {
-            stack.SetHighlight(true, Color.LightBlue, 0, 1);
+            var pyramidStack = stack as MixedStack;
+            Debug.Assert(pyramidStack != null);
+            if (pyramidStack == PreviousSelection)
+            {
+                UnsetPreviousSelection();
+                return;
+            }
+            var (left, right) = GetPyramidChildren(IndexFromPyramidName(pyramidStack.Name));
+            if (left != null || right != null)
+            {
+                // The card is not free to be removed, so ignore the click.
+                return;
+            }
+
+            var cardSrc = pyramidStack.TopCard;
+            if (cardSrc.Rank == Card.KING)
+            {
+                var move = new GenericMove(pyramidStack.Name, "discards");
+                ApplyMove(move);
+                UnsetPreviousSelection();
+                return;
+            }
+            if (PreviousSelection == null)
+            {
+                SetPreviousSelection(pyramidStack);
+                return;
+            }
+            if (PreviousSelection.TopCard.Rank + pyramidStack.TopCard.Rank == 13)
+            {
+                var move = new GenericMove(PreviousSelection.Name, "discards", 1);
+                ApplyMove(move);
+                _startNewUndo = false;
+                move = new GenericMove(pyramidStack.Name, "discards", 1);
+                ApplyMove(move);
+                _startNewUndo = true;
+                UnsetPreviousSelection();
+                return;
+            }
+            else
+            {
+                SetPreviousSelection(pyramidStack);
+                return;
+            }
         }
+    }
+
+    void UnsetPreviousSelection()
+    {
+        if (PreviousSelection != null)
+        {
+            PreviousSelection.SetHighlight(false, Color.LightBlue, 0, 1);
+            PreviousSelection = null;
+        }
+    }
+
+    void SetPreviousSelection(MixedStack stack)
+    {
+        UnsetPreviousSelection();
+        PreviousSelection = stack;
+        stack.SetHighlight(true, Color.LightBlue, 0, 1);
     }
     #endregion
 }
