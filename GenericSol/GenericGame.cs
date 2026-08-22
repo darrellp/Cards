@@ -5,13 +5,14 @@ namespace GenericSol;
 public abstract class GenericGame : IGame
 {
     int _seed = -1;
-    protected bool _startNewUndo = true;
+    private bool startNewUndo;
     protected Random _random;
     protected GenericUndoHandler _undoHandler;
     string _turnState = "NoMoves";
 
     protected GenericGame(int seed = -1)
     {
+        startNewUndo = true;
         if (seed == -1)
         {
             _seed = new Random().Next();
@@ -39,6 +40,7 @@ public abstract class GenericGame : IGame
     public virtual IAi Ai => throw new NotImplementedException();
 
     public virtual IGameState GameState { get; set; } = new GenericGameState();
+    public bool StartNewUndo { get => startNewUndo; set => startNewUndo=value; }
 
     /// <summary>
     /// Applies a move to the game.
@@ -67,7 +69,7 @@ public abstract class GenericGame : IGame
         var dstStack = StackFromName(move.DstStack);
         var cardCount = move.CardCount;
 
-        if (_startNewUndo)
+        if (StartNewUndo)
         {
             _undoHandler.StartUndo();
         }

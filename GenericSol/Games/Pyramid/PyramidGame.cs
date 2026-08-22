@@ -1,4 +1,5 @@
-﻿using Cards;
+﻿using Avalonia.Controls;
+using Cards;
 using GenericSol.Games.Klondike;
 using GenericSol.Games.Pyramid;
 using System.Diagnostics;
@@ -10,9 +11,13 @@ public class PyramidGame : GenericGame
     #region Stacks
     internal MixedStack[] _pyramid { get; } = new MixedStack[28];
     internal Stack _stock;
+    internal Stack _play;
     internal Stack _waste;
     internal Stack _discards;
     public override IGameState GameState { get; set; } = new PyramidGameState();
+    public Stack Stock => _stock;
+    public Stack Play => _play;
+    public Stack Waste => _waste;
 
 
     // Pyramid is a 7-row triangle of cards, with 1 card in the top row, 2 in the second row, and so on down to 7 in the bottom row.
@@ -105,6 +110,7 @@ public class PyramidGame : GenericGame
             "stock" => _stock,
             "waste" => _waste,
             "discards" => _discards,
+            "play" => _play,
             _ => throw new ArgumentOutOfRangeException(nameof(name), $"Unknown stack name: {name}")
         };
     }
@@ -255,10 +261,10 @@ public class PyramidGame : GenericGame
         {
             var move = new GenericMove(PreviousSelection.Name, "discards", 1);
             ApplyMove(move);
-            _startNewUndo = false;
+            StartNewUndo = false;
             move = new GenericMove(stk.Name, "discards", 1);
             ApplyMove(move);
-            _startNewUndo = true;
+            StartNewUndo = true;
             UnsetPreviousSelection();
             return true;
         }
@@ -281,4 +287,96 @@ public class PyramidGame : GenericGame
         stack.SetHighlight(true, Color.LightBlue, 0, 1);
     }
     #endregion
-}
+
+    #region Finding moves
+    internal List<(GenericMove, GenericMove?)> FindAllMoves()
+    {
+        var moves = new List<(GenericMove, GenericMove?)>();
+        List<MixedStack> freePyramids = new List<MixedStack>();
+
+        for (var i = 0; i < 28; i++)
+        {
+            var pyramidStack = _pyramid[i];
+            if (pyramidStack.Count > 0)
+            {
+                var (left, right) = GetPyramidChildren(i);
+                if (left == null && right == null)
+                {
+                    freePyramids.Add(pyramidStack);
+                }
+            }
+        }
+
+        for (var i = 0; i < freePyramids.Count; i++)
+        {
+            var pyramidStack = freePyramids[i];
+            if (pyramidStack.TopCard.Rank == Card.KING)
+            {
+                (GenericMove, GenericMove?) pair = (new GenericMove(pyramidStack.Name, "discards", 1), null);
+                moves.Add(pair);
+            }
+            else
+            {
+                for (var j = i + 1; j < freePyramids.Count; j++)
+                {
+                    var otherPyramidStack = freePyramids[j];
+                    if (pyramidStack.TopCard.Rank + otherPyramidStack.TopCard.Rank == 13)
+                    {
+                        (GenericMove, GenericMove?) pair = (
+                            new GenericMove(pyramidStack.Name, "discards", 1),
+                            new GenericMove(otherPyramidStack.Name, "discards", 1));
+                        moves.Add(pair);
+                    }
+                }
+                if (_stock.Count > 0 && pyramidStack.TopCard.Rank + _stock.TopCard.Rank == 13)
+                {
+                    (GenericMove, GenericMove?) pair = (
+                        new GenericMove(pyramidStack.Name, "discards", 1), 
+                        new GenericMove("stock", "discards", 1));
+                    moves.Add(pair);
+                }
+                if (_waste.Count > 0 && pyramidStack.TopCard.Rank + _waste.TopCard.Rank == 13)
+                {
+                    (GenericMove, GenericMove?) pair = (
+                        new GenericMove(pyramidStack.Name, "discards", 1),
+                        new GenericMove("waste", "discards", 1));
+                    moves.Add(pair);
+                }
+            }
+        }
+
+        if (_stock.Count > 0 && _stock.TopCard.Rank == Card.KING)
+        {
+            (GenericMove, GenericMove?) pair = (new GenericMove("stock", "discards", 1), null);
+            moves.Add(pair);
+        }
+        if (_waste.Count > 0 && _waste.TopCard.Rank == Card.KING)
+        {
+            (GenericMove, GenericMove?) pair = (new GenericMove("waste", "discards", 1), null);
+            moves.Add(pair);
+        }   
+
+        return moves;
+    }
+    #endregion
+
+    #region Info
+    override public void SetupInfo(Grid options, out string markdown)
+    {
+        markdown = """
+            # Pyramid Solitaire
+            Pyramid Solitaire is to clear a 28-card pyramid by matching pairs of exposed cards that add up to 13. 
+            The game uses a standard 52-card deck, where number cards equal their face value, 
+            Aces are 1, Jacks are 11, Queens are 12, and Kings are 13.
+            #### **Game Setup**
+            - Deal 28 cards face-up in a overlapping pyramid of seven rows (1 card in the first row, 2 in the second, up to 7 in the bottom row).
+            - Place the remaining 24 cards face-down next to the pyramid to form the stock pile.
+            #### **Rules of Play**
+            - Draw cards from the stock pile one at a time. Match them with exposed pyramid cards or put them into a waste pile if they cannot be played. 
+            - Match the top stock or waste pile card with any exposed pyramid card. 
+            - Match the top waste card with the top stock card if their sum is 13. 
+            - Win by clearing all cards from the pyramid.
+            """;
+    }
+    #endregion
+    }

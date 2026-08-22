@@ -50,6 +50,7 @@
 				</Canvas>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10">
 					<controls:StackControl Stack="{Binding Stock}" Draggable="false" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" />
+					<controls:StackControl Stack="{Binding Play}" Draggable="false" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
 					<controls:StackControl Stack="{Binding Waste}" Draggable="false" FaceUp="true" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
 					<controls:StackControl Stack="{Binding Discards}" Draggable="false" FaceUp="false" CardWidth="120" CardHeight="160" Width="120" Margin="10,0,0,0" />
 				</StackPanel>

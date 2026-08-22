@@ -19,6 +19,7 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
     [ObservableProperty] private Stack _stock = _pyramidGame.StackFromName("stock");
     [ObservableProperty] private Stack _waste = _pyramidGame.StackFromName("waste");
     [ObservableProperty] private Stack _discards = _pyramidGame.StackFromName("discards");
+    [ObservableProperty] private Stack _play = _pyramidGame.StackFromName("play");
 
     [ObservableProperty] private Stack[] _pyramid = _pyramidGame.PyramidStacks();
 
@@ -43,6 +44,7 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
         _stock = _pyramidGame.StackFromName("stock");
         _waste = _pyramidGame.StackFromName("waste");
         _discards = _pyramidGame.StackFromName("discards");
+        _play = _pyramidGame.StackFromName("play");
         _pyramid = _pyramidGame.PyramidStacks();
         ComputePyramidLayout();
         SubscribeToGameEvents(_game);
@@ -69,10 +71,13 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
     [RelayCommand]
     private void ApplyAiMove()
     {
-        var nextMove = _game.Ai.GetNextMove();
-        if (nextMove is not null)
+        var pair = ((PyramidAi)_game.Ai).GetNextPair();
+        _game.ApplyMove(pair.Item1);
+        if (pair.Item2 is not null)
         {
-            _game.ApplyMove(nextMove);
+            ((GenericGame)_game).StartNewUndo = false;
+            _game.ApplyMove(pair.Item2);
+            ((GenericGame)_game).StartNewUndo = true;
         }
     }
 
@@ -87,6 +92,7 @@ public partial class PyramidViewModel : GameViewModelBase, IStatusBarViewModel
         Waste = _pyramidGame.StackFromName("waste");
         Discards = _pyramidGame.StackFromName("discards");
         Pyramid = _pyramidGame.PyramidStacks();
+        Play = _pyramidGame.StackFromName("play");
     }
 
     [RelayCommand]
