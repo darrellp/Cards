@@ -1,4 +1,6 @@
 ﻿using Cards;
+using GenericSol.Games.Klondike;
+using GenericSol.Games.Pyramid;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -10,6 +12,8 @@ public class PyramidGame : GenericGame
     internal Stack _stock;
     internal Stack _waste;
     internal Stack _discards;
+    public override IGameState GameState { get; set; } = new PyramidGameState();
+
 
     // Pyramid is a 7-row triangle of cards, with 1 card in the top row, 2 in the second row, and so on down to 7 in the bottom row.
     // Navigating in pyramid is done by row and column, with the top card being at (0, 0) and the bottom row having cards at (6, 0) through (6, 6).
@@ -107,6 +111,7 @@ public class PyramidGame : GenericGame
 
     public override bool IsMoveValid(Stack stkSrc, string srcName, Stack stkDst, int cardCount)
     {
+        // No moves are valid for dragging, so always return false.
         return false;
     }
 
@@ -130,6 +135,22 @@ public class PyramidGame : GenericGame
         _stock.Name = "stock";
         _waste = new Stack() { Name="waste" };
         _discards = new Stack() { Name="discards" };
+    }
+
+    public override void ApplyAbstractPostMove(IMove move)
+    {
+        if (_pyramid != null && _pyramid.All(s => s.Count == 0))
+        {
+            GameState.EventOccurred("Won");
+        }
+        else if (move.SrcStack.StartsWith("pyr") || move.DstStack.StartsWith("pyr"))
+        {
+            GameState.EventOccurred("PyramidMove");
+        }
+        else if (move.SrcStack == "waste" && move.DstStack == "stock")
+        {
+            GameState.EventOccurred("EndOfStock");
+        }
     }
 
     #region Mouse Handling
@@ -168,25 +189,21 @@ public class PyramidGame : GenericGame
             {
                 return;
             }
-            if (PreviousSelection.TopCard.Rank + pyramidStack.TopCard.Rank == 13)
-            {
-                var move = new GenericMove(PreviousSelection.Name, "discards", 1);
-                ApplyMove(move);
-                _startNewUndo = false;
-                move = new GenericMove(pyramidStack.Name, "discards", 1);
-                ApplyMove(move);
-                _startNewUndo = true;
-                UnsetPreviousSelection();
-                return;
-            }
             SetPreviousSelection(pyramidStack);
             return;
         }
         else if (stack.Name == "stock" || stack.Name == "waste")
         {
-            if (PreviousSelection != null && PreviousSelection.Name == stack.Name)
+            if (PreviousSelection != null)
             {
-                UnsetPreviousSelection();
+                if (PreviousSelection.Name == stack.Name)
+                {
+                    UnsetPreviousSelection();
+                }
+                else
+                {
+                    MakeMove(stack);
+                }
                 return;
             }
             else if (stack.TopCard.Rank == Card.KING)
@@ -197,10 +214,6 @@ public class PyramidGame : GenericGame
             }
             else if (stack.Count > 0)
             {
-                if (MakeMove(stack))
-                {
-                    return;
-                }
                 SetPreviousSelection(stack);
             }
         }
@@ -225,7 +238,7 @@ public class PyramidGame : GenericGame
         }
         if (stack.Name == "waste")
         {
-            if (stack.Count > 0)
+            if (stack.Count > 0 && _stock.Count == 0)
             {
                 stack.Reverse();
                 var move = new GenericMove("waste", "stock", stack.Count);

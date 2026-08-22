@@ -1,7 +1,7 @@
 ﻿namespace GenericSol;
 public class GenericGameState : IGameState
 {
-    public string State { get; set; } = "Normal";
+    public string State { get; set; } = "NoMoves";
 
     public event EventHandler? Won;
     public event EventHandler? Lost;

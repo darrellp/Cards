@@ -107,6 +107,7 @@ public abstract class GenericGame : IGame
     public virtual void Undo()
     {
         _undoHandler.Undo();
+        _turnState = State;
     }
     internal virtual void UndoPremove(GenericUndo undo) { }
     internal virtual void UndoSplitMove(GenericUndo undo, Stack src, Stack moved, Stack dst) { }
