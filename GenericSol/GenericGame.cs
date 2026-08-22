@@ -6,6 +6,7 @@ public abstract class GenericGame : IGame
 {
     int _seed = -1;
     private bool startNewUndo;
+    private bool dragging;
     protected Random _random;
     protected GenericUndoHandler _undoHandler;
     string _turnState = "NoMoves";
@@ -41,6 +42,7 @@ public abstract class GenericGame : IGame
 
     public virtual IGameState GameState { get; set; } = new GenericGameState();
     public bool StartNewUndo { get => startNewUndo; set => startNewUndo=value; }
+    public bool Dragging { get => dragging; set => dragging=value; }
 
     /// <summary>
     /// Applies a move to the game.
@@ -57,6 +59,7 @@ public abstract class GenericGame : IGame
     /// <param name="DragCards">The temporary stack containing the cards being dragged, if applicable</param>
     public virtual void ApplyMove(IMove move, Stack? DragCards = null)
     {
+        Dragging = DragCards != null;
         if (State == "Lost" || State == "Won")
         {
             return;     // No plays on won or lost games

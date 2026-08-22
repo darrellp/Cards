@@ -89,11 +89,6 @@ public class PyramidGame : GenericGame
 
     public override IAi Ai => (IAi)_ai;
 
-    public override IList<IMove> GetMoves()
-    {
-        return new List<IMove> { new GenericMove("From", "To") };
-    }
-
     public override Stack StackFromName(string name)
     {
         if (name.StartsWith("pyr"))
@@ -141,15 +136,28 @@ public class PyramidGame : GenericGame
         _stock.Name = "stock";
         _waste = new Stack() { Name="waste" };
         _discards = new Stack() { Name="discards" };
+        _play = new Stack() { Name="play" };
     }
 
+    public override void ApplyAbstractPreMove(IMove move)
+    {
+        if (move.SrcStack == "waste" && move.DstStack == "stock")
+        {
+            _waste.Reverse();
+        }
+    }
     public override void ApplyAbstractPostMove(IMove move)
     {
+        bool fMissedMove = false;
+        if (move.SrcStack == "stock" && State == "NoMoves")
+        {
+            fMissedMove = FindAllMoves().Count > 0;
+        }
         if (_pyramid != null && _pyramid.All(s => s.Count == 0))
         {
             GameState.EventOccurred("Won");
         }
-        else if (move.SrcStack.StartsWith("pyr") || move.DstStack.StartsWith("pyr"))
+        else if (move.SrcStack.StartsWith("pyr") || move.DstStack.StartsWith("pyr") || fMissedMove)
         {
             GameState.EventOccurred("PyramidMove");
         }
@@ -198,7 +206,7 @@ public class PyramidGame : GenericGame
             SetPreviousSelection(pyramidStack);
             return;
         }
-        else if (stack.Name == "stock" || stack.Name == "waste")
+        else if (stack.Name == "play" || stack.Name == "waste")
         {
             if (PreviousSelection != null)
             {
@@ -223,32 +231,32 @@ public class PyramidGame : GenericGame
                 SetPreviousSelection(stack);
             }
         }
-    }
-
-    public override void OnRightClick(Stack stack)
-    {
-        if (stack.Name == "stock")
+        else if (stack.Name == "stock")
         {
             if (stack.Count > 0)
             {
-                var move = new GenericMove("stock", "waste", 1);
+                if (_play.Count > 0)
+                {
+                    Debug.Assert(_play.Count == 1);
+                    ApplyMove(new GenericMove("play", "waste", 1));
+                    StartNewUndo = false;
+                }
+                var move = new GenericMove("stock", "play", 1);
                 ApplyMove(move);
+                StartNewUndo = true;
                 UnsetPreviousSelection();
             }
             else
             {
-                var move = new GenericMove("waste", "stock", _waste.Count);
-                ApplyMove(move);
-                UnsetPreviousSelection();
-            }
-        }
-        if (stack.Name == "waste")
-        {
-            if (stack.Count > 0 && _stock.Count == 0)
-            {
-                stack.Reverse();
-                var move = new GenericMove("waste", "stock", stack.Count);
-                ApplyMove(move);
+                if (_play.Count > 0)
+                {
+                    Debug.Assert(_play.Count == 1);
+                    ApplyMove(new GenericMove("play", "waste", 1));
+                    StartNewUndo = false;
+                }
+                _waste.Reverse();
+                ApplyMove(new GenericMove("waste", "stock", _waste.Count));
+                StartNewUndo = true;
                 UnsetPreviousSelection();
             }
         }
@@ -328,11 +336,11 @@ public class PyramidGame : GenericGame
                         moves.Add(pair);
                     }
                 }
-                if (_stock.Count > 0 && pyramidStack.TopCard.Rank + _stock.TopCard.Rank == 13)
+                if (_play.Count > 0 && pyramidStack.TopCard.Rank + _play.TopCard.Rank == 13)
                 {
                     (GenericMove, GenericMove?) pair = (
                         new GenericMove(pyramidStack.Name, "discards", 1), 
-                        new GenericMove("stock", "discards", 1));
+                        new GenericMove("play", "discards", 1));
                     moves.Add(pair);
                 }
                 if (_waste.Count > 0 && pyramidStack.TopCard.Rank + _waste.TopCard.Rank == 13)
@@ -345,9 +353,9 @@ public class PyramidGame : GenericGame
             }
         }
 
-        if (_stock.Count > 0 && _stock.TopCard.Rank == Card.KING)
+        if (_play.Count > 0 && _play.TopCard.Rank == Card.KING)
         {
-            (GenericMove, GenericMove?) pair = (new GenericMove("stock", "discards", 1), null);
+            (GenericMove, GenericMove?) pair = (new GenericMove("play", "discards", 1), null);
             moves.Add(pair);
         }
         if (_waste.Count > 0 && _waste.TopCard.Rank == Card.KING)
@@ -367,16 +375,23 @@ public class PyramidGame : GenericGame
             # Pyramid Solitaire
             Pyramid Solitaire is to clear a 28-card pyramid by matching pairs of exposed cards that add up to 13. 
             The game uses a standard 52-card deck, where number cards equal their face value, 
-            Aces are 1, Jacks are 11, Queens are 12, and Kings are 13.
+            Aces are 1, Jacks are 11, Queens are 12, and Kings are 13.  In this implementation the "stock" pile is split
+            into two parts - the pile on the far left is all the face down cards in the stock pile.  Left click on it to expose
+            the next top card which is placed into the small pile to it's right and move the previous top card if any to the waste pile.
+            Clicking on the empty stock pile will return the wastepile to it.
             #### **Game Setup**
             - Deal 28 cards face-up in a overlapping pyramid of seven rows (1 card in the first row, 2 in the second, up to 7 in the bottom row).
             - Place the remaining 24 cards face-down next to the pyramid to form the stock pile.
             #### **Rules of Play**
             - Draw cards from the stock pile one at a time. Match them with exposed pyramid cards or put them into a waste pile if they cannot be played. 
             - Match the top stock or waste pile card with any exposed pyramid card. 
-            - Match the top waste card with the top stock card if their sum is 13. 
             - Win by clearing all cards from the pyramid.
             """;
     }
-    #endregion
+
+    public override IList<IMove> GetMoves()
+    {
+        throw new NotImplementedException();
     }
+    #endregion
+}

@@ -14,11 +14,19 @@ public class PyramidAi : IAi
         }
         if (PyramidGame.Stock.Count > 0)
         {
-            return (new GenericMove("stock", "waste"), null);
+            if (PyramidGame.Play.Count > 0)
+            {
+                return (new GenericMove("play", "waste"), new GenericMove("stock", "play"));
+            }
+            return (new GenericMove("stock", "play"), null);
         }
         if (PyramidGame.Waste.Count > 0)
         {
-            PyramidGame.Waste.Reverse();
+            if (PyramidGame.Play.Count > 0)
+            {
+                return (new GenericMove("play", "waste"), new GenericMove("waste", "stock", PyramidGame.Waste.Count + 1));
+            }
+
             return (new GenericMove("waste", "stock", PyramidGame.Waste.Count), null);
         }
         return (GenericMove.NoMove, null);
