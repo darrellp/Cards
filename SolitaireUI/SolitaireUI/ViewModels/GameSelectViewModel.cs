@@ -21,7 +21,6 @@ public partial class GameSelectViewModel : ViewModelBase
             "Klondike",
             "Golf",
             "Pyramid",
-            "TestGame"
         };
 
         // Default selection
