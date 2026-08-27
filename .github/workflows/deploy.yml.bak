@@ -2,38 +2,10 @@ name: Deploy Avalonia WASM to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Change to your default branch name if it isn't main
+    branches: [ main ] # Triggers automatically when pushing code
+  workflow_dispatch:   # <--- ADD THIS LINE (Enables the manual grey button)
 
 permissions:
   contents: read
   pages: write
   id-token: write
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x' # Uses your .NET 10 environment
-
-      - name: Publish App
-        run: dotnet publish -c Release -o release
-
-      - name: Fix base href for Avalonia
-        run: |
-          # This injects the <base href="/Cards/"> tag into index.html automatically
-          sed -i 's|<head>|<head><base href="/Cards/"/>|g' release/wwwroot/index.html
-          # This creates the required .nojekyll file
-          touch release/wwwroot/.nojekyll
-
-      - name: Upload Artifacts
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: release/wwwroot
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
