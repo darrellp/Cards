@@ -13,6 +13,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -21,21 +22,28 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      - name: Install WASM workload
+        run: dotnet workload install wasm-tools --skip-manifest-update
+
       # 1. This explicitly targets the browser project and forces a flat output directory
       # This completely bypasses the long "SolitaireUI/SolitaireUI.Browser/bin/..." pathing issue
       - name: Publish App
         run: dotnet publish SolitaireUI/SolitaireUI.Browser/SolitaireUI.Browser.csproj -c Release -o deploy-output
 
-      # 2. Creates the file in our new custom folder
+      # 2. Debug: show what actually got published so we can catch missing/misplaced files
+      - name: List published output
+        run: find deploy-output -maxdepth 4 | sort
+
+      # 3. Creates the file in our new custom folder
       - name: Create .nojekyll
         run: touch deploy-output/wwwroot/.nojekyll
 
-      # 3. Uploads from our flat, custom folder
+      # 4. Uploads from our flat, custom folder
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'deploy-output/wwwroot'
 
-      # 4. Pushes live
+      # 5. Pushes live
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
