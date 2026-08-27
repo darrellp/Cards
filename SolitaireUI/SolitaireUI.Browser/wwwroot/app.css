@@ -1,4 +1,9 @@
 ﻿/* HTML styles for the splash screen */
+html, body, #out {
+    height: 100%;
+    width: 100%;
+}
+
 .avalonia-splash {
     position: absolute;
     height: 100%;
