@@ -25,24 +25,24 @@ jobs:
       - name: Install WASM workload
         run: dotnet workload install wasm-tools --skip-manifest-update
 
-      # 1. This explicitly targets the browser project and forces a flat output directory
-      # This completely bypasses the long "SolitaireUI/SolitaireUI.Browser/bin/..." pathing issue
+      # 1. Publish using the default output path so the SDK's static web asset
+      # copy step (index.html, main.js, app.css) behaves correctly.
       - name: Publish App
-        run: dotnet publish SolitaireUI/SolitaireUI.Browser/SolitaireUI.Browser.csproj -c Release -o deploy-output
+        run: dotnet publish SolitaireUI/SolitaireUI.Browser/SolitaireUI.Browser.csproj -c Release
 
       # 2. Debug: show what actually got published so we can catch missing/misplaced files
       - name: List published output
-        run: find deploy-output -maxdepth 4 | sort
+        run: find SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot -maxdepth 3 | sort
 
-      # 3. Creates the file in our new custom folder
+      # 3. Creates the file GitHub Pages needs to skip Jekyll processing
       - name: Create .nojekyll
-        run: touch deploy-output/wwwroot/.nojekyll
+        run: touch SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot/.nojekyll
 
-      # 4. Uploads from our flat, custom folder
+      # 4. Uploads the real publish output
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'deploy-output/wwwroot'
+          path: 'SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot'
 
       # 5. Pushes live
       - name: Deploy to GitHub Pages
