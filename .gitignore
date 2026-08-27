@@ -203,6 +203,7 @@ project.lock.json
 # Output folder used by Webpack or other FE stuff
 **/node_modules/*
 **/wwwroot/*
+!SolitaireUI/SolitaireUI.Browser/wwwroot/*
 
 # SpecFlow specific
 *.feature.cs
