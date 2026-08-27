@@ -52,8 +52,6 @@ public static class AppSettingsService
     /// </summary>
     public static ISettingsStore Store { get; set; } = new FileSettingsStore();
 
-    private static readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
-
     public static AppSettings Load()
     {
         try
@@ -61,17 +59,16 @@ public static class AppSettingsService
             var json = Store.Read();
             if (json != null)
             {
-                var settings = JsonSerializer.Deserialize<AppSettings>(json);
+                var settings = JsonSerializer.Deserialize(json, AppSettingsJsonContext.Default.AppSettings);
                 if (settings != null)
                 {
                     return settings;
                 }
             }
         }
-        catch (System.Exception ex)
+        catch
         {
             // Fall through to defaults if the file is missing, unreadable, or malformed.
-            System.Console.WriteLine($"AppSettingsService.Load failed: {ex}");
         }
 
         return new AppSettings();
@@ -81,13 +78,12 @@ public static class AppSettingsService
     {
         try
         {
-            var json = JsonSerializer.Serialize(settings, SerializerOptions);
+            var json = JsonSerializer.Serialize(settings, AppSettingsJsonContext.Default.AppSettings);
             Store.Write(json);
         }
-        catch (System.Exception ex)
+        catch
         {
             // Persisting settings is best-effort; ignore failures (e.g. read-only environment).
-            System.Console.WriteLine($"AppSettingsService.Save failed: {ex}");
         }
     }
 }

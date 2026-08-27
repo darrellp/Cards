@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Text.Json;
 
 namespace GenericSol.Games.Klondike;
-public class KlondikeGame : GenericGame
+public partial class KlondikeGame : GenericGame
 {
     #region Constants
     public const int TabCount = 7;
@@ -673,18 +673,18 @@ public class KlondikeGame : GenericGame
         return Options.FromJson(json);
     }
 
-    class Options : IJsonSerializable<Options>
+    public class Options : IJsonSerializable<Options>
     {
         public int Turnover { get; set; } = 3;
 
         public static Options FromJson(string json)
         {
-            return JsonSerializer.Deserialize<Options>(json)!;
+            return JsonSerializer.Deserialize(json, KlondikeOptionsJsonContext.Default.KlondikeOptions)!;
         }
 
         public string ToJson()
         {
-            return JsonSerializer.Serialize(this);
+            return JsonSerializer.Serialize(this, KlondikeOptionsJsonContext.Default.KlondikeOptions);
         }
     }
     #endregion
@@ -751,4 +751,9 @@ public class KlondikeGame : GenericGame
         }
     }
     #endregion
+}
+
+[System.Text.Json.Serialization.JsonSerializable(typeof(KlondikeGame.Options), TypeInfoPropertyName = "KlondikeOptions")]
+partial class KlondikeOptionsJsonContext : System.Text.Json.Serialization.JsonSerializerContext
+{
 }

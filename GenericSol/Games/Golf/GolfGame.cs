@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Text.Json;
 
 namespace GenericSol.Games.Golf;
-public class GolfGame : GenericGame
+public partial class GolfGame : GenericGame
 {
     #region Constants
     public const int TabCount = 7;
@@ -283,21 +283,26 @@ public class GolfGame : GenericGame
         return Options.FromJson(json);
     }
 
-    class Options : IJsonSerializable<Options>
+    public class Options : IJsonSerializable<Options>
     {
         public bool AceKingWrap { get; set; } = true;
         public bool SelectStartCard { get; set; } = true;
 
         public static Options FromJson(string json)
         {
-            return JsonSerializer.Deserialize<Options>(json)!;
+            return JsonSerializer.Deserialize(json, GolfOptionsJsonContext.Default.GolfOptions)!;
         }
 
         public string ToJson()
         {
-            return JsonSerializer.Serialize(this);
+            return JsonSerializer.Serialize(this, GolfOptionsJsonContext.Default.GolfOptions);
         }
     }
     #endregion
 
+}
+
+[System.Text.Json.Serialization.JsonSerializable(typeof(GolfGame.Options), TypeInfoPropertyName = "GolfOptions")]
+partial class GolfOptionsJsonContext : System.Text.Json.Serialization.JsonSerializerContext
+{
 }
