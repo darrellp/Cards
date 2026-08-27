@@ -68,9 +68,10 @@ public static class AppSettingsService
                 }
             }
         }
-        catch
+        catch (System.Exception ex)
         {
             // Fall through to defaults if the file is missing, unreadable, or malformed.
+            System.Console.WriteLine($"AppSettingsService.Load failed: {ex}");
         }
 
         return new AppSettings();
@@ -83,9 +84,10 @@ public static class AppSettingsService
             var json = JsonSerializer.Serialize(settings, SerializerOptions);
             Store.Write(json);
         }
-        catch
+        catch (System.Exception ex)
         {
             // Persisting settings is best-effort; ignore failures (e.g. read-only environment).
+            System.Console.WriteLine($"AppSettingsService.Save failed: {ex}");
         }
     }
 }
