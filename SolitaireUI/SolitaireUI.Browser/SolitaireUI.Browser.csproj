@@ -13,4 +13,11 @@
     <ItemGroup>
         <ProjectReference Include="..\SolitaireUI\SolitaireUI.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <!-- ViewLocator resolves views via reflection (Type.GetType by string name).
+             Preserve SolitaireUI's types so the trimmer doesn't remove them in the
+             browser/WASM publish. -->
+        <TrimmerRootAssembly Include="SolitaireUI" />
+    </ItemGroup>
 </Project>
