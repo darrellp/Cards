@@ -2,10 +2,40 @@ name: Deploy Avalonia WASM to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Triggers automatically when pushing code
-  workflow_dispatch:   # <--- ADD THIS LINE (Enables the manual grey button)
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # 1. This compiles your project exactly like you do locally
+      - name: Publish App
+        run: dotnet publish -c Release
+
+      # 2. This creates the .nojekyll file so GitHub doesn't block the files
+      # It searches your directory dynamically so it never gets the path wrong
+      - name: Create .nojekyll
+        run: find . -type d -name "wwwroot" -exec touch {}/.nojekyll \;
+
+      # 3. This finds your compiled wwwroot folder and uploads it
+      - name: Upload Artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './Cards/bin/Release/net10.0-browser/publish/wwwroot'
+
+      # 4. This pushes it live to your URL
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

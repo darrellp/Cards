@@ -2,8 +2,8 @@ name: Deploy Avalonia WASM to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # Triggers automatically when pushing code
-  workflow_dispatch:   # Enables the manual grey button for future builds
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,22 +19,22 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x' # Uses your .NET 10 environment
+          dotnet-version: '10.0.x'
 
+      # 1. This compiles your solution inside the cloud runner
       - name: Publish App
-        run: dotnet publish -c Release -o release
+        run: dotnet publish -c Release
 
-      - name: Fix base href for Avalonia
-        run: |
-          # This injects the <base href="/Cards/"> tag into index.html automatically
-          sed -i 's|<head>|<head><base href="/Cards/"/>|g' release/wwwroot/index.html
-          # This creates the required .nojekyll file
-          touch release/wwwroot/.nojekyll
+      # 2. This creates the required .nojekyll file in the compiled folder
+      - name: Create .nojekyll
+        run: touch SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot/.nojekyll
 
+      # 3. This points directly to your project's wwwroot folder
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: release/wwwroot
+          path: 'SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot'
 
+      # 4. This pushes it live to your URL
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
