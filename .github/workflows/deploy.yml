@@ -21,20 +21,21 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      # 1. This compiles your solution inside the cloud runner
+      # 1. This explicitly targets the browser project and forces a flat output directory
+      # This completely bypasses the long "SolitaireUI/SolitaireUI.Browser/bin/..." pathing issue
       - name: Publish App
-        run: dotnet publish -c Release
+        run: dotnet publish SolitaireUI/SolitaireUI.Browser/SolitaireUI.Browser.csproj -c Release -o deploy-output
 
-      # 2. This creates the required .nojekyll file in the compiled folder
+      # 2. Creates the file in our new custom folder
       - name: Create .nojekyll
-        run: touch SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot/.nojekyll
+        run: touch deploy-output/wwwroot/.nojekyll
 
-      # 3. This points directly to your project's wwwroot folder
+      # 3. Uploads from our flat, custom folder
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'SolitaireUI/SolitaireUI.Browser/bin/Release/net10.0-browser/publish/wwwroot'
+          path: 'deploy-output/wwwroot'
 
-      # 4. This pushes it live to your URL
+      # 4. Pushes live
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
