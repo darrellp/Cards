@@ -663,6 +663,12 @@ public class StackControl : Control
             // Draw face-down card (card back image)
             var rect = new Rect(0, 0, CardWidth, CardHeight);
             context.DrawImage(MainWindowViewModel.GetCardBackImage(), rect);
+
+            // Draw card count in translucent text for facedown stacks
+            if (Stack!.Count > 0)
+            {
+                DrawCardCount(context, Stack!.Count, rect);
+            }
         }
     }
 
@@ -796,6 +802,37 @@ public class StackControl : Control
     /// ever rendered. Highlighting only ever applies to face-up cards, which the caller is expected to
     /// guarantee.
     /// </summary>
+    private void DrawCardCount(DrawingContext context, int cardCount, Rect cardRect)
+    {
+        var countText = cardCount.ToString();
+        var typeface = new Typeface("Arial", FontStyle.Normal, FontWeight.Bold);
+        var fontSize = Math.Min(CardWidth, CardHeight) * 0.3 * 1.5 * 1.3; // Scale font to card size, 30% larger twice
+
+        var formattedText = new FormattedText(
+            countText,
+            System.Globalization.CultureInfo.CurrentCulture,
+            FlowDirection.LeftToRight,
+            typeface,
+            fontSize,
+            Brushes.White);
+
+        // Center the text on the card, positioned near the top
+        var textWidth = formattedText.Width;
+        var x = cardRect.Left + (cardRect.Width - textWidth) / 2;
+        var y = cardRect.Top + cardRect.Height * 0.2; // Position 20% from top
+
+        var textGeometry = formattedText.BuildGeometry(new Point(x, y));
+
+        // Draw dark border/stroke around the text
+        var borderBrush = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0)); // Semi-transparent black
+        var borderPen = new Pen(borderBrush, 1.5);
+        context.DrawGeometry(null, borderPen, textGeometry);
+
+        // Draw the translucent white text
+        var textBrush = new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)); // Semi-transparent white
+        context.DrawGeometry(textBrush, null, textGeometry);
+    }
+
     private static void DrawTintIfHighlighted(DrawingContext context, Stack stack, int cardIndex, Rect rect)
     {
         if (!stack.IsHilit)
