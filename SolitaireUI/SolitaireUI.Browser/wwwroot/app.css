@@ -6,6 +6,16 @@ html, body, #out {
     margin: 0;
 }
 
+/* Mobile browsers (e.g. iPhone Safari) report 100%/100vh as taller than what's actually
+   visible, since it doesn't account for the address bar / home-indicator chrome. That extra
+   height, combined with overflow: hidden below, was pushing content (like the status bar) below
+   the visible fold. dvh (dynamic viewport height) correctly reflects the real visible area. */
+@supports (height: 100dvh) {
+    html, body, #out {
+        height: 100dvh;
+    }
+}
+
 .avalonia-splash {
     position: absolute;
     height: 100%;
