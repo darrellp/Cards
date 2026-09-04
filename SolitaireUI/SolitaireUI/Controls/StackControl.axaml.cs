@@ -73,6 +73,32 @@ public class StackControl : Control
         }
     }
 
+    /// <summary>
+    /// Returns the visual whose local coordinate space should be used for positioning the drag
+    /// ghost (<see cref="DragGhostCanvas"/>). Hit-testing against the <see cref="TopLevel"/> must
+    /// use real/unscaled screen coordinates, but the drag ghost lives inside the same
+    /// (potentially scaled) subtree as the game board - e.g. wrapped in a <see cref="Viewbox"/>
+    /// on the Browser build so it fits mobile screens. If we fed it raw TopLevel coordinates it
+    /// would effectively be scaled a second time, dragging from the wrong position (offset up and
+    /// to the left whenever the Viewbox scales down). Walking up from this control to find the
+    /// direct child of the nearest ancestor Viewbox gives us the correct local coordinate space;
+    /// if there is no Viewbox ancestor (e.g. desktop), the walk simply reaches the root, which is
+    /// equivalent to using TopLevel coordinates as before.
+    /// </summary>
+    private Visual GetGhostCoordinateRoot()
+    {
+        Visual current = this;
+        foreach (var ancestor in this.GetVisualAncestors())
+        {
+            if (ancestor is Viewbox)
+            {
+                return current;
+            }
+            current = ancestor;
+        }
+        return current;
+    }
+
     static StackControl()
     {
         AffectsRender<StackControl>(StackProperty, FaceUpProperty, CardWidthProperty,
@@ -272,14 +298,14 @@ public class StackControl : Control
 
                 if (clickedCardIndex >= 0)
                 {
-                    var topLevel = TopLevel.GetTopLevel(this);
-                    var topLevelPoint = topLevel != null ? e.GetPosition(topLevel) : point.Position;
+                    var ghostRoot = GetGhostCoordinateRoot();
+                    var ghostPoint = e.GetPosition(ghostRoot);
                     var clickOffsetX = vertical ? point.Position.X : point.Position.X - clickedCardAxisPos;
                     var clickOffsetY = vertical ? point.Position.Y - clickedCardAxisPos : point.Position.Y;
 
                     try
                     {
-                        var started = viewModel.StartDrag(Stack, cardCount, topLevelPoint.X, topLevelPoint.Y, clickOffsetX, clickOffsetY);
+                        var started = viewModel.StartDrag(Stack, cardCount, ghostPoint.X, ghostPoint.Y, clickOffsetX, clickOffsetY);
                         if (started)
                         {
                             e.Pointer.Capture(this);
@@ -313,7 +339,7 @@ public class StackControl : Control
 
         if (viewModel.IsDragging)
         {
-            // Get the position relative to the window/top-level
+            // Get the position relative to the window/top-level for hit-testing purposes.
             var topLevel = TopLevel.GetTopLevel(this);
             if (topLevel != null)
             {
@@ -322,7 +348,11 @@ public class StackControl : Control
                 // Hit test to find which stack control is under the pointer
                 var hitStack = FindStackUnderPoint(topLevel, screenPoint);
 
-                viewModel.UpdateDragHover(hitStack, screenPoint.X, screenPoint.Y);
+                // The drag ghost is positioned in the (possibly scaled) local coordinate space,
+                // not raw screen/TopLevel space - see GetGhostCoordinateRoot for details.
+                var ghostRoot = GetGhostCoordinateRoot();
+                var ghostPoint = e.GetPosition(ghostRoot);
+                viewModel.UpdateDragHover(hitStack, ghostPoint.X, ghostPoint.Y);
 
                 // Invalidate all stack controls to update visuals
                 InvalidateAllStackControls();
