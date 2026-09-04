@@ -16,6 +16,19 @@ html, body, #out {
     }
 }
 
+/* iOS Safari only reserves space for the notch / home-indicator "safe area" if the page opts in
+   via viewport-fit=cover (see index.html) AND pads for it explicitly. Without this, especially
+   in landscape, the bottom (and side, depending on orientation) safe-area strips overlap page
+   content instead of being excluded from it - which was cutting off the bottom of the app
+   (including the status bar) even though the reported viewport height looked correct. */
+#out {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    box-sizing: border-box;
+}
+
 .avalonia-splash {
     position: absolute;
     height: 100%;
