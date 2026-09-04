@@ -806,7 +806,7 @@ public class StackControl : Control
     {
         var countText = cardCount.ToString();
         var typeface = new Typeface("Arial", FontStyle.Normal, FontWeight.Bold);
-        var fontSize = Math.Min(CardWidth, CardHeight) * 0.3 * 1.5 * 1.3; // Scale font to card size, 30% larger twice
+        var fontSize = Math.Min(CardWidth, CardHeight) * 0.7; // Scale font to card size, 30% larger twice
 
         var formattedText = new FormattedText(
             countText,
